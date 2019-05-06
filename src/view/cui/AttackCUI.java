@@ -8,7 +8,6 @@ import model.Game;
 import model.Player;
 
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Map;
 
 public class AttackCUI extends AbstractCUI {
@@ -34,7 +33,7 @@ public class AttackCUI extends AbstractCUI {
         boolean hasCountryToAttackFrom = false;
         try {
             hasCountryToAttackFrom = gc.hasCountryToAttackFrom(gameId, player);
-        } catch (GameNotFoundException | NoSuchPlayerException e) {
+        } catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException e) {
             e.printStackTrace();
         }
 
@@ -59,7 +58,7 @@ public class AttackCUI extends AbstractCUI {
             Map<String, Country> countriesAttacksCanBeLaunchedFrom = null;
             try {
                 countriesAttacksCanBeLaunchedFrom = gc.getCountriesAttackCanBeLaunchedFrom(gameId, player);
-            } catch (GameNotFoundException | NoSuchPlayerException e) {
+            } catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException e) {
                 e.printStackTrace();
             }
             while (!countriesAttacksCanBeLaunchedFrom.keySet().contains(ans)) {
@@ -74,12 +73,18 @@ public class AttackCUI extends AbstractCUI {
             Country srcCountry = game.getCountries().get(ans);
             // find destCountry
             ans = "";
-            while (!gc.getHostileNeighbors(srcCountry).keySet().contains(ans)) {
+            Map<String, Country> hostileNeighbors = null;
+            try {
+                 hostileNeighbors = gc.getHostileNeighbors(gameId, srcCountry);
+            } catch (GameNotFoundException | NoSuchCountryException e) {
+                e.printStackTrace();
+            }
+            while (!hostileNeighbors.keySet().contains(ans)) {
                 System.out.println(player + " select a country to attack");
                 System.out.println("Possible options:");
-                System.out.println(gc.getHostileNeighbors(srcCountry).keySet());
+                System.out.println(hostileNeighbors.keySet());
                 ans = reader.nextLine();
-                if (!gc.getHostileNeighbors(srcCountry).keySet().contains(ans)) {
+                if (!hostileNeighbors.keySet().contains(ans)) {
                     checkForSpecialInput(ans, "Not a country", game.toString());
                 }
             }
@@ -123,8 +128,8 @@ public class AttackCUI extends AbstractCUI {
 
                 AttackResult attackResult = null;
                 try {
-                    attackResult = gc.fight(srcCountry, destCountry, attackingUnits, defendingUnits);
-                } catch (NotEnoughUnitsException | CountriesNotAdjacentException e) {
+                    attackResult = gc.fight(gameId, srcCountry, destCountry, attackingUnits, defendingUnits);
+                } catch (NotEnoughUnitsException | CountriesNotAdjacentException | GameNotFoundException | NoSuchCountryException e) {
                     e.printStackTrace();
                 }
                 System.out.println("Attacker dices: " + attackResult.getAttackerDices());
@@ -160,7 +165,7 @@ public class AttackCUI extends AbstractCUI {
 
                                 try {
                                     gc.moveUnits(gameId, srcCountry, destCountry, nachRueckUnits);
-                                } catch (GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
+                                } catch (GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException | NoSuchPlayerException e) {
                                     e.printStackTrace();
                                 }
                                 System.out.println(nachRueckUnits + " units have been moved.");
@@ -202,10 +207,7 @@ public class AttackCUI extends AbstractCUI {
                 }
             }
         }
-        for (Player p : game.getPlayers()) {
-            GraphController.getInstance().updatePlayerGraphMap(p);
 
-        }
     }
 
 }

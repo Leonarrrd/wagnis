@@ -1,6 +1,8 @@
 package view.cui;
 
+import exceptions.CardAlreadyOwnedException;
 import exceptions.GameNotFoundException;
+import exceptions.NoSuchCardException;
 import exceptions.NoSuchPlayerException;
 import model.Game;
 import model.Player;
@@ -22,9 +24,6 @@ public class TurnCUI extends AbstractCUI {
         }
 
         initGameLoop(game);
-
-
-        gameResult(game.getTurn().getPlayer());
 
 
     }
@@ -52,37 +51,40 @@ public class TurnCUI extends AbstractCUI {
                         break;
 
                 }
+                postTurnCheck(game, gameWon, player);
             } catch (GameNotFoundException e) {
                 e.printStackTrace();
             }
 
-            // FIXME: Wrong place, maybe put it at the end of attack Method? (Or right after player has conquered a country)
-            boolean winCondition = false;
-            try {
-                winCondition = gc.checkWinCondidtion(gameId, player);
-            } catch (GameNotFoundException | NoSuchPlayerException e) {
-                e.printStackTrace();
-            }
-            if (winCondition) {
-                gameWon = true;
-                break;
-            }
+        }
 
-            // FIXME: Wrong place, maybe put it at the end of move method?
-            if (player.hasConqueredCountry()) {
+    }
+
+    private void postTurnCheck(Game game, boolean gameWon, Player player) {
+
+        boolean winCondition = false;
+        try {
+            winCondition = gc.checkWinCondidtion(gameId, player);
+        } catch (GameNotFoundException | NoSuchPlayerException e) {
+            e.printStackTrace();
+        }
+        if (winCondition) {
+            gameResult(game.getTurn().getPlayer());
+            return;
+        }
+
+        if (player.hasConqueredCountry()) {
+            try {
+                System.out.println(player + " is awarded a card");
                 try {
-                    System.out.println(player + " is awarded a card");
-                    try {
-                        gc.addCard(gameId, player);
-                    } catch (NoSuchPlayerException e) {
-                        e.printStackTrace();
-                    }
-                    player.setHasConqueredCountry(false);
-                } catch (GameNotFoundException e) {
+                    gc.addCard(gameId, player);
+                } catch (NoSuchPlayerException | NoSuchCardException | CardAlreadyOwnedException e) {
                     e.printStackTrace();
                 }
+                player.setHasConqueredCountry(false);
+            } catch (GameNotFoundException e) {
+                e.printStackTrace();
             }
-
         }
 
     }

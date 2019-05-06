@@ -31,6 +31,9 @@ public class MoveCUI extends AbstractCUI {
         }
         player = game.getTurn().getPlayer();
 
+        //might need another phase to do this
+        //might wanna do this in the controller move method
+
         System.out.println("Move phase starting...");
 
         System.out.println("Do you want to move any units? (y/n)");
@@ -50,7 +53,7 @@ public class MoveCUI extends AbstractCUI {
             try {
                 countriesToMoveFrom = gc.getCountriesWithMoreThanOneUnit(gameId, player);
                 hasCountryToMoveFrom = gc.hasCountryToMoveFrom(gameId, player);
-            } catch (GameNotFoundException | NoSuchPlayerException e) {
+            } catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException e) {
                 e.printStackTrace();
             }
 
@@ -63,7 +66,7 @@ public class MoveCUI extends AbstractCUI {
             System.out.println(countriesToMoveFrom.keySet());
 
             String srcCountryStr = reader.nextLine();
-            while (countriesToMoveFrom.containsKey(srcCountryStr)) {
+            while (!countriesToMoveFrom.containsKey(srcCountryStr)) {
                 checkForSpecialInput(srcCountryStr, "Not a country or not owned", game.toString());
                 srcCountryStr = reader.nextLine();
             }
@@ -96,7 +99,7 @@ public class MoveCUI extends AbstractCUI {
 
             try {
                 gc.moveUnits(gameId, srcCountry, destCountry, unitsToMove);
-            } catch (GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
+            } catch (GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException | NoSuchPlayerException e) {
                 e.printStackTrace();
             }
 

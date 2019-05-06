@@ -21,7 +21,7 @@ public class GameController {
     private WorldController wc = WorldController.getInstance();
     private TurnController tc = TurnController.getInstance();
     private CardDeckController cdc = CardDeckController.getInstance();
-
+    private GraphController grc = GraphController.getInstance();
     private GameController() {
     }
 
@@ -62,6 +62,7 @@ public class GameController {
 
         Game game = new Game(UUID.randomUUID(), countries, continents);
         activeGames.put(game.getId(), game);
+
 
 
         return game;
@@ -116,7 +117,7 @@ public class GameController {
      * @throws GameNotFoundException
      * @throws CountryAlreadyOccupiedException
      */
-    public void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException {
+    public void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException {
         Game game = getGameById(gameId);
         wc.addCountry(game, countryAsString, player);
     }
@@ -127,7 +128,7 @@ public class GameController {
      * @param country
      * @param units   units to add
      */
-    public void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException {
+    public void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException {
         Game game = getGameById(gameId);
         wc.changeUnits(game, country, units);
     }
@@ -139,7 +140,7 @@ public class GameController {
      * @param frozenUnits
      * @throws GameNotFoundException
      */
-    public void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) throws GameNotFoundException {
+    public void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) throws GameNotFoundException, NoSuchCountryException {
         Game game = getGameById(gameId);
         wc.changeFrozenUnits(game, country, frozenUnits);
     }
@@ -168,7 +169,7 @@ public class GameController {
         return wc.assignUnits(game);
     }
 
-    public void addCard(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
+    public void addCard(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         Game game = getGameById(gameId);
         cdc.addCard(game, player);
     }
@@ -179,7 +180,7 @@ public class GameController {
      *
      * @return number of units the player can place this turn
      */
-    public int awardUnits(UUID gameId, Player player) throws GameNotFoundException {
+    public int awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         return lc.awardUnits(game, player);
     }
@@ -193,8 +194,9 @@ public class GameController {
      * @param cardsToBeUsed
      * @return
      */
-    public int useCards(Player player, int cardsToBeUsed) {
-        return lc.useCards(player, cardsToBeUsed);
+    public int useCards(UUID gameId, Player player, int cardsToBeUsed) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
+        Game game = getGameById(gameId);
+        return lc.useCards(game, player, cardsToBeUsed);
     }
 
 
@@ -206,7 +208,7 @@ public class GameController {
      * @param player
      * @return map of countries with more than one unit
      */
-    public Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
+    public Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return wc.getCountriesAttackCanBeLaunchedFrom(game, player);
     }
@@ -227,7 +229,7 @@ public class GameController {
      * @param player
      * @return
      */
-    public boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
+    public boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return lc.hasCountryToMoveFrom(game, player);
     }
@@ -238,7 +240,7 @@ public class GameController {
      * @param player
      * @return
      */
-    public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
+    public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return lc.hasCountryToAttackFrom(game, player);
     }
@@ -250,17 +252,10 @@ public class GameController {
      * @param country
      * @return
      */
-    public Map<String, Country> getHostileNeighbors(Country country) {
-        return wc.getHostileNeighbors(country);
+    public Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException {
+        Game game = getGameById(gameId);
+        return wc.getHostileNeighbors(game, country);
     }
-
-    /**
-     * TODO: add description
-     * @param country
-     * @return
-     */
-
-
 
     /**
      * Carries out one round of an attack
@@ -275,8 +270,9 @@ public class GameController {
      * @param defendingUnits
      * @return null if both sides still have enough units to fight, the winner of the war otherwise
      */
-    public AttackResult fight(Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException {
-        return lc.fight(attackingCountry, defendingCountry, attackingUnits, defendingUnits);
+    public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException {
+        Game game = getGameById(gameId);
+        return lc.fight(game, attackingCountry, defendingCountry, attackingUnits, defendingUnits);
     }
 
     /**
@@ -286,7 +282,7 @@ public class GameController {
      * @param destCountry
      * @param amount
      */
-    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws  GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException {
+    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         wc.moveUnits(game, srcCountry, destCountry, amount);
     }
@@ -320,5 +316,15 @@ public class GameController {
     public void switchTurns(UUID gameId) throws GameNotFoundException {
         Game game = getGameById(gameId);
         tc.switchTurns(game);
+    }
+
+    /**
+     * updates the player graph
+     * @param gameId
+     * @param p
+     */
+    public void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException {
+        Game game = getGameById(gameId);
+        grc.updatePlayerGraphMap(game, p);
     }
 }

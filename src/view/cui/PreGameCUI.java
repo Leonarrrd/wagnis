@@ -1,10 +1,7 @@
 package view.cui;
 
 import controller.GraphController;
-import exceptions.CountriesAlreadyAssignedException;
-import exceptions.GameNotFoundException;
-import exceptions.InvalidFormattedDataException;
-import exceptions.MaximumNumberOfPlayersReachedException;
+import exceptions.*;
 import model.Country;
 import model.Game;
 import model.Player;
@@ -20,8 +17,6 @@ public class PreGameCUI extends AbstractCUI {
     public void run() {
         boolean preGameDone = false;
         System.out.println("Welcome to Risk!");
-
-        System.out.println("Do you want to load a saved game?");
 
         boolean savedGame = false;
         try {
@@ -93,7 +88,11 @@ public class PreGameCUI extends AbstractCUI {
         }
 
         for (Player p : game.getPlayers()) {
-            GraphController.getInstance().updatePlayerGraphMap(p);
+            try {
+                GraphController.getInstance().updatePlayerGraphMap(game, p);
+            } catch (NoSuchPlayerException e) {
+                e.printStackTrace();
+            }
         }
     }
 

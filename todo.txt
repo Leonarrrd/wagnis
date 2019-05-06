@@ -1,5 +1,6 @@
 // 06/05
 - Status: TODO | Phil | Nicht das ganze Game an alle Methoden übergeben, sondern nur die Objekte die gebraucht werden??? Teschke fragen
+- Status: TODO | Phil | get-Methoden in das Model.. auf jeden fall
 
 // 24/04
 - Status: DONE | Phil | Refactor CUI

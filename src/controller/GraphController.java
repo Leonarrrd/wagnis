@@ -1,7 +1,9 @@
 package controller;
 
 import datastructures.Graph;
+import exceptions.NoSuchPlayerException;
 import model.Country;
+import model.Game;
 import model.Player;
 
 import java.util.ArrayList;
@@ -20,13 +22,22 @@ public class GraphController {
     }
 
     public static GraphController getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new GraphController();
         }
         return instance;
     }
 
+    public void updatePlayerGraphMap(Game game, Player player) throws NoSuchPlayerException {
+        if (!game.getPlayers().contains(player)) {
+            throw new NoSuchPlayerException(player + " does not exist.");
+        }
+        Graph graph = createGraph(player);
+        playerGraphMap.put(player, graph);
+    }
+
     private Graph createGraph(Player player) {
+
 
         Graph graph = new Graph();
         List<Country> countryList = new ArrayList<>(player.getCountries().values());
@@ -35,10 +46,6 @@ public class GraphController {
         return graph;
     }
 
-    public void updatePlayerGraphMap(Player player) {
-        Graph graph = createGraph(player);
-        playerGraphMap.put(player, graph);
-    }
 
     public Map<Player, Graph> getPlayerGraphMap() {
         return playerGraphMap;

@@ -1,7 +1,9 @@
 package view.cui;
 
-import controller.TurnController;
 import exceptions.GameNotFoundException;
+import exceptions.NoSuchCardException;
+import exceptions.NoSuchCountryException;
+import exceptions.NoSuchPlayerException;
 import model.Game;
 import model.Player;
 
@@ -22,8 +24,13 @@ public class PlaceUnitsCUI extends AbstractCUI {
         Player player = null;
         try {
             game = gc.getGameById(gameId);
-            player = game.getTurn().getPlayer();
 
+        } catch (GameNotFoundException e) {
+            e.printStackTrace();
+        }
+        player = game.getTurn().getPlayer();
+
+        try {
             unitsToPlace = awardUnits(gameId, player);
         } catch (GameNotFoundException e) {
             e.printStackTrace();
@@ -31,7 +38,6 @@ public class PlaceUnitsCUI extends AbstractCUI {
 
         while (unitsToPlace > 0) {
             String ans = "";
-            //FIXME: Get player from turn manager
             while (!player.getCountries().keySet().contains(ans)) {
                 System.out.println("All units must be placed to continue.");
                 System.out.println("Total available units: " + unitsToPlace);
@@ -58,7 +64,7 @@ public class PlaceUnitsCUI extends AbstractCUI {
             }
             try {
                 gc.changeUnits(gameId, player.getCountries().get(ans), howManyUnits);
-            } catch (GameNotFoundException e) {
+            } catch (GameNotFoundException | NoSuchCountryException e) {
                 e.printStackTrace();
             }
             unitsToPlace -= howManyUnits;
@@ -77,7 +83,12 @@ public class PlaceUnitsCUI extends AbstractCUI {
     private int awardUnits(UUID gameId, Player player) throws GameNotFoundException {
         Game game = gc.getGameById(gameId);
 
-        int awardedUnits = gc.awardUnits(gameId, player);
+        int awardedUnits = 0;
+        try {
+            awardedUnits = gc.awardUnits(gameId, player);
+        } catch (NoSuchPlayerException e) {
+            e.printStackTrace();
+        }
 
         System.out.println(player + " is awarded " + awardedUnits + " units.");
 
@@ -103,7 +114,11 @@ public class PlaceUnitsCUI extends AbstractCUI {
                             checkForSpecialInput(numAsString, "Please enter a number", game.toString());
                         }
                     }
-                    awardedUnits += gc.useCards(player, cardsToBeUsed);
+                    try {
+                        awardedUnits += gc.useCards(gameId, player, cardsToBeUsed);
+                    } catch (NoSuchCardException | NoSuchPlayerException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }

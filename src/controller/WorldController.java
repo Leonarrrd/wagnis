@@ -1,5 +1,6 @@
 package controller;
 
+import datastructures.AttackResult;
 import exceptions.*;
 import model.Country;
 import model.Game;
@@ -26,7 +27,13 @@ public class WorldController {
      * @param countryAsString
      * @param player
      */
-    void addCountry(Game game, String countryAsString, Player player) throws CountryAlreadyOccupiedException {
+    void addCountry(Game game, String countryAsString, Player player) throws CountryAlreadyOccupiedException, NoSuchCountryException {
+
+
+        if (!game.getCountries().containsKey(countryAsString)) {
+            throw new NoSuchCountryException("Country " + countryAsString + " does not exist");
+        }
+
         Country country = game.getCountries().get(countryAsString);
 
         if (country.getOwner() != null) {
@@ -43,13 +50,18 @@ public class WorldController {
      * @param country
      * @param units   units to add
      */
-    void changeUnits(Game game, Country country, int units) {
+    void changeUnits(Game game, Country country, int units) throws NoSuchCountryException {
+        if (!game.getCountries().containsValue(country)) {
+            throw new NoSuchCountryException("Country " + country + " does not exist");
+        }
         int tempUnits = game.getCountries().get(country.getName()).getUnits();
         game.getCountries().get(country.getName()).setUnits(tempUnits + units);
     }
 
-    void changeFrozenUnits(Game game, Country country, int frozenUnits) {
-
+    void changeFrozenUnits(Game game, Country country, int frozenUnits) throws NoSuchCountryException {
+        if (!game.getCountries().containsValue(country)) {
+            throw new NoSuchCountryException("Country " + country + " does not exist");
+        }
         int tempFrozenUnits = game.getCountries().get(country.getName()).getUnits();
         game.getCountries().get(country.getName()).setFrozenUnits(tempFrozenUnits + frozenUnits);
     }
@@ -61,13 +73,13 @@ public class WorldController {
     void assignCountries(Game game) throws CountriesAlreadyAssignedException {
         List<Country> countries = new ArrayList<>(game.getCountries().values());
         boolean assigned = false;
-        for(Country c : countries) {
-            if(c.getOwner() != null) {
+        for (Country c : countries) {
+            if (c.getOwner() != null) {
                 assigned = true;
             }
         }
 
-        if(assigned) {
+        if (assigned) {
             throw new CountriesAlreadyAssignedException("Countries already have been assigned.");
         }
 
@@ -121,15 +133,15 @@ public class WorldController {
      * @param player
      * @return map of countries with more than one unit
      */
-    Map<String, Country> getCountriesAttackCanBeLaunchedFrom(Game game, Player player)  throws NoSuchPlayerException {
-        if(!game.getPlayers().contains(player)) {
+    Map<String, Country> getCountriesAttackCanBeLaunchedFrom(Game game, Player player) throws NoSuchPlayerException, NoSuchCountryException {
+        if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player + " does not exist.");
         }
 
 
         Map<String, Country> countriesWithMoreThanOneUnit = new HashMap<>();
         for (Country country : player.getCountries().values()) {
-            if (country.getUnits() > 1 && !getHostileNeighbors(country).isEmpty()) {
+            if (country.getUnits() > 1 && !getHostileNeighbors(game, country).isEmpty()) {
                 countriesWithMoreThanOneUnit.put(country.getName(), country);
             }
         }
@@ -144,7 +156,10 @@ public class WorldController {
      * @param country
      * @return
      */
-    Map<String, Country> getHostileNeighbors(Country country) {
+    Map<String, Country> getHostileNeighbors(Game game, Country country) throws NoSuchCountryException {
+        if (!game.getCountries().containsValue(country)) {
+            throw new NoSuchCountryException("Country " + country + " does not exist.");
+        }
         Map<String, Country> hostileNeighbors = new HashMap<>();
         for (Country neighborCountry : country.getNeighbors()) {
             if (!(country.getOwner().getName().equals(neighborCountry.getOwner().getName()))) { // maybe better to implement equals for player
@@ -158,7 +173,10 @@ public class WorldController {
      * @param country
      * @return
      */
-    Map<String, Country> getAlliedNeighbors(Country country) {
+    Map<String, Country> getAlliedNeighbors(Game game, Country country) throws NoSuchCountryException {
+        if (!game.getCountries().containsValue(country)) {
+            throw new NoSuchCountryException("Country " + country + " does not exist.");
+        }
         Map<String, Country> alliedNeighbors = new HashMap<>();
         for (Country neighborCountry : country.getNeighbors()) {
             if (country.getOwner().getName().equals(neighborCountry.getOwner().getName())) {
@@ -175,8 +193,8 @@ public class WorldController {
      * @param player
      * @return
      */
-    Map<String, Country> getCountriesWithMoreThanOneUnit(Game game, Player player) throws NoSuchPlayerException{
-        if(!game.getPlayers().contains(player)) {
+    Map<String, Country> getCountriesWithMoreThanOneUnit(Game game, Player player) throws NoSuchPlayerException {
+        if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player + " does not exist.");
         }
         Map<String, Country> countriesWithMoreThanOneUnit = new HashMap<>();
@@ -189,7 +207,6 @@ public class WorldController {
     }
 
 
-
     /**
      * TODO: We should use changeUnits() here, but we have no gameID
      *
@@ -197,11 +214,11 @@ public class WorldController {
      * @param destCountry
      * @param amount
      */
-    void moveUnits(Game game, Country srcCountry, Country destCountry, int amount) throws NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException {
-        if(!game.getCountries().values().contains(srcCountry)) {
+    void moveUnits(Game game, Country srcCountry, Country destCountry, int amount) throws NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, NoSuchPlayerException {
+        if (!game.getCountries().values().contains(srcCountry)) {
             throw new NoSuchCountryException(srcCountry + " does not exist.");
         }
-        if(!game.getCountries().values().contains(destCountry)) {
+        if (!game.getCountries().values().contains(destCountry)) {
             throw new NoSuchCountryException(destCountry + " does not exist.");
         }
         if (srcCountry.getUnits() < amount) {
@@ -213,5 +230,27 @@ public class WorldController {
 
         srcCountry.setUnits(srcCountry.getUnits() - amount);
         destCountry.setUnits(destCountry.getUnits() + amount);
+    }
+
+    /**
+     * changing the ownership of a country
+     *
+     * @param defendingCountry
+     * @param attackingCountry
+     * @param remainingAttackingUnits
+     */
+    void changeCountryOwnership(Game game, Country defendingCountry, Country attackingCountry, int remainingAttackingUnits) throws NoSuchCountryException, CountriesNotAdjacentException {
+        if (!game.getCountries().containsValue(attackingCountry)) {
+            throw new NoSuchCountryException("Country " + attackingCountry + " does not exist.");
+        }
+        if (!game.getCountries().containsValue(defendingCountry)) {
+            throw new NoSuchCountryException("Country " + defendingCountry + " does not exist.");
+        }
+
+        defendingCountry.getOwner().getCountries().remove(defendingCountry.getName());
+        defendingCountry.setOwner(attackingCountry.getOwner());
+        attackingCountry.getOwner().getCountries().put(defendingCountry.getName(), defendingCountry);
+
+
     }
 }
