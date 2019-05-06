@@ -1,0 +1,55 @@
+// 06/05
+- Status: TODO | Phil | Nicht das ganze Game an alle Methoden übergeben, sondern nur die Objekte die gebraucht werden??? Teschke fragen
+
+// 24/04
+- Status: DONE | Phil | Refactor CUI
+- Status: TODO | Phil | Abfragen in Controller
+- Status: TODO | Phil | Exceptions erstellen
+- Status: DONE | Phil | Turn Objekt kennt nur einen Spieler
+- Status: DONE | Leo | Non-case-sensitive input handling // Deemed not important
+- Status: TODO | Leo | Improve number input in CUI // Problem: see CUI line 400
+- Status: DONE | Leo | Implement AttackResult class
+- Status: DONE | Leo | Fix bug in nachrueckUnits
+- Status: DONE | Leo | Missionen implementieren (abstrakte Klasse + Unterklassen) FIXME: Noch nicht ins Spiel implementiert
+- Status: DONE | Leo | Karten implementieren -- Stapel in Game Objekt FIXME: Bisher nur in simplifizierter Form
+
+- Status: TODO | Speicherung des GameState in Datei über OutputStream
+- Status: DONE | Laden des GameState über Inputstream
+- Status: TODO | Alle Länder und Kontinente über Inputstream
+- Status: TODO | Einlesen von Welt über Streams
+
+- Status: TODO | Unbeteiligte Einheiten dürfen nicht verschoben werden
+
+
+- Status : IDK | Maybe add int lostAttackingUnits and int lostDefendingUnits to AttackResult so we can print how many units were lost in each country
+
+// 23/04
+- Invalid input durch methode ersetzen // phil DONE leo DONE
+- Game.toString() schreiben // phil DONE
+- Weitere Angriffe erm�glichen(im Moment nur ein Angriff m�glich) // leo DONE
+- Weitere Moves erm�glichen(im Moment nur ein Angriff m�glich) // leo DONE
+- Automtisch Länder verteilen // leo DONE
+- Turn - Klasse // phil DONE
+- Nachrücken von Einheiten // leo DONE
+- Unbeteiligte Einheiten dürfen nicht verschoben werden // leo TODO?f
+
+
+- worldController: method "addUnits" name misleading, maybe "changeUnits" is better? // leo DONE
+- implement checkGameWon() // leo DONE
+
+// 04/04
+
+Alle L�nder
+
+DONE -- Bug Phillip beheben -- DONE
+DONE -- Fight Methode �berarbeiten, W�rfel auslagern
+DONE -- gleiche Augenzahl t�tet Angreifer
+DONE -- Einr�cken nach Angriff
+
+Weitere Angriffe erm�glichen(im Moment nur ein Angriff m�glich)
+DONE -- Abfragen von Daten -- Scanner Klasse erweitern
+
+
+Spiel speichern
+Spielstand �ber Stream in Datei schreiben + laden
+(Move muss nicht bewegbare Einheiten ber�cksichtigen)

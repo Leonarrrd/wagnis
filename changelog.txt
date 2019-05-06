@@ -1,0 +1,26 @@
+Date: 12/04/19 Author: Leo
+
+	WorldController:
+	1.	Added method "getCountriesAttackCanBeLaunchedFrom(Player player)" which is basically"getCountriesWithMoreThanOneUnit()" just that the countries also need to have a hostile neighbor
+	
+	2.	Added method "getAlliedNeighbors(Player player)"
+		Is used in hasCountryToMoveFrom (see below), might be used in the future for other logic
+	
+	LogicController:
+	1.	Split rolling dices apart from the attack()-method to rollDices(int numberOfDices)
+		I could split it further so that the view first takes the dicerolls and prints them, and then passes them on to the attack function, but I'd rather only do that when we make the gui
+	
+	2.	Made it so that attacker loses a unit if both dices show the same number
+	
+	3. 	Attacking units now move to the defending country if it has been defeated
+
+	4. 	Added methods "boolean hasCountryToMoveFrom(Player player)" and "boolean hasCountryToAttackFrom(Player player)"
+		These get called at the start of their respecting UI-methods. If they evaluate false, the UI will skip further dialog
+		Maybe they should be put into WorldController?
+		
+	UI:
+	1. 	Changed move()-method so that invalid inputs are no longer accepted:
+		Before: Possible options get displayed correctly, but if-statement only checked if the player owns the country, not if it matches any of the possible options
+		while (!player.getCountries().containsKey(game.getCountries().get(srcCountryStr).getName())) --> while (!graph.evaluateCountriesAllowedToMoveTo(srcCountryStr).contains(srcCountryStr))
+	
+	2.	Minor changes in wording

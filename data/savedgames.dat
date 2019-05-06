@@ -1,0 +1,3 @@
+c16f70fc-1fa2-41a5-919c-2332e97debf2,[player1:player2:player3],{[1'2-5'6]:[3'2-2'7]:[4'6-6'2]},[1:2:3],{[1-2]:[4-5]:[7-8]},player1,ATTACK;
+4aea1d7a-d4e3-4496-ae22-42d2909fc258,[Leonard:Philipp],{[3'3-4'6-6'2]:[5'2-1'7-2'6]},[1:2:3],{[1-2]:[4-5]:[7-8]},Leonard,ATTACK;
+ee86b65f-4537-417e-894c-af6eda87bbfd,[player1:player2:player3:player4],{[1'2-5'6]:[3'2-2'7]:[4'6-]:[6'2-]},[1:2:3],{[1-2]:[4-5]:[7-8]},player1,ATTACK;
