@@ -1,6 +1,4 @@
-package datastructures;
-
-import model.Country;
+package model;
 
 import java.util.List;
 

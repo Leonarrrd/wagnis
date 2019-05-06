@@ -1,14 +1,11 @@
 package controller;
 
 import exceptions.CardAlreadyOwnedException;
-import exceptions.GameNotFoundException;
 import exceptions.NoSuchCardException;
 import exceptions.NoSuchPlayerException;
 import model.Card;
 import model.Game;
 import model.Player;
-
-import java.util.UUID;
 
 public class CardDeckController {
     private static CardDeckController instance;

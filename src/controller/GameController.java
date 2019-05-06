@@ -1,6 +1,6 @@
 package controller;
 
-import datastructures.AttackResult;
+import model.AttackResult;
 import exceptions.*;
 import model.*;
 import persistence.FileReader;

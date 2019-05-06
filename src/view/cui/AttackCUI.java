@@ -1,7 +1,6 @@
 package view.cui;
 
-import controller.GraphController;
-import datastructures.AttackResult;
+import model.AttackResult;
 import exceptions.*;
 import model.Country;
 import model.Game;

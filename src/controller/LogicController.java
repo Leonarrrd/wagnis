@@ -1,13 +1,12 @@
 package controller;
 
-import datastructures.AttackResult;
+import model.AttackResult;
 import exceptions.*;
 import model.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 public class LogicController {
 

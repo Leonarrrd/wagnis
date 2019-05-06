@@ -4,8 +4,8 @@
 
 // 24/04
 - Status: DONE | Phil | Refactor CUI
-- Status: TODO | Phil | Abfragen in Controller
-- Status: TODO | Phil | Exceptions erstellen
+- Status: DONE | Phil | Abfragen in Controller
+- Status: DONE | Phil | Exceptions erstellen
 - Status: DONE | Phil | Turn Objekt kennt nur einen Spieler
 - Status: DONE | Leo | Non-case-sensitive input handling // Deemed not important
 - Status: TODO | Leo | Improve number input in CUI // Problem: see CUI line 400
@@ -16,9 +16,8 @@
 
 - Status: TODO | Speicherung des GameState in Datei über OutputStream
 - Status: DONE | Laden des GameState über Inputstream
-- Status: TODO | Alle Länder und Kontinente über Inputstream
-- Status: TODO | Einlesen von Welt über Streams
-
+- Status: DONE | Alle Länder und Kontinente über Inputstream
+- Status: DONE | Einlesen von Welt über Streams
 - Status: TODO | Unbeteiligte Einheiten dürfen nicht verschoben werden
 
 
