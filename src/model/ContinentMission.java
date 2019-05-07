@@ -2,11 +2,11 @@ package model;
 
 import java.util.List;
 
-public class ConquerMission extends Mission {
+public class ContinentMission extends Mission {
 
     private List<Continent> continentsToConquer;
 
-    public ConquerMission(int id, List<Continent> continentsToConquer, String message){
+    public ContinentMission(int id, List<Continent> continentsToConquer, String message){
         super(id, message);
         this.continentsToConquer = continentsToConquer;
     }

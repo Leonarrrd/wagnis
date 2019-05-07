@@ -1,15 +1,15 @@
 // 07/05
-- Status: TODO | Leo | assignMIssions-Methode spielerabhängig machen, kein Remove
-- Status: TODO | Leo | get-Methoden in das Model.. auf jeden fall
-- Status: TODO | Leo | Mission in CUI einbauen
 - Status: TODO | Phil | GameState speichern
 - Status: TODO | Phil | Mission/Karten in Game to String ausgeben
-- Status: TODO | Leo | Kartenliste und Aktuelles Kartendeck, kein Remove
 - Status: TODO | Phil | Exceptions zu missions hinzufügen
+- Status: TODO | Phil | Missons farbe
+- Status: DONE | Leo | assignMissions-Methode spielerabhängig machen, kein Remove
+- Status: DONE | Leo | Mission in CUI einbauen
+- Status: DONE | Leo | Country und Kontinentmissionen
+- Status: DONE | Leo | Mission und Card in gameState
 - Status: TODO | Leo | Tabelle einlesen
 - Status: TODO | Leo | Vaildätsprüfung für Karteneinsatz
-- Status: TODO | Leo | Mission und Card in checkForSpecialInput()
-- Status: TODO | Phil | Missons farbe
+- Status: TODO | Leo | Kartenliste und Aktuelles Kartendeck, kein Remove
 
 
 // 06/05

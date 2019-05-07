@@ -263,7 +263,6 @@ public class LogicController {
             throw new NoSuchPlayerException(player + " does not exist.");
         }
         //FIXME: enter real win condition
-//        return player.getMission().getTarget() == null ? checkContinentConquered(player) : getPlayerEliminated(player);
-        return player.getCountries().size() == 6;
+        return player.getMission().isAccomplished(player);
     }
 }

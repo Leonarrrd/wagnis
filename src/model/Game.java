@@ -124,7 +124,10 @@ public class Game {
         sb.append("\n");
         sb.append("\nPlayers: " + "\n");
         for (Player p : this.players) {
-            sb.append(p.toString() + "\n");
+            sb.append(p.toString() + "| ");
+            sb.append("Mission: " + p.getMission().getMessage() + "| ");
+            sb.append("Cards: " + p.getCards());
+            sb.append("\n");
         }
         sb.append("\nCountries: \n");
         for (Country c : this.countries.values()) {
