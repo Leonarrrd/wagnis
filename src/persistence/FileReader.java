@@ -12,7 +12,6 @@ import java.util.*;
 
 public class FileReader {
 
-    private static final String PROJECT_DATA_DIR = System.getProperty("user.dir") + "/data/";
     private static FileReader instance;
 
     private FileReader() {
@@ -283,7 +282,7 @@ public class FileReader {
 
     private String[] loadStringLinesFromData(String dataFile) throws IOException {
 
-        InputStream inputStream = new FileInputStream(PROJECT_DATA_DIR + dataFile);
+        InputStream inputStream = new FileInputStream(GameLoadUtils.PROJECT_DATA_DIR + dataFile);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder sb = new StringBuilder();
         String line;

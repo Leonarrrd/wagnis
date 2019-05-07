@@ -35,52 +35,10 @@ public class Game {
 
         for (int j = 0; j < 20; j++) {
             for (int i = 0; i < 2; i++) {
-                cardDeck.add(new Card(i + 1));
+                cardDeck.add(new Card(j+i, i + 1));
             }
         }
         Collections.shuffle(cardDeck);
-
-//        Country germany = new Country("Germany");
-//        Country denmark = new Country("Denmark");
-//        Country sweden = new Country("Sweden");
-//        Country finland = new Country("Finland");
-//        Country norway = new Country("Norway");
-//        Country poland = new Country("Poland");
-//
-//        germany.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(denmark, poland)
-//        ));
-//        denmark.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(sweden, germany)
-//        ));
-//        sweden.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(norway, denmark, finland)
-//        ));
-//        norway.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(sweden, finland)
-//        ));
-//        finland.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(norway, sweden, poland)
-//        ));
-//        poland.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(germany, finland)
-//        ));
-//
-//
-//        countries = new HashMap<String, Country>() {{
-//            put("Germany", germany);
-//            put("Denmark", denmark);
-//            put("Sweden", sweden);
-//            put("Finland", finland);
-//            put("Norway", norway);
-//            put("Poland", poland);
-//        }};
-//
-//        continents.add(new Continent(1,"GermanyAndPoland", 5, Arrays.asList(germany, poland)));
-
-//        missions.add(new Mission(players.get(1))); // kill player 2
-//        missions.add(new Mission(players.get(0))); // kill player 1
-//        missions.add(new Mission(Arrays.asList(continents.get(0)))); // conquer Germany and Poland
     }
 
     public List<Player> getPlayers() {

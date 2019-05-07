@@ -1,7 +1,11 @@
 package view.cui;
 
 import controller.GameController;
+import exceptions.GameNotFoundException;
+import model.Game;
+import persistence.FileWriter;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -30,6 +34,18 @@ public abstract class AbstractCUI {
             case "quit":
                 System.exit(0);
                 break;
+            case "save":
+                Game game = null;
+                try {
+                    game = gc.getGameById(gameId);
+                } catch (GameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    FileWriter.getInstance().saveGame(game);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             default:
                 System.out.println("Invalid input (" + input + "): " + message);
         }
