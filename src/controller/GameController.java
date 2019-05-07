@@ -57,10 +57,13 @@ public class GameController {
     public Game initNewGame() throws IOException, InvalidFormattedDataException {
         Map<String, Country> countries = null;
         List<Continent> continents = null;
+        List<Mission> missions = null;
+
         countries = FileReader.getInstance().loadCountries();
         continents = FileReader.getInstance().loadContinents(new ArrayList(countries.values()));
+        missions = FileReader.getInstance().loadMissions(continents);
 
-        Game game = new Game(UUID.randomUUID(), countries, continents);
+        Game game = new Game(UUID.randomUUID(), countries, continents, missions);
         activeGames.put(game.getId(), game);
 
 
@@ -79,7 +82,9 @@ public class GameController {
     public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException {
         List<Country> loadedCountries = new ArrayList<>(FileReader.getInstance().loadCountries().values());
         List<Continent> loadedContinents = new ArrayList<>(FileReader.getInstance().loadContinents(loadedCountries));
-        Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents);
+        List<Mission> loadedMissions = new ArrayList<>(FileReader.getInstance().loadMissions(loadedContinents));
+
+        Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents, loadedMissions);
         activeGames.put(game.getId(), game);
 
         return game;
@@ -156,6 +161,18 @@ public class GameController {
     public void assignCountries(UUID gameId) throws GameNotFoundException, CountriesAlreadyAssignedException {
         Game game = getGameById(gameId);
         wc.assignCountries(game);
+    }
+
+    /**
+     * Assigns missions to players
+     * Missions are assigned randomly because the missions list is shuffled on creation
+     * An assigned mission will be removed from the list
+     * @param gameId
+     * @throws GameNotFoundException
+     */
+    public void assignMissions(UUID gameId) throws  GameNotFoundException {
+        Game game = getGameById(gameId);
+        pc.assignMissions(game);
     }
 
     /**

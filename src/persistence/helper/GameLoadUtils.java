@@ -1,8 +1,11 @@
 package persistence.helper;
 
+import model.Mission;
 import persistence.helpermodels.RawCountryData;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GameLoadUtils {
@@ -35,6 +38,17 @@ public class GameLoadUtils {
             playerIndicesCountryDataMap.put(i, rawCountryDatas);
         }
         return playerIndicesCountryDataMap;
+    }
+
+    public static List<Integer> evaluateMissionData(String dataString){
+        List<Integer> missionIds = new ArrayList<>();
+        dataString = dataString.replace("[", "").replace("]", "");
+        String [] split = dataString.split(":");
+        for (int i = 0; i < split.length; i++){
+            int missionId = Integer.parseInt(split[i]);
+            missionIds.add(missionId);
+        }
+        return missionIds;
     }
 
     public static void main(String... args) {

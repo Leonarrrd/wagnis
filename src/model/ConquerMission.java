@@ -11,10 +11,10 @@ public class ConquerMission extends Mission {
         this.continentsToConquer = continentsToConquer;
     }
 
-    public boolean isAccomplished(){
+    public boolean isAccomplished(Player owner){
         boolean isAccomplished = true;
         for (Continent continent : continentsToConquer){
-            if (!continent.isOwnedByPlayer(this.getOwner())){
+            if (!continent.isOwnedByPlayer(owner)){
                 isAccomplished = false;
             }
         }

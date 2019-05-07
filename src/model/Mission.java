@@ -4,27 +4,23 @@ public abstract class Mission {
 
     private int id;
     private String message;
-    private Player owner;
 
     public Mission(int id, String message){
         this.message = message;
-    }
-
-    public void setPlayer(Player owner){
-        this.owner = owner;
-    }
-
-    public Player getOwner() {
-        return owner;
+        this.id = id;
     }
 
     public String getMessage() {
         return message;
     }
 
+    public int getId(){
+        return id;
+    }
+
     /**
      * Checks if the win condition described by the message is met
      * @return
      */
-    public abstract boolean isAccomplished();
+    public abstract boolean isAccomplished(Player owner);
 }

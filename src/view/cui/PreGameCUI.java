@@ -60,10 +60,11 @@ public class PreGameCUI extends AbstractCUI {
             }
             try {
                 gc.setTurn(gameId);
+                gc.assignMissions(gameId);
             } catch (GameNotFoundException e) {
                 e.printStackTrace();
             }
-            assignCountries(gameId);
+            countryAssignmentPhase(gameId);
         }
     }
 
@@ -73,7 +74,7 @@ public class PreGameCUI extends AbstractCUI {
      *
      * @param gameId
      */
-    private void assignCountries(UUID gameId) {
+    private void countryAssignmentPhase(UUID gameId) {
         Game game = null;
         try {
             game = gc.getGameById(gameId);
@@ -110,12 +111,16 @@ public class PreGameCUI extends AbstractCUI {
                 System.out.println(s);
             }
             //FIXME: Might want to map the gameIds to something that it's easier to type
-            //TODO: Might wannt to show more information on the games (e.g. date, game state?)
+            //TODO: Might want to show more information on the games (e.g. date, game state?)
             System.out.println("Which game do you want to load?");
             //TODO: load game etc
             input = reader.nextLine();
             Game game = gc.loadGame(UUID.fromString(input));
             System.out.println(game);
+            for (Player player : game.getPlayers()){
+                System.out.println(player.getName());
+                System.out.println(player.getMission().getMessage());
+            }
             setGameId(game.getId());
 
             return true;
