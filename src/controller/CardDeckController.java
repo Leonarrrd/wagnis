@@ -7,6 +7,9 @@ import model.Card;
 import model.Game;
 import model.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CardDeckController {
     private static CardDeckController instance;
 
@@ -33,7 +36,18 @@ public class CardDeckController {
             throw new NoSuchCardException("Card does not exist");
         }
 
-        player.getCards().add(game.getCardDeck().get(0));
-        game.getCardDeck().remove(0);
+        player.getCards().add(game.getCardDeck().remove(0));
+    }
+
+    List<Card> createCardDeck(){
+        List<Card> cardDeck = new ArrayList<>();
+        int id = 1;
+        for (int j = 0; j < 20; j++) {
+            for (int i = 0; i < 2; i++) {
+                cardDeck.add(new Card(id,i + 1));
+                id++;
+            }
+        }
+        return cardDeck;
     }
 }

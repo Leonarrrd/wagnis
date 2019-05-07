@@ -58,15 +58,18 @@ public class GameController {
         Map<String, Country> countries = null;
         List<Continent> continents = null;
         List<Mission> missions = null;
+        List<Card> cards = null;
+        List<Card> cardDeck = null;
+
 
         countries = FileReader.getInstance().loadCountries();
         continents = FileReader.getInstance().loadContinents(new ArrayList(countries.values()));
         missions = FileReader.getInstance().loadMissions(continents);
+        cards = cdc.createCardDeck();
+        cardDeck = (ArrayList) ((ArrayList)cards).clone();
 
-        Game game = new Game(UUID.randomUUID(), countries, continents, missions);
+        Game game = new Game(UUID.randomUUID(), countries, continents, missions, cards, cardDeck);
         activeGames.put(game.getId(), game);
-
-
 
         return game;
     }
@@ -83,8 +86,10 @@ public class GameController {
         List<Country> loadedCountries = new ArrayList<>(FileReader.getInstance().loadCountries().values());
         List<Continent> loadedContinents = new ArrayList<>(FileReader.getInstance().loadContinents(loadedCountries));
         List<Mission> loadedMissions = new ArrayList<>(FileReader.getInstance().loadMissions(loadedContinents));
+        List<Card> loadedCards = cdc.createCardDeck();
 
-        Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents, loadedMissions);
+
+        Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents, loadedMissions, loadedCards);
         activeGames.put(game.getId(), game);
 
         return game;
@@ -100,18 +105,6 @@ public class GameController {
     public void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException {
         Game game = getGameById(gameId);
         pc.addPlayer(game, playerName);
-    }
-
-    /**
-     * MISSIONS NOT IMPLEMENTED YET
-     *
-     * @param gameId
-     * @return random mission
-     * @throws GameNotFoundException
-     */
-    public Mission getRandomMission(UUID gameId) throws GameNotFoundException {
-        Game game = getGameById(gameId);
-        return lc.getRandomMission(game);
     }
 
     /**

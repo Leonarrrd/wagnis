@@ -169,12 +169,10 @@ public class LogicController {
             throw new NoSuchPlayerException(player + " does not exist");
         }
 
-        List<Card> usableCards = new ArrayList();
         boolean validCards = true;
         for (int i = 0; i < cardsToBeUsed; i++) {
             Card card = player.getCards().get(i);
-            usableCards.add(card);
-            if(!game.getCardDeck().contains(card)) {
+            if(!game.getCards().contains(card)) {
                 validCards = false;
             }
         }
@@ -185,7 +183,46 @@ public class LogicController {
         for (int i = 0; i < cardsToBeUsed; i++) {
             player.getCards().remove(0);
         }
-        return cardsToBeUsed * cardsToBeUsed;
+        return getUnitsForValue(cardsToBeUsed);
+    }
+
+    int getUnitsForValue(int cardsToBeUsed){
+        int unitsToGet;
+        switch (cardsToBeUsed){
+            case 1:
+                unitsToGet = 1;
+                break;
+            case 2:
+                unitsToGet = 2;
+                break;
+            case 3:
+                unitsToGet = 4;
+                break;
+            case 4:
+                unitsToGet = 7;
+                break;
+            case 5:
+                unitsToGet = 10;
+                break;
+            case 6:
+                unitsToGet = 13;
+                break;
+            case 7:
+                unitsToGet = 17;
+                break;
+            case 8:
+                unitsToGet = 21;
+                break;
+            case 9:
+                unitsToGet = 25;
+                break;
+            case 10:
+                unitsToGet = 30;
+                break;
+            default:
+                unitsToGet = 0;
+        }
+        return  unitsToGet;
     }
 
     /**

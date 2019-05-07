@@ -3,13 +3,14 @@
 - Status: TODO | Phil | Mission/Karten in Game to String ausgeben
 - Status: TODO | Phil | Exceptions zu missions hinzufügen
 - Status: TODO | Phil | Missons farbe
+- Status: TODO | BOTH | Player has to give cards to the player that eliminated him
 - Status: DONE | Leo | assignMissions-Methode spielerabhängig machen, kein Remove
 - Status: DONE | Leo | Mission in CUI einbauen
 - Status: DONE | Leo | Country und Kontinentmissionen
 - Status: DONE | Leo | Mission und Card in gameState
-- Status: TODO | Leo | Tabelle einlesen
-- Status: TODO | Leo | Vaildätsprüfung für Karteneinsatz
-- Status: TODO | Leo | Kartenliste und Aktuelles Kartendeck, kein Remove
+- Status: DONE | Leo | Tabelle einlesen
+- Status: DONE | Leo | Vaildätsprüfung für Karteneinsatz
+- Status: DONE | Leo | Kartenliste und Aktuelles Kartendeck, kein Remove
 
 
 // 06/05

@@ -10,10 +10,11 @@ import java.util.Map;
 public class Player {
     private String name;
     private Map<String, Country> countries = new HashMap<>(); // maybe better as Map<String, Country>?
+
     private List<Card> cards = new ArrayList<>();
+
     private Mission mission;
     private boolean hasConqueredCountry = false;
-
     public Player(String name) {
         this.name = name;
     }
@@ -45,6 +46,10 @@ public class Player {
 
     public List<Card> getCards(){
         return cards;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards = cards;
     }
 
     public boolean hasConqueredCountry() {

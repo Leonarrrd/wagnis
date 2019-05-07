@@ -81,6 +81,7 @@ public class FileWriter {
                 sb.append("-");
             }
             sb.append("]");
+            sb.append(":");
         }
         sb.append("}");
         sb.append(",");

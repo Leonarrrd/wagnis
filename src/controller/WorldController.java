@@ -238,7 +238,7 @@ public class WorldController {
      * @param attackingCountry
      * @param remainingAttackingUnits
      */
-    void changeCountryOwnership(Game game, Country defendingCountry, Country attackingCountry, int remainingAttackingUnits) throws NoSuchCountryException, CountriesNotAdjacentException {
+    void changeCountryOwnership(Game game, Country attackingCountry, Country defendingCountry, int remainingAttackingUnits) throws NoSuchCountryException, CountriesNotAdjacentException {
         if (!game.getCountries().containsValue(attackingCountry)) {
             throw new NoSuchCountryException("Country " + attackingCountry + " does not exist.");
         }

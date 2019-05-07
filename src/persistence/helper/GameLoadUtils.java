@@ -54,6 +54,23 @@ public class GameLoadUtils {
         return missionIds;
     }
 
+    public static Map<Integer, List<Integer>> evaluateCardData(String dataString){
+        Map<Integer, List<Integer>> cardData = new HashMap<>();
+        dataString = dataString.replace("[", "").replace("]", "");
+        dataString = dataString.replace("{", "").replace("}", "");
+        String[] split = dataString.split(":");
+        for (int i = 0; i < split.length; i++){
+            cardData.put(i, new ArrayList<>());
+            String s = split[i];
+            String[] cardIds = s.split("-");
+            for (String field : cardIds){
+                cardData.get(i).add(Integer.parseInt(field));
+            }
+        }
+        return cardData;
+    }
+
+
     public static void main(String... args) {
         Map<Integer, RawCountryData[]> x = evaluateCountryData("{[1'2-5'6]:[3'2-2'7]:[4'6-6'2]}");
     }
