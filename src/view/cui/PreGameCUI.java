@@ -54,7 +54,7 @@ public class PreGameCUI extends AbstractCUI {
                     } else {
                         preGameDone = true;
                     }
-                } catch (GameNotFoundException | MaximumNumberOfPlayersReachedException e) {
+                } catch (GameNotFoundException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException e) {
                     e.printStackTrace();
                 }
             }
@@ -66,7 +66,7 @@ public class PreGameCUI extends AbstractCUI {
                     System.out.println(player);
                     System.out.println(player.getMission().getMessage());
                 }
-            } catch (GameNotFoundException e) {
+            } catch (GameNotFoundException | MaximumNumberOfPlayersReachedException e) {
                 e.printStackTrace();
             }
             countryAssignmentphase(gameId);

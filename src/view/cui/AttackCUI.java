@@ -66,7 +66,7 @@ public class AttackCUI extends AbstractCUI {
                 System.out.println(countriesAttacksCanBeLaunchedFrom.keySet());
                 ans = reader.nextLine();
                 if (!countriesAttacksCanBeLaunchedFrom.keySet().contains(ans)) {
-                    checkForSpecialInput(ans, "Not a country", game.toString());
+                    checkForSpecialInput(ans, "Not a country");
                 }
             }
             Country srcCountry = game.getCountries().get(ans);
@@ -84,7 +84,7 @@ public class AttackCUI extends AbstractCUI {
                 System.out.println(hostileNeighbors.keySet());
                 ans = reader.nextLine();
                 if (!hostileNeighbors.keySet().contains(ans)) {
-                    checkForSpecialInput(ans, "Not a country", game.toString());
+                    checkForSpecialInput(ans, "Not a country");
                 }
             }
             Country destCountry = game.getCountries().get(ans);
@@ -121,7 +121,7 @@ public class AttackCUI extends AbstractCUI {
                         String numAsString = reader.nextLine();
                         defendingUnits = Integer.parseInt(numAsString);
                     } catch (Exception e) {
-                        checkForSpecialInput(ans, "Not a number", game.toString());
+                        checkForSpecialInput(ans, "Not a number");
                     }
                 }
 
@@ -144,7 +144,7 @@ public class AttackCUI extends AbstractCUI {
                             System.out.println("Do you want to nachrueck units? (y,n)");
                             ans = reader.nextLine();
                             if (!(ans.equals("y") || ans.equals("n"))) {
-                                checkForSpecialInput(ans, "Neither 'y' nor 'n'", game.toString());
+                                checkForSpecialInput(ans, "Neither 'y' nor 'n'");
                             }
                             if (ans.equals("y")) {
                                 int maxNachRueckUnits = (srcCountry.getUnits() - 1);
@@ -158,7 +158,7 @@ public class AttackCUI extends AbstractCUI {
                                         String numAsString = reader.nextLine();
                                         nachRueckUnits = Integer.parseInt(numAsString);
                                     } catch (Exception e) {
-                                        checkForSpecialInput(ans, "Not a number.", game.toString());
+                                        checkForSpecialInput(ans, "Not a number.");
                                     }
                                 }
 
@@ -181,7 +181,7 @@ public class AttackCUI extends AbstractCUI {
                         System.out.println("Do you want to continue attacking? (y,n)");
                         ans = reader.nextLine();
                         if (!(ans.equals("y") || ans.equals("n"))) {
-                            checkForSpecialInput(ans, "Neither 'y' nor 'n'", game.toString());
+                            checkForSpecialInput(ans, "Neither 'y' nor 'n'");
                         }
                         if (ans.equals("n")) {
                             fightFinished = true;
@@ -199,7 +199,7 @@ public class AttackCUI extends AbstractCUI {
                 System.out.println("Do you want to launch another attack? (y,n)");
                 ans = reader.nextLine();
                 if (!(ans.equals("y") || ans.equals("n"))) {
-                    checkForSpecialInput(ans, "Neither 'y' nor 'n'", game.toString());
+                    checkForSpecialInput(ans, "Neither 'y' nor 'n'");
                 }
                 if (ans.equals("n")) {
                     attackPhaseFinished = true;

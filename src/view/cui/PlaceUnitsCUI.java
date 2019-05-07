@@ -46,7 +46,7 @@ public class PlaceUnitsCUI extends AbstractCUI {
                 System.out.println(player.getCountries().values());
                 ans = reader.nextLine();
                 if (!player.getCountries().keySet().contains(ans)) {
-                    checkForSpecialInput(ans, "Invalid input. Make sure you input matches the country name exactly", game.toString());
+                    checkForSpecialInput(ans, "Invalid input. Make sure you input matches the country name exactly");
                 }
             }
 
@@ -59,7 +59,7 @@ public class PlaceUnitsCUI extends AbstractCUI {
                     //TODO: Following two lines are a bit awkward. Had problems with readInt() method, so did this instead
                     howManyUnits = Integer.parseInt(numAsString);
                 } catch (NumberFormatException e) {
-                    checkForSpecialInput(numAsString, "Please enter a number", game.toString());
+                    checkForSpecialInput(numAsString, "Please enter a number");
                 }
             }
             try {
@@ -99,7 +99,7 @@ public class PlaceUnitsCUI extends AbstractCUI {
                 System.out.println("Do you want to use any cards? (y/n)");
                 ans = reader.nextLine();
                 if (!(ans.equals("y") || ans.equals("n"))) {
-                    checkForSpecialInput(ans, "Neither 'y' nor 'n'", game.toString());
+                    checkForSpecialInput(ans, "Neither 'y' nor 'n'");
                 }
                 if (ans.equals("y")) {
                     int cardsToBeUsed = 0;
@@ -111,7 +111,7 @@ public class PlaceUnitsCUI extends AbstractCUI {
                             //TODO: Following two lines are a bit awkward. Had problems with readInt() method, so did this instead
                             cardsToBeUsed = Integer.parseInt(numAsString);
                         } catch (NumberFormatException e) {
-                            checkForSpecialInput(numAsString, "Please enter a number", game.toString());
+                            checkForSpecialInput(numAsString, "Please enter a number");
                         }
                     }
                     try {

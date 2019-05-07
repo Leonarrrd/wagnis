@@ -67,7 +67,7 @@ public class MoveCUI extends AbstractCUI {
 
             String srcCountryStr = reader.nextLine();
             while (!countriesToMoveFrom.containsKey(srcCountryStr)) {
-                checkForSpecialInput(srcCountryStr, "Not a country or not owned", game.toString());
+                checkForSpecialInput(srcCountryStr, "Not a country or not owned");
                 srcCountryStr = reader.nextLine();
             }
 
@@ -78,7 +78,7 @@ public class MoveCUI extends AbstractCUI {
 
             String destCountryStr = reader.nextLine();
             while (!graph.evaluateCountriesAllowedToMoveTo(srcCountryStr).contains(srcCountryStr)) {
-                checkForSpecialInput(srcCountryStr, "Not a country or not a valid target", game.toString());
+                checkForSpecialInput(srcCountryStr, "Not a country or not a valid target");
                 destCountryStr = reader.nextLine();
             }
 
@@ -112,7 +112,7 @@ public class MoveCUI extends AbstractCUI {
                 System.out.println("Do you want to perform another move operation? (y,n)");
                 ans = reader.nextLine();
                 if (!(ans.equals("y") || ans.equals("n"))) {
-                    checkForSpecialInput(ans, "Neither 'y' nor 'n'", game.toString());
+                    checkForSpecialInput(ans, "Neither 'y' nor 'n'");
                 }
                 if (ans.equals("n")) {
                     movePhaseFinished = true;

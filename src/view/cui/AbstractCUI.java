@@ -21,35 +21,44 @@ public abstract class AbstractCUI {
 
     /**
      * if the input from the call is not a valid input for a player action
-     * this method checks if it's a special input (like printing the game state with "state"
+     * this method checks if it's a special input (like printing the game state with "state")
      * else the input is invalid and an error message is printed.
      *
      * @param input
-     * @param gameState
      */
-    protected void checkForSpecialInput(String input, String message, String gameState) {
+    protected void checkForSpecialInput(String input, String message) {
+        Game game = null;
+        try {
+            game = gc.getGameById(gameId);
+        } catch (GameNotFoundException e) {
+            e.printStackTrace();
+        }
         switch (input) {
             case "state":
-                System.out.println(gameState + "\n");
+                System.out.println(game.toString()+ "\n");
                 break;
             case "quit":
                 System.exit(0);
                 break;
             case "save":
-                Game game = null;
-                try {
-                    game = gc.getGameById(gameId);
-                } catch (GameNotFoundException e) {
-                    e.printStackTrace();
-                }
                 try {
                     FileWriter.getInstance().saveGame(game);
                 } catch (IOException | GameNotFoundException | DuplicateGameIdException e) {
                     e.printStackTrace();
                 }
                 break;
+            case "delete":
+                try {
+                    FileWriter.getInstance().removeGame(game);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (GameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 System.out.println("Invalid input (" + input + "): " + message);
+                break;
         }
     }
 

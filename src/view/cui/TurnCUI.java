@@ -7,6 +7,8 @@ import exceptions.NoSuchPlayerException;
 import model.Game;
 import model.Player;
 
+import java.io.IOException;
+
 public class TurnCUI extends AbstractCUI {
 
 
@@ -60,12 +62,13 @@ public class TurnCUI extends AbstractCUI {
 
     }
 
+    //FIXME: Needs to be done in the controller asap
     private void postTurnCheck(Game game, boolean gameWon, Player player) {
 
         boolean winCondition = false;
         try {
             winCondition = gc.checkWinCondidtion(gameId, player);
-        } catch (GameNotFoundException | NoSuchPlayerException e) {
+        } catch (GameNotFoundException | NoSuchPlayerException | IOException e) {
             e.printStackTrace();
         }
         if (winCondition) {

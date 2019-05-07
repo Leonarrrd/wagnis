@@ -19,7 +19,7 @@ public class FileReader {
 
 
     /**
-     * loads countries from countries.csv file and parses them to the needed data structure
+     * Loads countries from countries.dat file and parses them to the needed data structure
      *
      * @return
      * @throws IOException
@@ -66,8 +66,8 @@ public class FileReader {
     }
 
     /**
-     * loads continents from continents.csv file and parses them to the needed data structure
-     * !!make sure to load continents AFTER loading the countries!!
+     * Loads continents from continents.dat file and parses them to the needed data structure
+     * !!Make sure to load continents AFTER loading the countries!!
      *
      * @return
      * @throws IOException
@@ -99,6 +99,13 @@ public class FileReader {
         return continents;
     }
 
+    /**
+     * Loads missions from the persistence (missions.dat).
+     * @param continents
+     * @return
+     * @throws IOException
+     * @throws InvalidFormattedDataException
+     */
     public List<Mission> loadMissions(List<Continent> continents) throws IOException, InvalidFormattedDataException {
         List<Mission> missions = new ArrayList<>();
         String[] missionData = getStringLinesFromData("missions.dat");
@@ -136,6 +143,11 @@ public class FileReader {
         getInstance().loadGame(UUID.fromString("c16f70fc-1fa2-41a5-919c-2332e97debf2"), countries, continents);
     }*/
 
+    /**
+     * Loads available saved games
+     * @return
+     * @throws IOException
+     */
     public List<String> loadAvailableGameIds() throws IOException {
         String[] gameData = getStringLinesFromData("savedgames.dat");
         List<String> availableGameIds = new ArrayList<>();
@@ -148,6 +160,19 @@ public class FileReader {
         return availableGameIds;
     }
 
+    /**
+     * loads a game from the persistence and parses it into a valid Game-Object.
+     * The assets (country, continents, missions, cards) need to be loaded first and passed as parameters.
+     * @param gameId
+     * @param loadedCountries
+     * @param loadedContinents
+     * @param loadedMissions
+     * @param loadedCards
+     * @return
+     * @throws IOException
+     * @throws GameNotFoundException
+     * @throws InvalidFormattedDataException
+     */
     public Game loadGame(UUID gameId, List<Country> loadedCountries, List<Continent> loadedContinents, List<Mission> loadedMissions, List<Card> loadedCards) throws IOException, GameNotFoundException, InvalidFormattedDataException {
         String[] gameData = getStringLinesFromData("savedgames.dat");
         String dataset = null;
@@ -178,6 +203,7 @@ public class FileReader {
         String[] commaSplit = dataset.split(",");
 
         //Determine gameId
+        //TODO: might remove, might needed later
         UUID nGameId = UUID.fromString(commaSplit[0]);
 
         //evaluate Player array
@@ -288,6 +314,12 @@ public class FileReader {
     }
 
 
+    /**
+     * helper method to determine the indices from a String in the persistence representation.
+     * @param arrayString
+     * @return
+     * @throws InvalidFormattedDataException
+     */
     private int[] getIndicesFromDataSetArray(String arrayString) throws InvalidFormattedDataException {
         if (!arrayString.contains("[") && !arrayString.contains("]")) {
             throw new InvalidFormattedDataException("Array does not contain [ and ]. Use following format: [0:1:...:n]");
@@ -303,6 +335,12 @@ public class FileReader {
         return indices;
     }
 
+    /**
+     * Loads each line (delmitted by ';') from a file and puts it into a String array.
+     * @param dataFile
+     * @return
+     * @throws IOException
+     */
     String[] getStringLinesFromData(String dataFile)  throws IOException {
 
         String toSplit = loadFileContent(dataFile);
@@ -312,6 +350,12 @@ public class FileReader {
         return split;
     }
 
+    /**
+     * Loads the whole content of a file
+     * @param dataFile
+     * @return
+     * @throws IOException
+     */
     private String loadFileContent(String dataFile)  throws IOException  {
         InputStream inputStream = new FileInputStream(GameLoadUtils.PROJECT_DATA_DIR + dataFile);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));

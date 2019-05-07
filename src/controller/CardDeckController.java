@@ -27,7 +27,7 @@ public class CardDeckController {
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player + " does not exist.");
         }
-        //!!FIXME:absolute bullshit, but wanted to get the exception in fix: pass right card
+        //!!FIXME:absolute Bs, but wanted to get the exception in fix: pass right card
         Card card = game.getCardDeck().get(0);
         if(player.getCards().contains(card)) {
             throw new CardAlreadyOwnedException(player + " already owns the card.");

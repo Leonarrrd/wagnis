@@ -3,7 +3,9 @@ package controller;
 import model.AttackResult;
 import exceptions.*;
 import model.*;
+import persistence.FileWriter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -285,11 +287,17 @@ public class LogicController {
      * @param player
      * @return
      */
-    boolean checkWinCondition(Game game, Player player) throws NoSuchPlayerException {
+    //FIXME: IOException muss da besser gehandlet werden. Macht semantisch keinen Sinn.
+    boolean checkWinCondition(Game game, Player player) throws NoSuchPlayerException, IOException, GameNotFoundException {
         if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player + " does not exist.");
         }
         //FIXME: enter real win condition
+        boolean winConditionMet = player.getMission().isAccomplished(player);
+        if(winConditionMet) {
+            FileWriter.getInstance().removeGame(game);
+            return winConditionMet;
+        }
         return player.getMission().isAccomplished(player);
     }
 }

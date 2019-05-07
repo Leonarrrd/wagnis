@@ -95,6 +95,7 @@ public class GameController {
         return game;
     }
 
+
     /**
      * adds a player to a game
      *
@@ -102,7 +103,7 @@ public class GameController {
      * @param playerName
      * @throws GameNotFoundException
      */
-    public void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException {
+    public void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
         Game game = getGameById(gameId);
         pc.addPlayer(game, playerName);
     }
@@ -163,7 +164,7 @@ public class GameController {
      * @param gameId
      * @throws GameNotFoundException
      */
-    public void assignMissions(UUID gameId) throws  GameNotFoundException {
+    public void assignMissions(UUID gameId) throws GameNotFoundException, MaximumNumberOfPlayersReachedException {
         Game game = getGameById(gameId);
         pc.assignMissions(game);
     }
@@ -299,12 +300,11 @@ public class GameController {
 
 
     /**
-     * Missing missions
      *
      * @param player
      * @return
      */
-    public boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
+    public boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException {
         Game game = getGameById(gameId);
         return lc.checkWinCondition(game, player);
     }
