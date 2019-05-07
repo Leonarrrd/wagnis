@@ -22,7 +22,6 @@ public class GameController {
     private TurnController tc = TurnController.getInstance();
     private CardDeckController cdc = CardDeckController.getInstance();
     private GraphController grc = GraphController.getInstance();
-
     private GameController() {
     }
 
@@ -35,7 +34,6 @@ public class GameController {
 
     /**
      * gets the game by providing a game id.
-     *
      * @param id
      * @return the main game object
      * @throws GameNotFoundException if the game does not exist
@@ -51,7 +49,6 @@ public class GameController {
 
     /**
      * inits a new game
-     *
      * @return
      * @throws IOException
      * @throws InvalidFormattedDataException
@@ -61,21 +58,24 @@ public class GameController {
         Map<String, Country> countries = null;
         List<Continent> continents = null;
         List<Mission> missions = null;
+        List<Card> cards = null;
+        List<Card> cardDeck = null;
+
 
         countries = FileReader.getInstance().loadCountries();
         continents = FileReader.getInstance().loadContinents(new ArrayList(countries.values()));
         missions = FileReader.getInstance().loadMissions(continents);
+        cards = cdc.createCardDeck();
+        cardDeck = (ArrayList) ((ArrayList)cards).clone();
 
-        Game game = new Game(UUID.randomUUID(), countries, continents, missions);
+        Game game = new Game(UUID.randomUUID(), countries, continents, missions, cards, cardDeck);
         activeGames.put(game.getId(), game);
-
 
         return game;
     }
 
     /**
      * load an exisitng game from saved games
-     *
      * @param gameId
      * @return
      * @throws IOException
@@ -86,8 +86,10 @@ public class GameController {
         List<Country> loadedCountries = new ArrayList<>(FileReader.getInstance().loadCountries().values());
         List<Continent> loadedContinents = new ArrayList<>(FileReader.getInstance().loadContinents(loadedCountries));
         List<Mission> loadedMissions = new ArrayList<>(FileReader.getInstance().loadMissions(loadedContinents));
+        List<Card> loadedCards = cdc.createCardDeck();
 
-        Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents, loadedMissions);
+
+        Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents, loadedMissions, loadedCards);
         activeGames.put(game.getId(), game);
 
         return game;
@@ -107,7 +109,6 @@ public class GameController {
 
     /**
      * TODO: kann die raus? add description
-     *
      * @param gameId
      * @param countryAsString
      * @param player
@@ -132,7 +133,6 @@ public class GameController {
 
     /**
      * TODO: add description
-     *
      * @param gameId
      * @param country
      * @param frozenUnits
@@ -160,11 +160,10 @@ public class GameController {
      * Assigns missions to players
      * Missions are assigned randomly because the missions list is shuffled on creation
      * An assigned mission will be removed from the list
-     *
      * @param gameId
      * @throws GameNotFoundException
      */
-    public void assignMissions(UUID gameId) throws GameNotFoundException {
+    public void assignMissions(UUID gameId) throws  GameNotFoundException {
         Game game = getGameById(gameId);
         pc.assignMissions(game);
     }
@@ -316,12 +315,13 @@ public class GameController {
      * @param gameId
      */
     public void setTurn(UUID gameId) throws GameNotFoundException {
-        Game game = getGameById(gameId);
+        Game game =getGameById(gameId);
         tc.setTurn(game);
     }
 
     /**
      * switch turns (phase or phase and player)
+     *
      */
     public void switchTurns(UUID gameId) throws GameNotFoundException {
         Game game = getGameById(gameId);
@@ -330,7 +330,6 @@ public class GameController {
 
     /**
      * updates the player graph
-     *
      * @param gameId
      * @param p
      */

@@ -47,6 +47,7 @@ public abstract class AbstractCUI {
                 } catch (IOException | GameNotFoundException | DuplicateGameIdException e) {
                     e.printStackTrace();
                 }
+                break;
             default:
                 System.out.println("Invalid input (" + input + "): " + message);
         }

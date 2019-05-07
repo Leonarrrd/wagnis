@@ -148,7 +148,7 @@ public class FileReader {
         return availableGameIds;
     }
 
-    public Game loadGame(UUID gameId, List<Country> loadedCountries, List<Continent> loadedContinents, List<Mission> loadedMissions) throws IOException, GameNotFoundException, InvalidFormattedDataException {
+    public Game loadGame(UUID gameId, List<Country> loadedCountries, List<Continent> loadedContinents, List<Mission> loadedMissions, List<Card> loadedCards) throws IOException, GameNotFoundException, InvalidFormattedDataException {
         String[] gameData = getStringLinesFromData("savedgames.dat");
         String dataset = null;
 
@@ -187,16 +187,6 @@ public class FileReader {
             players.add(new Player(s));
         }
 
-        //evaluate player missions
-        List<Integer> missionIds = GameLoadUtils.evaluateMissionData(commaSplit[3]);
-        for (int i = 0; i < players.size(); i++){
-            Player player = players.get(i);
-            for (Mission mission : loadedMissions){
-                if (missionIds.get(i) == mission.getId()){
-                    player.setMission(mission);
-                }
-            }
-        }
 
         //evaluate owned countries by players + units
         //Integer = player index, RawCountryData countryId + units
@@ -223,11 +213,39 @@ public class FileReader {
 
         }
 
-        //evaluate missions
-        //TODO: Evaluating missions
-
+        //evaluate player missions
+        List<Integer> missionIds = GameLoadUtils.evaluateMissionData(commaSplit[3]);
+        for (int i = 0; i < players.size(); i++){
+            Player player = players.get(i);
+            for (Mission mission : loadedMissions){
+                if (missionIds.get(i) == mission.getId()){
+                    player.setMission(mission);
+                }
+            }
+        }
         //evaluate cards
         //TODO: Evaluating cards
+        //TODO: Create cardDeck
+        // key is the player index, values or List of cardIds
+        List<Card> cardDeck = (ArrayList)((ArrayList)loadedCards).clone();
+
+        Map<Integer, List<Integer>> cardData = GameLoadUtils.evaluateCardData(commaSplit[4]);
+        for (int i = 0; i < players.size(); i++){
+            Player player = players.get(i);
+            List<Card> playersCards = new ArrayList<>();
+            if (cardData.get(i) != null) {
+                for (int cardId : cardData.get(i)) {
+                    for (Card card : loadedCards) {
+                        if (cardId == card.getId()) {
+                            playersCards.add(card);
+                            cardDeck.remove(card);
+                        }
+                    }
+                }
+            }
+            player.setCards(playersCards);
+        }
+
 
         //evaluate player turn
         Player activePlayer = null;
@@ -262,8 +280,7 @@ public class FileReader {
             loadedCountriesMap.put(c.getName(), c);
         }
 
-        //FIXME: total bogus third parameter
-        Game game = new Game(gameId, loadedCountriesMap, loadedContinents, loadedMissions);
+        Game game = new Game(gameId, loadedCountriesMap, loadedContinents, loadedMissions, loadedCards, cardDeck);
         game.setPlayers(players);
         game.setTurn(turn);
 
