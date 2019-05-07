@@ -1,2 +1,3 @@
-1,Conquer Germany and Poland,conquer,[1];
-2,Conquer Scampinavia,conquer,[2];
+1,Conquer Germany and Poland,continent,[1];
+2,Conquer Scandinavia,continent,[2];
+3,Conquer 30 countries,country,30;

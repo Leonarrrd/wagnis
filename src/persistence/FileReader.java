@@ -107,17 +107,23 @@ public class FileReader {
             String[] fields = entry.split(",");
             int missionId = Integer.parseInt(fields[0]);
             String missionMessage = fields[1];
-            if (fields[2].equals("conquer")){
-                List<Continent> continentsToConquer = new ArrayList<>();
-                int[] continentIndices = getIndicesFromDataSetArray(fields[3]);
-                for (int indice : continentIndices){
-                    for (Continent continent : continents){
-                        if (indice == continent.getId()){
-                            continentsToConquer.add(continent);
+            switch (fields[2]){
+                case "continent":
+                    List<Continent> continentsToConquer = new ArrayList<>();
+                    int[] continentIndices = getIndicesFromDataSetArray(fields[3]);
+                    for (int indice : continentIndices){
+                        for (Continent continent : continents){
+                            if (indice == continent.getId()){
+                                continentsToConquer.add(continent);
+                            }
                         }
                     }
-                }
-                missions.add(new ConquerMission(missionId, continentsToConquer, missionMessage));
+                    missions.add(new ContinentMission(missionId, continentsToConquer, missionMessage));
+                    break;
+                case "country":
+                    int countriesToConquer = Integer.parseInt(fields[3]);
+                    missions.add(new CountryMission(missionId, countriesToConquer, missionMessage));
+                    break;
             }
         }
         Collections.shuffle(missions);

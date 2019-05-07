@@ -35,9 +35,8 @@ public class PlayerController {
      * @param game
      */
     void assignMissions(Game game){
-        for (Player player : game.getPlayers()){
-            player.setMission(game.getMissions().remove(0));
+        for (int i = 0; i < game.getPlayers().size(); i++){
+            game.getPlayers().get(i).setMission(game.getMissions().get(i));
         }
     }
-
 }

@@ -61,10 +61,15 @@ public class PreGameCUI extends AbstractCUI {
             try {
                 gc.setTurn(gameId);
                 gc.assignMissions(gameId);
+                //FIXME: remove these prints
+                for (Player player : game.getPlayers()){
+                    System.out.println(player);
+                    System.out.println(player.getMission().getMessage());
+                }
             } catch (GameNotFoundException e) {
                 e.printStackTrace();
             }
-            countryAssignmentPhase(gameId);
+            countryAssignmentphase(gameId);
         }
     }
 
@@ -74,7 +79,7 @@ public class PreGameCUI extends AbstractCUI {
      *
      * @param gameId
      */
-    private void countryAssignmentPhase(UUID gameId) {
+    private void countryAssignmentphase(UUID gameId) {
         Game game = null;
         try {
             game = gc.getGameById(gameId);
@@ -117,12 +122,7 @@ public class PreGameCUI extends AbstractCUI {
             input = reader.nextLine();
             Game game = gc.loadGame(UUID.fromString(input));
             System.out.println(game);
-            for (Player player : game.getPlayers()){
-                System.out.println(player.getName());
-                System.out.println(player.getMission().getMessage());
-            }
             setGameId(game.getId());
-
             return true;
         } else if (input.equals("n")) {
             return false;
