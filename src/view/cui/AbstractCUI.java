@@ -1,6 +1,7 @@
 package view.cui;
 
 import controller.GameController;
+import exceptions.DuplicateGameIdException;
 import exceptions.GameNotFoundException;
 import model.Game;
 import persistence.FileWriter;
@@ -43,7 +44,7 @@ public abstract class AbstractCUI {
                 }
                 try {
                     FileWriter.getInstance().saveGame(game);
-                } catch (IOException e) {
+                } catch (IOException | GameNotFoundException | DuplicateGameIdException e) {
                     e.printStackTrace();
                 }
             default:

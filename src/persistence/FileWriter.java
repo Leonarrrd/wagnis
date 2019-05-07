@@ -1,5 +1,7 @@
 package persistence;
 
+import exceptions.DuplicateGameIdException;
+import exceptions.GameNotFoundException;
 import model.Card;
 import model.Country;
 import model.Game;
@@ -7,6 +9,7 @@ import model.Player;
 import persistence.helper.GameLoadUtils;
 
 import java.io.*;
+import java.util.List;
 import java.util.UUID;
 
 public class FileWriter {
@@ -15,24 +18,66 @@ public class FileWriter {
     private FileWriter() {}
 
 
-    public void saveGame(UUID gameId) throws IOException {
+    public void saveGame(Game game) throws IOException, GameNotFoundException, DuplicateGameIdException {
 
         boolean newRecord = true;
         for(String s : FileReader.getInstance().loadAvailableGameIds()) {
-            if(s.equals(gameId.toString())) {
+            if(s.equals(game.getId())) {
                 newRecord = false;
             }
+        }
+
+        if(newRecord) {
+            newGameRecord(game);
+        } else {
+            updateGameRecord(game);
         }
 
 
 
     }
 
-    public void updateGameRecord() {
+    private void updateGameRecord(Game game) throws IOException, GameNotFoundException {
+        String[] savedGameStrings = FileReader.getInstance().getStringLinesFromData("savedgames.dat");
+        List<String> availableGames = FileReader.getInstance().loadAvailableGameIds();
+        if(!availableGames.contains(game.getId().toString())) {
+            throw new GameNotFoundException("Game with id " + game.getId() + " could not be found." );
+        }
+
+
+        for (int i = 0; i < availableGames.size(); i++) {
+            String gameId = savedGameStrings[i].split(",")[0];
+            if(savedGameStrings[i].split(",")[0].equals(availableGames.get(i))) {
+                savedGameStrings[i] = parseGameToRecord(game);
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for(String s : savedGameStrings) {
+            sb.append(s);
+        }
+
+        FileOutputStream out = new FileOutputStream(GameLoadUtils.PROJECT_DATA_DIR + "savedgames.dat");
+        byte[] data = sb.toString().getBytes();
+        out.write(data);
+        out.flush();
+        out.close();
+
 
     }
 
-    public void saveGame(Game game) throws IOException {
+
+
+    private void newGameRecord(Game game) throws IOException, DuplicateGameIdException {
+        boolean duplicateGame = false;
+        for(String s : FileReader.getInstance().loadAvailableGameIds()) {
+            if(game.getId().toString().equals(s)) {
+                duplicateGame = true;
+            }
+        }
+        if(duplicateGame) {
+            throw new DuplicateGameIdException("Game with id " + game.getId() + " already exists.");
+        }
         outputGameToNewLine(parseGameToRecord(game));
     }
 
@@ -89,7 +134,7 @@ public class FileWriter {
         sb.append(",");
         // phase
         sb.append(game.getTurn().getPhase().toString());
-        sb.append(";");
+        sb.append(";\n");
 
         return sb.toString();
     }
@@ -110,5 +155,4 @@ public class FileWriter {
         }
         return instance;
     }
-
 }

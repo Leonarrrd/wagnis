@@ -22,17 +22,7 @@ public class LogicController {
         return instance;
     }
 
-    /**
-     * returns random mission
-     *
-     * @return
-     * @throws GameNotFoundException
-     */
-    Mission getRandomMission(Game game) {
-        return game.getMissions().get((int) Math.floor(Math.random() * game.getMissions().size()));
-    }
-
-    /**
+       /**
      * Calculates the amount of units the player is eligible to get for this turn
      * Get units for: default, total number of countries, full continents, Cards played
      *

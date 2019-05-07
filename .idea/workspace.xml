@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="802a3eaf-23db-495c-b6b4-eba9ab07e63d" name="Default Changelist" comment="Big ass Leo merch">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="802a3eaf-23db-495c-b6b4-eba9ab07e63d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/exceptions/DuplicateGameIdException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/missions.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/missions.dat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/AbstractCUI.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/AbstractCUI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/savedgames.dat" beforeDir="false" afterPath="$PROJECT_DIR$/data/savedgames.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/exceptions/CountriesAlreadyAssignedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/exceptions/CountryAlreadyOccupiedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/exceptions/CountryNotOwnedException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/exceptions/NoSuchCountryException.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/LogicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/LogicController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/datastructures/Colors.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/datastructures/Colors.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/persistence/FileReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/persistence/FileReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/persistence/FileWriter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/persistence/FileWriter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/view/cui/AbstractCUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/view/cui/AbstractCUI.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,13 +43,14 @@
         <counts>
           <entry key="project.closed" value="3" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.open.time.7" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="168" />
+          <entry key="dat" value="2" />
+          <entry key="java" value="181" />
           <entry key="log" value="1" />
           <entry key="neighbors" value="1" />
           <entry key="txt" value="10" />
@@ -48,21 +58,22 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="168" />
-          <entry key="PLAIN_TEXT" value="12" />
+          <entry key="JAVA" value="181" />
+          <entry key="PLAIN_TEXT" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
+          <entry key="dat" value="1" />
           <entry key="dummy" value="39" />
-          <entry key="java" value="20574" />
+          <entry key="java" value="22179" />
           <entry key="txt" value="397" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="20574" />
-          <entry key="PLAIN_TEXT" value="436" />
+          <entry key="JAVA" value="22179" />
+          <entry key="PLAIN_TEXT" value="437" />
         </counts>
       </usages-collector>
     </session>
@@ -77,15 +88,15 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="42" />
+          <entry key="JAVA" value="41" />
           <entry key="Kotlin" value="1" />
-          <entry key="PLAIN_TEXT" value="8" />
+          <entry key="PLAIN_TEXT" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="2056" />
-          <entry key="PLAIN_TEXT" value="827" />
+          <entry key="JAVA" value="1983" />
+          <entry key="PLAIN_TEXT" value="795" />
         </counts>
       </usages-collector>
     </session>
@@ -130,8 +141,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/view/cui/AbstractCUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="290">
-              <caret line="46" column="20" selection-start-line="46" selection-start-column="20" selection-end-line="46" selection-end-column="40" />
+            <state relative-caret-position="323">
+              <caret line="48" column="17" selection-start-line="48" selection-start-column="17" selection-end-line="48" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -140,28 +151,49 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/Game.java">
+        <entry file="file://$PROJECT_DIR$/src/model/Mission.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="198">
-              <caret line="37" column="40" selection-start-line="37" selection-start-column="40" selection-end-line="37" selection-end-column="40" />
+            <state relative-caret-position="34">
+              <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/persistence/FileWriter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="884">
-              <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
+            <state relative-caret-position="269">
+              <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Main.java">
+        <entry file="file://$PROJECT_DIR$/src/exceptions/DuplicateGameIdException.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+            <state relative-caret-position="68">
+              <caret line="4" column="53" selection-start-line="4" selection-start-column="53" selection-end-line="4" selection-end-column="53" />
+              <folding>
+                <element signature="e#161#162#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/controller/PlayerController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="38" column="37" selection-start-line="38" selection-start-column="37" selection-end-line="38" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="48">
+              <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
             </state>
           </provider>
         </entry>
@@ -169,35 +201,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/persistence/FileReader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2554">
-              <caret line="296" column="9" lean-forward="true" selection-start-line="296" selection-start-column="9" selection-end-line="296" selection-end-column="9" />
+            <state relative-caret-position="198">
+              <caret line="138" column="10" selection-start-line="138" selection-start-column="4" selection-end-line="138" selection-end-column="10" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/todo.txt">
+        <entry file="file://$PROJECT_DIR$/src/controller/LogicController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" selection-start-line="17" selection-end-line="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/data/missions.dat">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/persistence/helper/GameLoadUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+            <state relative-caret-position="-153">
+              <caret line="204" column="14" lean-forward="true" selection-start-line="204" selection-start-column="14" selection-end-line="204" selection-end-column="14" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -205,20 +222,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/savedgames.dat">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="50" selection-start-line="4" selection-start-column="50" selection-end-line="4" selection-end-column="50" />
+            <state relative-caret-position="85">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/model/Card.java">
+        <entry file="file://$PROJECT_DIR$/src/model/Player.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+            <state relative-caret-position="212">
+              <caret line="33" column="21" lean-forward="true" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
               <folding>
-                <element signature="e#287#288#0" expanded="true" />
-                <element signature="e#312#313#0" expanded="true" />
+                <element signature="e#733#734#0" expanded="true" />
+                <element signature="e#771#772#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -260,7 +277,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/persistence/helpermodels/RawCountryData.java" />
         <option value="$PROJECT_DIR$/src/exceptions/UnknownPhaseException.java" />
         <option value="$PROJECT_DIR$/src/exceptions/NoSuchPlayerException.java" />
         <option value="$PROJECT_DIR$/src/ui/PreGameCUI.java" />
@@ -287,12 +303,10 @@
         <option value="$PROJECT_DIR$/src/view/cui/TurnCUI.java" />
         <option value="$PROJECT_DIR$/src/view/cui/PlaceUnitsCUI.java" />
         <option value="$PROJECT_DIR$/src/view/cui/PreGameCUI.java" />
-        <option value="$PROJECT_DIR$/src/controller/GameController.java" />
         <option value="$PROJECT_DIR$/src/view/cui/AttackCUI.java" />
         <option value="$PROJECT_DIR$/src/controller/GraphController.java" />
         <option value="$PROJECT_DIR$/src/view/cui/MoveCUI.java" />
         <option value="$PROJECT_DIR$/src/controller/CardDeckController.java" />
-        <option value="$PROJECT_DIR$/src/controller/LogicController.java" />
         <option value="$PROJECT_DIR$/src/controller/PlayerController.java" />
         <option value="$PROJECT_DIR$/src/controller/TurnController.java" />
         <option value="$PROJECT_DIR$/src/controller/WorldController.java" />
@@ -302,15 +316,18 @@
         <option value="$PROJECT_DIR$/src/model/Mission.java" />
         <option value="$PROJECT_DIR$/src/model/Player.java" />
         <option value="$PROJECT_DIR$/todo.txt" />
-        <option value="$PROJECT_DIR$/src/datastructures/Colors.java" />
-        <option value="$PROJECT_DIR$/src/persistence/helper/GameLoadUtils.java" />
-        <option value="$PROJECT_DIR$/src/persistence/FileReader.java" />
-        <option value="$PROJECT_DIR$/src/model/Card.java" />
-        <option value="$PROJECT_DIR$/src/view/cui/AbstractCUI.java" />
-        <option value="$PROJECT_DIR$/src/model/Game.java" />
-        <option value="$PROJECT_DIR$/src/persistence/FileWriter.java" />
-        <option value="$PROJECT_DIR$/data/savedgames.dat" />
         <option value="$PROJECT_DIR$/data/missions.dat" />
+        <option value="$PROJECT_DIR$/src/persistence/helper/GameLoadUtils.java" />
+        <option value="$PROJECT_DIR$/src/model/Card.java" />
+        <option value="$PROJECT_DIR$/src/model/Game.java" />
+        <option value="$PROJECT_DIR$/src/datastructures/Colors.java" />
+        <option value="$PROJECT_DIR$/src/controller/GameController.java" />
+        <option value="$PROJECT_DIR$/src/controller/LogicController.java" />
+        <option value="$PROJECT_DIR$/src/persistence/FileReader.java" />
+        <option value="$PROJECT_DIR$/src/exceptions/DuplicateGameIdException.java" />
+        <option value="$PROJECT_DIR$/src/persistence/FileWriter.java" />
+        <option value="$PROJECT_DIR$/src/view/cui/AbstractCUI.java" />
+        <option value="$PROJECT_DIR$/data/savedgames.dat" />
       </list>
     </option>
   </component>
@@ -332,8 +349,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -381,43 +396,18 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="persistence" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Prog_2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Prog_2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="persistence" type="462c0819:PsiDirectoryNode" />
-              <item name="helper" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Prog_2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Prog_2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="persistence" type="462c0819:PsiDirectoryNode" />
-              <item name="helpermodels" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Prog_2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Prog_2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Prog_2" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Prog_2" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
-              <item name="cui" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557235153867" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557249890567" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
@@ -437,12 +427,19 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/.idea/misc.xml</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/.idea/workspace.xml</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/data/missions.dat</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/data/savedgames.dat</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/out/production/risikoDraft/view/cui/AbstractCUI.class</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/src/controller/LogicController.java</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/src/controller/PlayerController.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/model/Card.java</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/src/model/Game.java</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/src/persistence/FileReader.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/persistence/FileWriter.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/persistence/helper/GameLoadUtils.java</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/view/cui/AbstractCUI.java</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/src/view/cui/PreGameCUI.java</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/todo.txt</PATH>
         </FILE-GROUP>
@@ -452,6 +449,7 @@
           <option name="mySupportsDeletion" value="false" />
           <option name="myCanBeAbsent" value="false" />
           <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/src/datastructures/Colors.java</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/src/model/ContinentMission.java</PATH>
           <PATH vcs="Git" revision="">$PROJECT_DIR$/src/model/CountryMission.java</PATH>
         </FILE-GROUP>
@@ -648,7 +646,8 @@
       <workItem from="1557140394845" duration="9537000" />
       <workItem from="1557150389693" duration="3523000" />
       <workItem from="1557166634123" duration="8317000" />
-      <workItem from="1557223708193" duration="8710000" />
+      <workItem from="1557223708193" duration="7212000" />
+      <workItem from="1557243596248" duration="6299000" />
     </task>
     <task id="LOCAL-00001" summary="big ass console refactoring&#10;+ fixed bug with printing the wrong player name">
       <created>1556991756434</created>
@@ -727,33 +726,26 @@
       <option name="project" value="LOCAL" />
       <updated>1557227394150</updated>
     </task>
-    <task id="LOCAL-00012" summary="Big ass Leo merch">
-      <created>1557235060287</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1557235060287</updated>
-    </task>
-    <option name="localTasksCounter" value="13" />
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="63624000" />
+    <option name="totallyTimeSpent" value="68425000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="55" y="-8" width="1873" height="1096" extended-state="6" />
+    <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.55572754" visible="true" weight="0.26640928" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.55572754" visible="true" weight="0.2695599" />
       <window_info id="Image Layers" order="1" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
       <window_info id="Capture Tool" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.79987293" weight="0.3281412" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4974587" visible="true" weight="0.3281412" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4983462" weight="0.39771548" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.79987293" weight="0.32735425" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4974587" visible="true" weight="0.32735425" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4983462" weight="0.39806867" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -761,7 +753,7 @@
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.49555272" weight="0.3281412" />
+      <window_info anchor="bottom" id="Messages" order="11" sideWeight="0.49555272" weight="0.32735425" />
       <window_info anchor="bottom" x="747" y="58" width="363" height="963" id="Structure" order="12" sideWeight="0.20012707" side_tool="true" weight="0.32832617" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -790,8 +782,7 @@
     <MESSAGE value="save before big ass refactor" />
     <MESSAGE value="Big ass exception handling update" />
     <MESSAGE value="Big ass ToDo-Liste angepasst + Big ass import aufräumaktion" />
-    <MESSAGE value="Big ass Leo merch" />
-    <option name="LAST_COMMIT_MESSAGE" value="Big ass Leo merch" />
+    <option name="LAST_COMMIT_MESSAGE" value="Big ass ToDo-Liste angepasst + Big ass import aufräumaktion" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -801,12 +792,6 @@
           <line>84</line>
           <properties />
           <option name="timeStamp" value="43" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/persistence/helper/GameLoadUtils.java</url>
-          <line>34</line>
-          <properties />
-          <option name="timeStamp" value="44" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -866,7 +851,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/controller/services/GameService.java" />
     <entry file="file://$PROJECT_DIR$/src/controller/services/LogicService.java" />
     <entry file="file://$PROJECT_DIR$/src/controller/services/TurnService.java" />
     <entry file="file://$PROJECT_DIR$/src/controller/WorldHelper.java" />
@@ -882,33 +866,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" column="50" selection-start-line="4" selection-start-column="50" selection-end-line="4" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/TurnController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/GraphController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="192">
-          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/LogicController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -964,13 +921,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/Mission.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="26" column="14" lean-forward="true" selection-start-line="26" selection-start-column="14" selection-end-line="26" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/model/Turn.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -985,12 +935,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/resource/neighbors">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/hs_err_pid10289.log">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/resource/neighbors" />
+    <entry file="file://$PROJECT_DIR$/hs_err_pid10289.log" />
     <entry file="file://$PROJECT_DIR$/src/view/cui/AttackCUI.java">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1017,27 +963,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/CardDeckController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="28" column="30" lean-forward="true" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/view/cui/TurnCUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="9" column="13" selection-start-line="9" selection-start-column="13" selection-end-line="9" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="164">
-          <caret line="301" column="21" selection-start-line="301" selection-start-column="21" selection-end-line="301" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -1048,20 +977,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/Player.java">
+    <entry file="file://$PROJECT_DIR$/todo.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="10" column="24" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
+        <state relative-caret-position="289">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/persistence/helper/GameWriteUtils.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/persistence/helper/GameWriteUtils.kt" />
     <entry file="file://$PROJECT_DIR$/src/view/cui/PreGameCUI.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -1094,10 +1017,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/datastructures/Colors.java">
+    <entry file="file://$PROJECT_DIR$/src/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="39" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
+        <state relative-caret-position="119">
+          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/missions.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
         </state>
       </provider>
     </entry>
@@ -1107,35 +1037,117 @@
     <entry file="file://$PROJECT_DIR$/data/savedgameids.dat">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/PlayerController.java">
+    <entry file="file://$PROJECT_DIR$/src/persistence/helper/GameLoadUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="36" column="3" selection-start-line="36" selection-start-column="3" selection-end-line="36" selection-end-column="3" />
+        <state relative-caret-position="306">
+          <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/model/Card.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="11" selection-start-line="10" selection-start-column="11" selection-end-line="10" selection-end-column="11" />
+        <state relative-caret-position="255">
+          <caret line="25" column="24" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/Game.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/CardDeckController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" column="30" lean-forward="true" selection-start-line="28" selection-start-column="30" selection-end-line="28" selection-end-column="30" />
           <folding>
-            <element signature="e#287#288#0" expanded="true" />
-            <element signature="e#312#313#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/controller/TurnController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
+        <state relative-caret-position="595">
+          <caret line="38" lean-forward="true" selection-start-line="38" selection-end-line="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/GraphController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="13" column="13" selection-start-line="13" selection-start-column="13" selection-end-line="13" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/datastructures/Colors.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="33" selection-start-line="3" selection-start-column="33" selection-end-line="3" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/Mission.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="23" selection-start-line="2" selection-start-column="23" selection-end-line="2" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="48">
+          <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="106" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/model/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="33" column="21" lean-forward="true" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
+          <folding>
+            <element signature="e#733#734#0" expanded="true" />
+            <element signature="e#771#772#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/PlayerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="38" column="37" selection-start-line="38" selection-start-column="37" selection-end-line="38" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/LogicController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-153">
+          <caret line="204" column="14" lean-forward="true" selection-start-line="204" selection-start-column="14" selection-end-line="204" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/exceptions/DuplicateGameIdException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="4" column="53" selection-start-line="4" selection-start-column="53" selection-end-line="4" selection-end-column="53" />
+          <folding>
+            <element signature="e#161#162#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/cui/AbstractCUI.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="46" column="20" selection-start-line="46" selection-start-column="20" selection-end-line="46" selection-end-column="40" />
+        <state relative-caret-position="323">
+          <caret line="48" column="17" selection-start-line="48" selection-start-column="17" selection-end-line="48" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1144,50 +1156,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/persistence/FileReader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2554">
-          <caret line="296" column="9" lean-forward="true" selection-start-line="296" selection-start-column="9" selection-end-line="296" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/persistence/helper/GameLoadUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="29" lean-forward="true" selection-start-line="29" selection-end-line="29" />
+        <state relative-caret-position="198">
+          <caret line="138" column="10" selection-start-line="138" selection-start-column="4" selection-end-line="138" selection-end-column="10" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/data/savedgames.dat">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="50" selection-start-line="4" selection-start-column="50" selection-end-line="4" selection-end-column="50" />
+        <state relative-caret-position="85">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/persistence/FileWriter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="884">
-          <caret line="59" column="28" selection-start-line="59" selection-start-column="28" selection-end-line="59" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/model/Game.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="37" column="40" selection-start-line="37" selection-start-column="40" selection-end-line="37" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/todo.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/missions.dat">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+        <state relative-caret-position="269">
+          <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
         </state>
       </provider>
     </entry>

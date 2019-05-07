@@ -27,7 +27,7 @@ public class FileReader {
     public Map<String, Country> loadCountries() throws IOException, NumberFormatException, ArrayIndexOutOfBoundsException, InvalidFormattedDataException {
         List<Country> loadedCountries = new ArrayList();
 
-        String[] countryData = new FileReader().loadStringLinesFromData("countries.dat");
+        String[] countryData = new FileReader().getStringLinesFromData("countries.dat");
 
 
         //saving the indices to the hashmap, because the countries need to be initialized before we're able to assign
@@ -74,7 +74,7 @@ public class FileReader {
      */
     public List<Continent> loadContinents(List<Country> countries) throws IOException, InvalidFormattedDataException {
         List<Continent> continents = new ArrayList();
-        String[] continentData = loadStringLinesFromData("continents.dat");
+        String[] continentData = getStringLinesFromData("continents.dat");
 
         for (String entry : continentData) {
             String[] fields = entry.split(",");
@@ -101,7 +101,7 @@ public class FileReader {
 
     public List<Mission> loadMissions(List<Continent> continents) throws IOException, InvalidFormattedDataException {
         List<Mission> missions = new ArrayList<>();
-        String[] missionData = loadStringLinesFromData("missions.dat");
+        String[] missionData = getStringLinesFromData("missions.dat");
 
         for (String entry : missionData) {
             String[] fields = entry.split(",");
@@ -137,7 +137,7 @@ public class FileReader {
     }*/
 
     public List<String> loadAvailableGameIds() throws IOException {
-        String[] gameData = loadStringLinesFromData("savedgames.dat");
+        String[] gameData = getStringLinesFromData("savedgames.dat");
         List<String> availableGameIds = new ArrayList<>();
         for(String entry: gameData) {
             String[] split = entry.split(",");
@@ -149,7 +149,7 @@ public class FileReader {
     }
 
     public Game loadGame(UUID gameId, List<Country> loadedCountries, List<Continent> loadedContinents, List<Mission> loadedMissions) throws IOException, GameNotFoundException, InvalidFormattedDataException {
-        String[] gameData = loadStringLinesFromData("savedgames.dat");
+        String[] gameData = getStringLinesFromData("savedgames.dat");
         String dataset = null;
 
         boolean validGameId = false;
@@ -286,8 +286,16 @@ public class FileReader {
         return indices;
     }
 
-    private String[] loadStringLinesFromData(String dataFile) throws IOException {
+    String[] getStringLinesFromData(String dataFile)  throws IOException {
 
+        String toSplit = loadFileContent(dataFile);
+        String[] split = toSplit.split(";");
+
+
+        return split;
+    }
+
+    private String loadFileContent(String dataFile)  throws IOException  {
         InputStream inputStream = new FileInputStream(GameLoadUtils.PROJECT_DATA_DIR + dataFile);
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder sb = new StringBuilder();
@@ -296,13 +304,7 @@ public class FileReader {
             sb.append(line);
         }
 
-        String toSplit = sb.toString();
-
-        String[] split = toSplit.split(";");
-
-
-        return split;
-
+        return sb.toString();
     }
 
 
