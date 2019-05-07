@@ -26,11 +26,12 @@ public class Game {
     /*
      * Just filling the map with generic countries
      */
-    public Game(UUID id, Map<String, Country> countries, List<Continent> continents) {
+    public Game(UUID id, Map<String, Country> countries, List<Continent> continents, List<Mission> missions) {
 
         this.id = id;
         this.countries = countries;
         this.continents = continents;
+        this.missions = missions;
 
         for (int j = 0; j < 20; j++) {
             for (int i = 0; i < 2; i++) {

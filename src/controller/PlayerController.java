@@ -28,4 +28,16 @@ public class PlayerController {
         }
     }
 
+    /**
+     * Assigns missions to players
+     * Missions are assigned randomly because the missions list is shuffled on creation
+     * An assigned mission will be removed from the list
+     * @param game
+     */
+    void assignMissions(Game game){
+        for (Player player : game.getPlayers()){
+            player.setMission(game.getMissions().remove(0));
+        }
+    }
+
 }

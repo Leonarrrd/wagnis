@@ -8,7 +8,7 @@ public class EliminationMission extends Mission {
         this.target = target;
     }
 
-    public boolean isAccomplished(){
+    public boolean isAccomplished(Player owner){
         return target.getCountries().isEmpty();
     }
 }

@@ -31,7 +31,7 @@ public class FileReader {
         String[] countryData = new FileReader().loadStringLinesFromData("countries.dat");
 
 
-        //saving the indeces to the hashmap, because the countries need to be initialized before we're able to assign
+        //saving the indices to the hashmap, because the countries need to be initialized before we're able to assign
         //neighbour countries to the specific country because the country to be added might not have been loaded yet.
         Map<Country, int[]> countryNeighbourIndecesMap = new HashMap<>();
         for (String entry : countryData) {
@@ -75,7 +75,7 @@ public class FileReader {
      */
     public List<Continent> loadContinents(List<Country> countries) throws IOException, InvalidFormattedDataException {
         List<Continent> continents = new ArrayList();
-        String[] continentData = new FileReader().loadStringLinesFromData("continents.dat");
+        String[] continentData = loadStringLinesFromData("continents.dat");
 
         for (String entry : continentData) {
             String[] fields = entry.split(",");
@@ -100,6 +100,31 @@ public class FileReader {
         return continents;
     }
 
+    public List<Mission> loadMissions(List<Continent> continents) throws IOException, InvalidFormattedDataException {
+        List<Mission> missions = new ArrayList<>();
+        String[] missionData = loadStringLinesFromData("missions.dat");
+
+        for (String entry : missionData) {
+            String[] fields = entry.split(",");
+            int missionId = Integer.parseInt(fields[0]);
+            String missionMessage = fields[1];
+            if (fields[2].equals("conquer")){
+                List<Continent> continentsToConquer = new ArrayList<>();
+                int[] continentIndices = getIndicesFromDataSetArray(fields[3]);
+                for (int indice : continentIndices){
+                    for (Continent continent : continents){
+                        if (indice == continent.getId()){
+                            continentsToConquer.add(continent);
+                        }
+                    }
+                }
+                missions.add(new ConquerMission(missionId, continentsToConquer, missionMessage));
+            }
+        }
+        Collections.shuffle(missions);
+        return missions;
+    }
+
     /*public static void main(String... args) throws IOException, GameNotFoundException, InvalidFormattedDataException {
         List<Country> countries = new ArrayList(getInstance().loadCountries().values());
         List<Continent> continents = getInstance().loadContinents(countries);
@@ -118,7 +143,7 @@ public class FileReader {
         return availableGameIds;
     }
 
-    public Game loadGame(UUID gameId, List<Country> loadedCountries, List<Continent> loadedContinents) throws IOException, GameNotFoundException, InvalidFormattedDataException {
+    public Game loadGame(UUID gameId, List<Country> loadedCountries, List<Continent> loadedContinents, List<Mission> loadedMissions) throws IOException, GameNotFoundException, InvalidFormattedDataException {
         String[] gameData = loadStringLinesFromData("savedgames.dat");
         String dataset = null;
 
@@ -155,6 +180,17 @@ public class FileReader {
         List<Player> players = new ArrayList();
         for (String s : playerNames) {
             players.add(new Player(s));
+        }
+
+        //evaluate player missions
+        List<Integer> missionIds = GameLoadUtils.evaluateMissionData(commaSplit[3]);
+        for (int i = 0; i < players.size(); i++){
+            Player player = players.get(i);
+            for (Mission mission : loadedMissions){
+                if (missionIds.get(i) == mission.getId()){
+                    player.setMission(mission);
+                }
+            }
         }
 
         //evaluate owned countries by players + units
@@ -220,7 +256,9 @@ public class FileReader {
         for (Country c : loadedCountries) {
             loadedCountriesMap.put(c.getName(), c);
         }
-        Game game = new Game(gameId, loadedCountriesMap, loadedContinents);
+
+        //FIXME: total bogus third parameter
+        Game game = new Game(gameId, loadedCountriesMap, loadedContinents, loadedMissions);
         game.setPlayers(players);
         game.setTurn(turn);
 
