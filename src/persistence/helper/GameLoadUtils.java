@@ -64,7 +64,9 @@ public class GameLoadUtils {
             String s = split[i];
             String[] cardIds = s.split("-");
             for (String field : cardIds){
+                if(!field.equals("")) {
                 cardData.get(i).add(Integer.parseInt(field));
+                }
             }
         }
         return cardData;

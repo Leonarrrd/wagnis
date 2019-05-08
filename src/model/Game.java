@@ -10,76 +10,21 @@ import java.util.*;
 public class Game {
 
     private UUID id;
-
     private List<Player> players = new ArrayList<Player>();
-
     private Map<String, Country> countries;
-
-    private List<Continent> continents = new ArrayList<>();
-
-    private List<Mission> missions = new ArrayList<>();
-
-    private List<Card> cards = new ArrayList<>();
-
-    private List<Card> cardDeck = new ArrayList<>();
-
-
+    private List<Continent> continents;
+    private List<Mission> missions;
+    private List<Card> cards;
+    private List<Card> cardDeck;
     private Turn turn;
 
-    /*
-     * Just filling the map with generic countries
-     */
     public Game(UUID id, Map<String, Country> countries, List<Continent> continents, List<Mission> missions, List<Card> cards, List<Card> cardDeck) {
-
         this.id = id;
         this.countries = countries;
         this.continents = continents;
         this.missions = missions;
         this.cards = cards;
         this.cardDeck = cardDeck;
-
-
-//        Country germany = new Country("Germany");
-//        Country denmark = new Country("Denmark");
-//        Country sweden = new Country("Sweden");
-//        Country finland = new Country("Finland");
-//        Country norway = new Country("Norway");
-//        Country poland = new Country("Poland");
-//
-//        germany.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(denmark, poland)
-//        ));
-//        denmark.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(sweden, germany)
-//        ));
-//        sweden.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(norway, denmark, finland)
-//        ));
-//        norway.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(sweden, finland)
-//        ));
-//        finland.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(norway, sweden, poland)
-//        ));
-//        poland.setNeighbors(new ArrayList<Country>(
-//                Arrays.asList(germany, finland)
-//        ));
-//
-//
-//        countries = new HashMap<String, Country>() {{
-//            put("Germany", germany);
-//            put("Denmark", denmark);
-//            put("Sweden", sweden);
-//            put("Finland", finland);
-//            put("Norway", norway);
-//            put("Poland", poland);
-//        }};
-//
-//        continents.add(new Continent(1,"GermanyAndPoland", 5, Arrays.asList(germany, poland)));
-
-//        missions.add(new Mission(players.get(1))); // kill player 2
-//        missions.add(new Mission(players.get(0))); // kill player 1
-//        missions.add(new Mission(Arrays.asList(continents.get(0)))); // conquer Germany and Poland
     }
 
     public List<Player> getPlayers() {
@@ -141,6 +86,8 @@ public class Game {
         for (Continent c : this.continents) {
             sb.append(c.toString() + "\n");
         }
+
+        sb.append("\n Turn: Player " + this.turn.getPlayer() + "'s turn. Phase: " + this.turn.getPhase().toString() );
 
         return sb.toString();
 

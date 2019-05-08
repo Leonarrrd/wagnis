@@ -99,6 +99,8 @@ public class FileWriter {
             String gameId = savedGameStrings[i].split(",")[0];
             if (gameId.equals(game.getId().toString())) {
                 savedGameStrings[i] = parseGameToRecord(game);
+            } else {
+                savedGameStrings[i] = savedGameStrings[i] + ";\n";
             }
         }
 
