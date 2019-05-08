@@ -1,5 +1,6 @@
-1,Conquer Germany and Poland,continent,[1];
-2,Conquer Scampinavia,continent,[2];
-3,Conquer 30 countries,country,30;
-4,Conquer 30 countries,country,30;
-5,Conquer Germany and Poland,continent,[1];
+1,Conquer North America,continent,[1];
+2,Conquer South America,continent,[2];
+3,Conquer Europe,continent,[3];
+4,Conquer Africa,continent,[4];
+5,Conquer Oceania,continent,[5];
+6,Conquer 30 countries,country,30;
