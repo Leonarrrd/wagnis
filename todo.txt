@@ -1,6 +1,6 @@
 // 07/05
 - Status | TODO | Phil|  postTurnCheck() TurnCUI Zeile 60 macht Logikoperationen. Muss in Controller ausgelagert werden
-- Status | TODO | Phil | gegebenenfalls die ganze logikklasse nochmal überprüfen, habe das Gefühl da wird viel Logik drin gemacht.
+- Status | TODO | Phil | gegebenenfalls die ganze TurnCUI nochmal überprüfen, habe das Gefühl da wird viel Logik drin gemacht.
 - Status: DONE | Phil | GameState speichern
 - Status: DONE | Phil | Game aus der Persistenz löschen
 - Status: FIXME | Leo | Hä hast du doch schon gemacht du otto - Missionen/Karten in Game toString ausgeben.
