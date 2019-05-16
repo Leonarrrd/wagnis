@@ -14,14 +14,12 @@ import java.io.IOException;
 public class SavedGamesListView extends ListView implements RiskUIElement {
     public SavedGamesListView() {
         super();
+        applyStyling(this, "saved-games-list-view", "saved_games_list_view.css");
         doStuff();
     }
 
 
-    @Override
-    public void applyStyling() {
 
-    }
 
     @Override
     public void doStuff() {

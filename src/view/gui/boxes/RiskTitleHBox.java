@@ -2,6 +2,7 @@ package view.gui.boxes;
 
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import view.gui.helper.RiskUIElement;
 
@@ -9,14 +10,10 @@ public class RiskTitleHBox extends HBox implements RiskUIElement {
 
 
     public RiskTitleHBox() {
+        applyStyling(this, "risk-title-hbox", "risk_title_hbox.css");
         doStuff();
-        applyStyling();
     }
 
-    @Override
-    public void applyStyling() {
-        this.setAlignment(Pos.CENTER);
-    }
 
     @Override
     public void doStuff() {

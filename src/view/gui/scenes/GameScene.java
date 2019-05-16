@@ -10,11 +10,7 @@ import static view.gui.util.UIConstants.WINDOW_WIDTH;
 public class GameScene extends Scene implements RiskUIElement {
     public GameScene(Parent root) {
         super(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-    }
-
-    @Override
-    public void applyStyling() {
-
+        doStuff();
     }
 
     @Override

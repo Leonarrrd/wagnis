@@ -1,0 +1,8 @@
+#start-menu-left-vbox {
+    -fx-padding: 20px;
+    -fx-alignment: center;
+}
+
+.start-menu-left-text {
+    -fx-padding: 50px;
+}

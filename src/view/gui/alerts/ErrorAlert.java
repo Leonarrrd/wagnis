@@ -31,10 +31,6 @@ public class ErrorAlert extends Alert implements RiskUIElement {
         doStuffException();
     }
 
-    @Override
-    public void applyStyling() {
-
-    }
 
     @Override
     public void doStuff() {
