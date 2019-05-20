@@ -3,3 +3,17 @@
     -fx-border-insets: 200px;
     -fx-background-insets: 200px;
 }
+
+.list-view .list-cell:even {
+    -fx-background-color: #999999;
+    -fx-text-fill: white;
+}
+.list-view .list-cell:odd {
+    -fx-background-color: #696969;
+    -fx-text-fill: white;
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: blue;
+
+}
