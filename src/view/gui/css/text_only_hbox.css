@@ -1,0 +1,11 @@
+#text-only-hbox {
+    -fx-cursor: hand;
+    -fx-alignment: center;
+
+}
+
+#text-only-hbox:hover {
+    -fx-border-color: white;
+    -fx-border-width: 3 0 3 0;
+    -fx-border-style: solid;
+}

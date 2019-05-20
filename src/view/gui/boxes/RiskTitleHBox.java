@@ -17,7 +17,9 @@ public class RiskTitleHBox extends HBox implements RiskUIElement {
 
     @Override
     public void doStuff() {
-        Text text = new Text("Risiko");
-        this.getChildren().add(text);
+        Text title = new Text("Risiko");
+        title.getStyleClass().add("risk-title");
+
+        this.getChildren().add(title);
     }
 }

@@ -1,3 +1,12 @@
+// 08/05
+- Status | TODO | BOTH | Game has been saved ausprinten
+- Status | TODO | Leo | Player has no countires to attack from output
+- Status | TODO | BOTH | not a number error output
+- Status | TODO | toString() von Card überschreiben
+- Status | TODO | invalid input bei move()
+- Status | TODO | Farben
+
+
 // 07/05
 - Status | TODO | Phil|  postTurnCheck() TurnCUI Zeile 60 macht Logikoperationen. Muss in Controller ausgelagert werden
 - Status | TODO | Phil | gegebenenfalls die ganze TurnCUI nochmal überprüfen, habe das Gefühl da wird viel Logik drin gemacht.

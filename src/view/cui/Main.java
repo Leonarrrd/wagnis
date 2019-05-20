@@ -1,3 +1,5 @@
+package view.cui;
+
 import view.cui.ConsoleUserInterface;
 
 public class Main {

@@ -32,4 +32,6 @@ public class StartBorderPane extends BorderPane implements RiskUIElement {
         this.setBottom(button);
 
     }
+
+
 }

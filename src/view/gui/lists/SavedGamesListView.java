@@ -18,9 +18,6 @@ public class SavedGamesListView extends ListView implements RiskUIElement {
         doStuff();
     }
 
-
-
-
     @Override
     public void doStuff() {
 

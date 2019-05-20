@@ -13,7 +13,7 @@ public class TurnCUI extends AbstractCUI {
 
 
     /**
-     * Main gameloop turn method
+     * view.cui.Main gameloop turn method
      * checks for winning condition and exectures the turn with all its methods for the player in the right sequence
      */
     @Override

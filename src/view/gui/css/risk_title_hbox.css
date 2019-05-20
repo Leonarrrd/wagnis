@@ -1,3 +1,8 @@
 #risk-title-hbox {
     -fx-alignment: center;
 }
+
+.risk-title {
+    -fx-fill: white;
+    -fx-font-size: 35pt;
+}
