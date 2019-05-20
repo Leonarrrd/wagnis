@@ -12,8 +12,6 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
         doStuff();
     }
 
-
-
     @Override
     public void doStuff() {
         Text text = new Text("Hello from game scene");

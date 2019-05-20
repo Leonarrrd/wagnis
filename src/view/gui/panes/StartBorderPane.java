@@ -22,16 +22,5 @@ public class StartBorderPane extends BorderPane implements RiskUIElement {
         this.setTop(new RiskTitleHBox());
         this.setLeft(new StartMenuLeftVBox());
         this.setCenter(new SavedGamesListView());
-        Button button = new Button("Start Game");
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Main.stage.setScene(new GameScene(new GameBorderPane()));
-            }
-        });
-        this.setBottom(button);
-
     }
-
-
 }
