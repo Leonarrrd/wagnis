@@ -23,10 +23,8 @@ public class ErrorAlert extends Alert implements RiskUIElement {
         doStuff();
     }
 
-    public ErrorAlert(AlertType alertType, String titleText, String headerText, Exception exception) {
+    public ErrorAlert(AlertType alertType, Exception exception) {
         super(alertType);
-        this.titleText = titleText;
-        this.headerText = headerText;
         this.exception = exception;
         doStuffException();
     }
@@ -38,13 +36,16 @@ public class ErrorAlert extends Alert implements RiskUIElement {
         this.setHeaderText(this.headerText);
         if (this.exception == null) {
             this.setContentText(this.contentText);
+            this.showAndWait();
         }
-        this.showAndWait();
+
     }
 
     private void doStuffException() {
-        doStuff();
+
         if (this.exception != null) {
+            this.setTitle(this.exception.getCause().toString());
+            this.setHeaderText("Stacktrace: ");
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             this.exception.printStackTrace(pw);

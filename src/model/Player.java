@@ -1,4 +1,6 @@
 package model;
+import datastructures.Color;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +11,17 @@ import java.util.Map;
  */
 public class Player {
     private String name;
+    private Color color;
     private Map<String, Country> countries = new HashMap<>(); // maybe better as Map<String, Country>?
 
     private List<Card> cards = new ArrayList<>();
 
     private Mission mission;
     private boolean hasConqueredCountry = false;
+    public Player(String name, Color color) {
+        this.name = name;
+        this.color = color;
+    }
     public Player(String name) {
         this.name = name;
     }

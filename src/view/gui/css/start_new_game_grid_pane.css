@@ -1,0 +1,6 @@
+#start-new-game-grid-pane {
+    -fx-hgap: 5;
+    -fx-vgap: 5;
+    -fx-alignment: center;
+}
+

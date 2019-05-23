@@ -1,5 +1,5 @@
 package datastructures;
 
-public enum Colors {
+public enum Color {
     BLUE, RED, GREEN, YELLOW, MACADAMIA
 }
