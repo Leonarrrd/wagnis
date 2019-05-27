@@ -1,6 +1,6 @@
-1,Conquer North America,continent,[1];
-2,Conquer South America,continent,[2];
-3,Conquer Europe,continent,[3];
-4,Conquer Africa,continent,[4];
-5,Conquer Oceania,continent,[5];
+1,Conquer North America and South America,continent,[1:2];
+2,Conquer South America and Asia,continent,[2:5];
+3,Conquer Europe and Oceania,continent,[3:6];
+4,Conquer Africa and Asia,continent,[4:5];
+5,Conquer Oceania and South America,continent,[6:2];
 6,Conquer 30 countries,country,30;
