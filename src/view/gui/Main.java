@@ -13,8 +13,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-//        Scene startupScene = new MainScene(new StartBorderPane());
-        Scene startupScene = new MainScene(new GameBorderPane());
+        Scene startupScene = new MainScene(new StartBorderPane());
+//        Scene startupScene = new MainScene(new GameBorderPane());
         stage.setTitle("Risiko - Leonard der Gewaltige & Assistent");
         stage.setScene(startupScene);
         stage.show();

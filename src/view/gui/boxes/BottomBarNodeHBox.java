@@ -13,6 +13,7 @@ public abstract class BottomBarNodeHBox extends HBox implements RiskUIElement {
         doStuff();
 
         this.setAlignment(Pos.CENTER);
+        this.setMaxWidth(400);
 //        this.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(this, Priority.ALWAYS);
     }

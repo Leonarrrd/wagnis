@@ -1,5 +1,6 @@
 package view.gui.boxes;
 
+import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Border;
@@ -16,9 +17,11 @@ public class LogHBox extends BottomBarNodeHBox implements RiskUIElement {
 
     @Override
     public void doStuff() {
+//        this.setPrefWidth(50);
+
         TextArea textArea = new TextArea("I'm a textArea");
         textArea.setMaxHeight(140);
-        textArea.setPrefWidth(300);
+        textArea.setPrefWidth(250);
         textArea.setEditable(false);
         textArea.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 
