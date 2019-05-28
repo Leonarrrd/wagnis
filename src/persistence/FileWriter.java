@@ -18,7 +18,6 @@ public class FileWriter {
     private FileWriter() {
     }
 
-
     /**
      * Save game method.
      * Determines if a new dataset has to be created or if the dataset is going to be updated.

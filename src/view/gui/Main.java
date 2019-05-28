@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         Scene startupScene = new MainScene(new StartBorderPane());
 //        Scene startupScene = new MainScene(new GameBorderPane());
-        stage.setTitle("Risiko - Leonard der Gewaltige & Assistent");
+        stage.setTitle("Risiko - Leonard der Gestaltige & Assistent");
         stage.setScene(startupScene);
         stage.show();
     }
