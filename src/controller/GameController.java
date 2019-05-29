@@ -338,12 +338,4 @@ public class GameController {
         Game game = getGameById(gameId);
         grc.updatePlayerGraphMap(game, p);
     }
-
-    /**
-     *
-     * @return Map<String,String> colorCountryMap
-     */
-    public Map<String, String> getColorCountryMap() {
-        return wc.getColorCountryMap();
-    }
 }

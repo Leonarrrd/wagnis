@@ -1,6 +1,5 @@
 package view.gui.boxes;
 
-import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Border;
@@ -9,9 +8,9 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.paint.Color;
 import view.gui.helper.RiskUIElement;
-import view.gui.helper.Updateable;
+import view.gui.helper.Updatable;
 
-public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updateable {
+public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
     public LogHBox (){
         super();
         addAsUpdateElement("", this);

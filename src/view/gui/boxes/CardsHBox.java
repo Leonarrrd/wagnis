@@ -2,9 +2,9 @@ package view.gui.boxes;
 
 import javafx.scene.text.Text;
 import view.gui.helper.RiskUIElement;
-import view.gui.helper.Updateable;
+import view.gui.helper.Updatable;
 
-public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updateable {
+public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
     public CardsHBox() {
         super();
         addAsUpdateElement("cards-hbox", this);

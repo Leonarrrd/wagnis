@@ -2,6 +2,8 @@ package view.gui.panes;
 
 import controller.GameController;
 import datastructures.Color;
+import exceptions.CountriesAlreadyAssignedException;
+import exceptions.GameNotFoundException;
 import exceptions.InvalidFormattedDataException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -143,7 +145,17 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement {
             Player p = new Player(playerName, playerColor);
             players.add(p);
         }
-        game.setPlayers(players);
+
+//        // should not happen here?
+//        game.setPlayers(players);
+//        try {
+//            GameController.getInstance().setTurn(game.getId());
+//            GameController.getInstance().assignMissions(game.getId());
+//            GameController.getInstance().assignCountries(game.getId());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println(game);
         getScene().setRoot(new GameBorderPane());
     }
 }

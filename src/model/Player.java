@@ -39,6 +39,10 @@ public class Player {
         return mission;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     public void setMission(Mission mission){
         this.mission = mission;
     }

@@ -7,9 +7,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import view.gui.helper.RiskUIElement;
-import view.gui.helper.Updateable;
+import view.gui.helper.Updatable;
 
-public class DialogVBox extends VBox implements RiskUIElement, Updateable {
+public class DialogVBox extends VBox implements RiskUIElement, Updatable {
     public DialogVBox() {
         applyStyling(this, "dialog-vbox", "dialog_vbox.css");
         addAsUpdateElement(getId(), this);

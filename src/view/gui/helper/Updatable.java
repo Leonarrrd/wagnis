@@ -1,8 +1,8 @@
 package view.gui.helper;
 
-public interface Updateable {
+public interface Updatable {
 
-    default void addAsUpdateElement(String id, Updateable updateable) {
+    default void addAsUpdateElement(String id, Updatable updateable) {
         GUIControl.getInstance().componentMap.put(id, updateable);
     }
 

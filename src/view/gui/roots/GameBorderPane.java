@@ -16,7 +16,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import view.gui.Main;
 import view.gui.boxes.BottomBarHBox;
+import view.gui.boxes.CountryInfoHBox;
 import view.gui.boxes.DialogVBox;
+import view.gui.helper.GUIControl;
+import view.gui.helper.MethodSlave;
 import view.gui.helper.RiskUIElement;
 import view.gui.boxes.BottomBarNodeHBox;
 
@@ -41,22 +44,26 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
         mapImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                String colorCode = mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString();
-                System.out.println(GameController.getInstance().getColorCountryMap().get(colorCode));
+                String rawColorCode = mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString();
+                String colorCode = GUIControl.getInstance().trimColorCode(rawColorCode);
+                System.out.println(GUIControl.getInstance().getCountryStringFromColorCode(colorCode));
             }
         });
 
         VBox dialogVBox = new DialogVBox();
+        dialogVBox.setLayoutY(670);
 
-        StackPane sp = new StackPane();
 
-        sp.getChildren().add(mapImageView);
-        sp.getChildren().add(dialogVBox);
-        sp.setAlignment(Pos.BOTTOM_LEFT);
+        Pane pane = new Pane();
+        pane.getChildren().add(mapImageView);
+        pane.getChildren().add(dialogVBox);
+        pane.getChildren().addAll(MethodSlave.buildCountryInfoBoxes());
+
+
         BottomBarHBox bottomBar = new BottomBarHBox();
 
         this.setBottom(bottomBar);
-        this.setTop(sp);
+        this.setTop(pane);
 
     }
 }
