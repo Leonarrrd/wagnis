@@ -19,6 +19,7 @@ import view.gui.helper.RiskUIElement;
 import view.gui.roots.GameBorderPane;
 import view.gui.viewhelper.PlayerColorItem;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
