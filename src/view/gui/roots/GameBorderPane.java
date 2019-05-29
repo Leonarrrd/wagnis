@@ -40,7 +40,6 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
             @Override
             public void handle(MouseEvent event) {
                 System.out.println(mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString());
-
             }
         });
 
