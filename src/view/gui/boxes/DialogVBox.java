@@ -18,6 +18,8 @@ public class DialogVBox extends VBox implements RiskUIElement {
     public void doStuff() {
         this.setPrefHeight(180);
         this.setMaxWidth(320);
+        this.setMaxHeight(200);
+
         this.setAlignment(Pos.CENTER);
 
         Text question = new Text("Do you want to nachrueck units?");

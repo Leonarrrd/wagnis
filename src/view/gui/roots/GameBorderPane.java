@@ -1,5 +1,6 @@
 package view.gui.roots;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
@@ -8,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -34,18 +36,21 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
     public void doStuff() {
 
         ImageView mapImageView = new ImageView(new Image("file:assets/img/map.png"));
-//        image.fitHeightProperty().bind(this.heightProperty()); // something like that
+        mapImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                System.out.println(mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString());
 
-        BorderPane bp = new BorderPane();
-        Button button = new Button("Im a button");
+            }
+        });
+
         VBox dialogVBox = new DialogVBox();
 
-        bp.setBottom(dialogVBox);
-
         StackPane sp = new StackPane();
-        sp.getChildren().add(mapImageView);
-        sp.getChildren().add(bp);
 
+        sp.getChildren().add(mapImageView);
+        sp.getChildren().add(dialogVBox);
+        sp.setAlignment(Pos.BOTTOM_LEFT);
         BottomBarHBox bottomBar = new BottomBarHBox();
 
         this.setBottom(bottomBar);
