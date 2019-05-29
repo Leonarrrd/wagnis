@@ -61,11 +61,6 @@ public class PreGameCUI extends AbstractCUI {
             try {
                 gc.setTurn(gameId);
                 gc.assignMissions(gameId);
-                //FIXME: remove these prints
-                for (Player player : game.getPlayers()){
-                    System.out.println(player);
-                    System.out.println(player.getMission().getMessage());
-                }
             } catch (GameNotFoundException | MaximumNumberOfPlayersReachedException e) {
                 e.printStackTrace();
             }

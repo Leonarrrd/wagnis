@@ -24,10 +24,7 @@ public class TurnCUI extends AbstractCUI {
         } catch (GameNotFoundException e) {
             e.printStackTrace();
         }
-
         initGameLoop(game);
-
-
     }
 
     private void initGameLoop(Game game) {
@@ -51,15 +48,12 @@ public class TurnCUI extends AbstractCUI {
                         new MoveCUI().run();
                         gc.switchTurns(gameId);
                         break;
-
                 }
                 postTurnCheck(game, gameWon, player);
             } catch (GameNotFoundException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
     //FIXME: Needs to be done in the controller asap
