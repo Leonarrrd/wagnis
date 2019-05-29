@@ -11,13 +11,6 @@
 - Status | TODO | LEO | PlayerListHBox mit Spielern + Phase
 - Status | TODO | LEO | CardsHBox rudimentär implementieren
 
-- Status | TODO | LEO | Einheitenzahlen dranschreiben
-
-- Status | TODO | BOTH | Logik: Farben und Missionen
-- Status | TODO | BOTH | Logik: Farben und Missionen
-- Status | TODO | BOTH | Logik: Farben und Missionen
-- Status | TODO | BOTH | Logik: Farben und Missionen
-
 
 // 08/05
 - Status | TODO | BOTH | Game has been saved ausprinten
