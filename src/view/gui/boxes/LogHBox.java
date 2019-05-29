@@ -9,10 +9,12 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.paint.Color;
 import view.gui.helper.RiskUIElement;
+import view.gui.helper.Updateable;
 
-public class LogHBox extends BottomBarNodeHBox implements RiskUIElement {
+public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updateable {
     public LogHBox (){
         super();
+        addAsUpdateElement("", this);
     }
 
     @Override
@@ -39,5 +41,10 @@ public class LogHBox extends BottomBarNodeHBox implements RiskUIElement {
         textArea.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
 
         this.getChildren().add(textArea);
+    }
+
+    @Override
+    public void update() {
+
     }
 }

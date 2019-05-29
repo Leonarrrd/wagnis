@@ -252,4 +252,13 @@ public class WorldController {
 
 
     }
+
+    public Map<String, String> getColorCountryMap() {
+        Map<String, String> colorCountryMap = new HashMap<>();
+        colorCountryMap.put("0xa0410dff", "Brazil");
+        colorCountryMap.put("0x32004bff", "West Australia");
+        colorCountryMap.put("0x005952ff", "India");
+        colorCountryMap.put("0x4b0049ff", "East Australia");
+        return colorCountryMap;
+    }
 }

@@ -22,6 +22,7 @@ public class GameController {
     private TurnController tc = TurnController.getInstance();
     private CardDeckController cdc = CardDeckController.getInstance();
     private GraphController grc = GraphController.getInstance();
+
     private GameController() {
     }
 
@@ -336,5 +337,13 @@ public class GameController {
     public void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         grc.updatePlayerGraphMap(game, p);
+    }
+
+    /**
+     *
+     * @return Map<String,String> colorCountryMap
+     */
+    public Map<String, String> getColorCountryMap() {
+        return wc.getColorCountryMap();
     }
 }

@@ -1,5 +1,6 @@
 package view.gui.roots;
 
+import controller.GameController;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
@@ -13,6 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import view.gui.Main;
 import view.gui.boxes.BottomBarHBox;
 import view.gui.boxes.DialogVBox;
 import view.gui.helper.RiskUIElement;
@@ -39,7 +41,8 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
         mapImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                System.out.println(mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString());
+                String colorCode = mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString();
+                System.out.println(GameController.getInstance().getColorCountryMap().get(colorCode));
             }
         });
 

@@ -7,10 +7,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import view.gui.helper.RiskUIElement;
+import view.gui.helper.Updateable;
 
-public class DialogVBox extends VBox implements RiskUIElement {
+public class DialogVBox extends VBox implements RiskUIElement, Updateable {
     public DialogVBox() {
         applyStyling(this, "dialog-vbox", "dialog_vbox.css");
+        addAsUpdateElement(getId(), this);
         doStuff();
     }
 
@@ -34,6 +36,11 @@ public class DialogVBox extends VBox implements RiskUIElement {
         answers.getChildren().add(new Button("No"));
 
         this.getChildren().add(answers);
+
+    }
+
+    @Override
+    public void update() {
 
     }
 }
