@@ -7,34 +7,29 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.paint.Color;
+import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 
 public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
     public LogHBox (){
         super();
-        addAsUpdateElement("", this);
+        addAsUpdateElement("LogHBox", this);
     }
 
     @Override
     public void doStuff() {
 //        this.setPrefWidth(50);
 
-        TextArea textArea = new TextArea("I'm a textArea");
+        TextArea textArea = new TextArea("Welcome to Risk!");
         textArea.setMaxHeight(140);
-        textArea.setPrefWidth(250);
+        textArea.setPrefWidth(300);
         textArea.setEditable(false);
         textArea.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+        textArea.setWrapText(true);
 
-        textArea.appendText("\nPhillip riecht nach Tümpel");
-        textArea.appendText("\nNorway attacks Finland");
-        textArea.appendText("\nFinland loses 2 units");
-        textArea.appendText("\nNorway loses 1 unit");
-        textArea.appendText("\nPhillip ends his turn");
-        textArea.appendText("\nPhillip ends his turn");
-        textArea.appendText("\nPhillip ends his turn");
-        textArea.appendText("\nPhillip ends his turn");
-        textArea.appendText("\nPhillip ends his turn");
+        textArea.appendText("\nThe current gamestate:");
+        textArea.appendText(GUIControl.getInstance().getGame().toString());
 
 
         textArea.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));

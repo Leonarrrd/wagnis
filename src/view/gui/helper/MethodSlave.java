@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class MethodSlave {
     /**
-     * Highly complicated algorithm, don't worry if you dont't understand it
+     * You may not like it, but this is what peak programming looks like
      * @return
      */
     public static  Map<String, CountryViewHelper> buildCountryViewMap() {

@@ -17,6 +17,7 @@ import javafx.scene.layout.GridPane;
 import model.Game;
 import model.Player;
 import view.gui.alerts.ErrorAlert;
+import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.roots.GameBorderPane;
 import view.gui.viewhelper.PlayerColorItem;
@@ -123,12 +124,7 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement {
 
     private void startGame() {
         //MARK: access to game logic
-        Game game = null;
-        try {
-            game = GameController.getInstance().initNewGame();
-        } catch (IOException | InvalidFormattedDataException e) {
-            new ErrorAlert(Alert.AlertType.ERROR, e);
-        }
+        //NOTE: Maybe refactor some of this to GUIControl?
         List<Player> players = new ArrayList<>();
         for(PlayerColorItem pci : playerColorItems) {
             if(pci.getPlayerTextField().getText().equals("") || pci.getPlayerTextField().getText() == null) {
@@ -146,16 +142,8 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement {
             players.add(p);
         }
 
-//        // should not happen here?
-//        game.setPlayers(players);
-//        try {
-//            GameController.getInstance().setTurn(game.getId());
-//            GameController.getInstance().assignMissions(game.getId());
-//            GameController.getInstance().assignCountries(game.getId());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        System.out.println(game);
+        GUIControl.getInstance().initNewGame(players);
+
         getScene().setRoot(new GameBorderPane());
     }
 }

@@ -24,13 +24,17 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
     private String countryString;
     // following two might be unncecessary because the references to these objects are already stored in children array,
     // but I dont know how to invoke methods like .setImage(...) from objects accessed via node.getChildren.get(index)
+    // update: it's actually possible using typecasting: something like
+    // ImageView iv = (ImageView) this.getChildren.get(0);
+    // ImageView.setImage(...)
+    // but I think the way it currently is is better
     private ImageView flag;
     private Text units;
 
     public CountryInfoHBox(String countryString) {
         this.countryString = countryString;
-        //FIXME: so wie du dir das vorgestellt hast mit Updatable?
-//        addAsUpdateElement(countryString + "InfoBox, this);
+        applyStyling(this, "country-info-hbox", "country_info_hbox.css");
+        addAsUpdateElement(countryString + "InfoHBox", this);
         doStuff();
     }
 
@@ -45,7 +49,7 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
         flag = new ImageView(new Image(getFlagImageUrl()));
 
 //        units = new Text("" + country.getUnits());
-        units = new Text("1");
+        units = new Text("" + GUIControl.getInstance().getGame().getCountries().get(countryString).getUnits());
         units.setStyle("-fx-font: 20 verdana;");
 
         HBox unitsWrapper = new HBox();
@@ -67,13 +71,13 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
     }
 
     /**
-     * FIXME: Not hooked up to the game yet
-     * FIXME: Probably better to have the images loaded somewhere and just set them here instead of buffering them again and again
+     * Maybe bad practice to build the URL from the enum.name()
+     * FIXME: Probably better to have the images loaded somewhere and just set them here instead of loading them from file again and again
      * @return an image URL to a flag image whose color matches the country owner
      */
     public String getFlagImageUrl(){
 //        String url = "";
-//        switch (country.getOwner().getColor()){
+//        switch (GUIControl.getInstance().getGame().getCountries().get(countryString).getOwner().getColor()){
 //            case RED:
 //                url = "file:assets/img/flagRed.png";
 //                break;
@@ -83,14 +87,19 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
 //            //etc.
 //        }
 //        return url;
-        return "file:assets/img/flagRed.png";
+        return  "file:assets/img/flag"
+                + GUIControl.getInstance().getGame().getCountries().get(countryString).getOwner().getColor().name()
+                + ".png";
+//        return "file:assets/img/flagRed.png"; // FOR TESTING IF DUMMY IS NEEDED
     }
 
+
     /**
-     * tested with dummy objects --> worked
+     * tested with dummy objects --> updating worked
      */
     public void update(){
-//        this.flag.setImage(new Image(getFlagImageUrl()));
-//        this.units.setText( "" + country.getUnits());
+        this.flag.setImage(new Image(getFlagImageUrl()));
+        // maybe also put this in own function?
+        this.units.setText( "" + GUIControl.getInstance().getGame().getCountries().get(countryString).getUnits());
     }
 }

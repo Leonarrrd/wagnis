@@ -3,6 +3,8 @@ package view.gui.lists;
 import controller.GameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import model.Game;
@@ -10,6 +12,7 @@ import persistence.FileReader;
 import view.gui.alerts.ErrorAlert;
 import view.gui.eventhandler.SavedGamesListViewItemClickHandler;
 import view.gui.helper.RiskUIElement;
+import view.gui.roots.GameBorderPane;
 
 import javax.swing.text.Element;
 import java.io.IOException;
@@ -31,5 +34,6 @@ public class SavedGamesListView extends ListView implements RiskUIElement {
         } catch (IOException e) {
             new ErrorAlert(Alert.AlertType.ERROR, e);
         }
+
     }
 }

@@ -70,4 +70,9 @@ public class Player {
     public void setHasConqueredCountry(boolean hasConqueredCountry) {
         this.hasConqueredCountry = hasConqueredCountry;
     }
+
+    // FIXME: REMOVE THIS WHEN COLORS ARE IMPLEMENTED IN SAVESTATES
+    public void setColor(Color color) {
+        this.color = color;
+    }
 }

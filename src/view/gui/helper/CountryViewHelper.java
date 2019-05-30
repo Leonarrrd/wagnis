@@ -5,7 +5,6 @@ public class CountryViewHelper {
     private String colorCode;
 
     public CountryViewHelper(Coordinate coordinate, String colorCode){
-//        this.countryString = countryString;
         this.coordinate = coordinate;
         this.colorCode = colorCode;
     }
