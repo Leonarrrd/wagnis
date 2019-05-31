@@ -5,4 +5,9 @@
     -fx-border-width: 3;
     -fx-border-radius: 18 18 18 18;
     -fx-border-color: #FC3D44;
+    -fx-pref-width: 180;
+    -fx-max-width: 320;
+    -fx-max-height: 200;
+    -fx-alignment: center;
 }
+

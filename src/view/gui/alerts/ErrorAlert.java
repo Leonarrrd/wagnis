@@ -15,16 +15,16 @@ public class ErrorAlert extends Alert implements RiskUIElement {
     private String contentText;
     private Exception exception;
 
-    public ErrorAlert(AlertType alertType, String titleText, String headerText, String contentText) {
-        super(alertType);
+    public ErrorAlert(String titleText, String headerText, String contentText) {
+        super(AlertType.ERROR);
         this.titleText = titleText;
         this.headerText = headerText;
         this.contentText = contentText;
         doStuff();
     }
 
-    public ErrorAlert(AlertType alertType, Exception exception) {
-        super(alertType);
+    public ErrorAlert(Exception exception) {
+        super(AlertType.ERROR);
         this.exception = exception;
         doStuffException();
     }
@@ -44,7 +44,7 @@ public class ErrorAlert extends Alert implements RiskUIElement {
     private void doStuffException() {
 
         if (this.exception != null) {
-            this.setTitle(this.exception.getCause().toString());
+            this.setTitle(this.exception.getMessage().toString());
             this.setHeaderText("Stacktrace: ");
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);

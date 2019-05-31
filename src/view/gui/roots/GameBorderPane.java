@@ -22,6 +22,7 @@ import view.gui.helper.GUIControl;
 import view.gui.helper.MethodSlave;
 import view.gui.helper.RiskUIElement;
 import view.gui.boxes.BottomBarNodeHBox;
+import view.gui.util.Util;
 
 import java.io.File;
 import java.sql.SQLOutput;
@@ -45,8 +46,9 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
             @Override
             public void handle(MouseEvent event) {
                 String rawColorCode = mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString();
-                String colorCode = GUIControl.getInstance().trimColorCode(rawColorCode);
-                System.out.println(GUIControl.getInstance().getCountryStringFromColorCode(colorCode));
+                String colorCode = Util.trimColorCode(rawColorCode);
+                GUIControl.getInstance().countryClicked(colorCode);
+                System.out.println();
             }
         });
 

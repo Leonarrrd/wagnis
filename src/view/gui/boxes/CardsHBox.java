@@ -11,8 +11,8 @@ public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updat
     private Text text;
     public CardsHBox() {
         super();
-        addAsUpdateElement("CardsHBox", this);
-//        applyStyling(this, "cards-hbox", "cards_hbox.css");
+        addAsUpdateElement("cards-hbox", this);
+
     }
 
     @Override
@@ -20,10 +20,8 @@ public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updat
         this.text = new Text("Total: " + GUIControl.getInstance().getGame().getTurn().getPlayer().getCards().size() + " cards");
 
         VBox vBox = new VBox();
-        vBox.setAlignment(Pos.CENTER_LEFT);
         vBox.getChildren().add(new Text("Your cards:"));
         vBox.getChildren().add(text);
-
         this.getChildren().add(vBox);
     }
 

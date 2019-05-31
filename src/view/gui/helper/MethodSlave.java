@@ -1,6 +1,7 @@
 package view.gui.helper;
 
 import view.gui.boxes.CountryInfoHBox;
+import view.gui.viewhelper.CountryViewHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;

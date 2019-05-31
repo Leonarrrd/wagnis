@@ -2,18 +2,22 @@ package view.gui.helper;
 
 import controller.GameController;
 import datastructures.Color;
-import exceptions.GameNotFoundException;
-import exceptions.InvalidFormattedDataException;
+import exceptions.*;
 import javafx.scene.control.Alert;
+import model.Country;
 import model.Game;
 import model.Player;
 import view.gui.alerts.ErrorAlert;
+import view.gui.viewhelper.CountryViewHelper;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static javafx.scene.control.Alert.AlertType.ERROR;
+
 
 public class GUIControl {
 
@@ -22,35 +26,34 @@ public class GUIControl {
     private UUID gameId;
     private Map<String, CountryViewHelper> countryViewMap = MethodSlave.buildCountryViewMap();
     private GameController gc = GameController.getInstance();
-
+    private String selectedCountry;
 
     public Game getGame() {
-//        if (gameId == null){
-//           throw new NoIdHasBeenSetException ?
-//        }
+
         try {
             return gc.getGameById(gameId);
         } catch (GameNotFoundException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
             return null;
         }
     }
 
-    private GUIControl() {}
+    private GUIControl() {
+    }
 
     public static GUIControl getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new GUIControl();
         }
         return instance;
     }
 
-    public void initNewGame(List<Player> players){
+    public void initNewGame(List<Player> players) {
         Game game = null;
         try {
             game = GameController.getInstance().initNewGame();
         } catch (IOException | InvalidFormattedDataException e) {
-            new ErrorAlert(Alert.AlertType.ERROR, e);
+            new ErrorAlert(e);
         }
         game.setPlayers(players);
         try {
@@ -58,16 +61,17 @@ public class GUIControl {
             GameController.getInstance().assignMissions(game.getId());
             GameController.getInstance().assignCountries(game.getId());
         } catch (Exception e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
         this.gameId = game.getId();
     }
 
+
     public void initLoadedGame(UUID gameId) {
         try {
             gc.loadGame(gameId);
-        } catch (GameNotFoundException | IOException | InvalidFormattedDataException e){
-            e.printStackTrace();
+        } catch (GameNotFoundException | IOException | InvalidFormattedDataException e) {
+            new ErrorAlert(e);
         }
         this.gameId = gameId;
         // FIXME: BULLSHIT FOR TESTING, since player colors arent implemented in savestates yet
@@ -78,21 +82,63 @@ public class GUIControl {
         if (getGame().getPlayers().size() > 4) getGame().getPlayers().get(4).setColor(Color.MACADAMIA);
     }
 
+    public void fight(String attackingCountry, String defendingCountry, int attackingUnits, int defendingUnits) {
+        Country attCountry = getGame().getCountries().get(attackingCountry);
+        Country defCountry = getGame().getCountries().get(defendingCountry);
+        try {
+            GameController.getInstance().fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
+        } catch (NotEnoughUnitsException | CountriesNotAdjacentException | GameNotFoundException | NoSuchCountryException e) {
+            new ErrorAlert(e);
+        }
+        forwardTurnPhase();
+    }
 
-    public String trimColorCode(String rawColorCode){
-        String colorCode = rawColorCode.substring(2,8);
-        return colorCode.toUpperCase();
+    public void forwardTurnPhase() {
+        try {
+
+            GameController.getInstance().switchTurns(gameId);
+            Updatable dialogVBox = componentMap.get("dialog-vbox");
+            dialogVBox.update();
+
+        } catch (GameNotFoundException e) {
+            new ErrorAlert(e);
+        }
+    }
+
+    /**
+     * method called when a country is clicked
+     *
+     * @param colorCode
+     */
+    public void countryClicked(String colorCode) {
+        selectedCountry = getCountryStringFromColorCode(colorCode);
+        switch(getGame().getTurn().getPhase()) {
+            case ATTACK:
+                Updatable attackVBox = componentMap.get("attack-vbox");
+                attackVBox.update();
+                break;
+            case MOVE:
+                Updatable moveVBox = componentMap.get("move-vbox");
+                moveVBox.update();
+                break;
+            case PLACE_UNITS:
+                Updatable placeUnitsVBox = componentMap.get("place-units-vbox");
+                placeUnitsVBox.update();
+                break;
+        }
+
     }
 
     /**
      * Looks up a the corresponding Country to a color Code
      * IMPORTANT: the caller of this method needs to handle the case that the player did not click on a country (nothing should happen then)
+     *
      * @param colorCode
      * @return countryString if found, empty string if no country has been found for the param colorCode
      */
-    public String getCountryStringFromColorCode(String colorCode){
-        for (String countryString : countryViewMap.keySet()){
-            if (countryViewMap.get(countryString).getColorCode().equals(colorCode)){
+    private String getCountryStringFromColorCode(String colorCode) {
+        for (String countryString : countryViewMap.keySet()) {
+            if (countryViewMap.get(countryString).getColorCode().equals(colorCode)) {
                 return countryString;
             }
         }
@@ -103,7 +149,13 @@ public class GUIControl {
 
     }
 
-    public Map<String, CountryViewHelper> getCountryViewMap(){
+    public Map<String, CountryViewHelper> getCountryViewMap() {
         return countryViewMap;
     }
+
+    public String getSelectedCountry() {
+        return selectedCountry;
+    }
+
+
 }

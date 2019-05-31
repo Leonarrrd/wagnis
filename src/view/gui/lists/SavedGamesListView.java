@@ -32,7 +32,7 @@ public class SavedGamesListView extends ListView implements RiskUIElement {
             this.setItems(gameIds);
             this.setOnMouseClicked(new SavedGamesListViewItemClickHandler(this));
         } catch (IOException e) {
-            new ErrorAlert(Alert.AlertType.ERROR, e);
+            new ErrorAlert(e);
         }
 
     }

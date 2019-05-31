@@ -53,7 +53,7 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
         units.setStyle("-fx-font: 20 verdana;");
 
         HBox unitsWrapper = new HBox();
-        unitsWrapper.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+        unitsWrapper.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(2))));
         unitsWrapper.setAlignment(Pos.BOTTOM_LEFT);
         unitsWrapper.setMaxHeight(5);
         unitsWrapper.getChildren().add(units);

@@ -42,9 +42,18 @@ public class TurnController {
                 turn.setPhase(Phase.ATTACK);
                 break;
             case ATTACK:
+                turn.setPhase(Phase.TRAIL_UNITS);
+                break;
+            case TRAIL_UNITS:
+                turn.setPhase(Phase.PERFORM_ANTOHER_ATTACK);
+                break;
+            case PERFORM_ANTOHER_ATTACK:
                 turn.setPhase(Phase.MOVE);
                 break;
             case MOVE:
+                turn.setPhase(Phase.PERFORM_ANOTHER_MOVE);
+                break;
+            case PERFORM_ANOTHER_MOVE:
                 turn.setPhase(Phase.PLACE_UNITS);
                 turn.setPlayer(getNextPlayer(game, turn.getPlayer()));
                 break;

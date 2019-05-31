@@ -1,4 +1,6 @@
-package view.gui.helper;
+package view.gui.viewhelper;
+
+import view.gui.helper.Coordinate;
 
 public class CountryViewHelper {
     private Coordinate coordinate;
@@ -15,5 +17,9 @@ public class CountryViewHelper {
 
     public String getColorCode() {
         return colorCode;
+    }
+
+    public void setColorCode(String colorCode) {
+        this.colorCode = colorCode;
     }
 }

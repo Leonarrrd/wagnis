@@ -12,11 +12,12 @@ import view.gui.helper.Updatable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerListHBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
+public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
 
-    public PlayerListHBox (){
+    public PlayerListVBox(){
         super();
-        addAsUpdateElement("PlayerListHBox", this);
+
+        addAsUpdateElement("PlayerListVBox", this);
     }
 
     @Override
@@ -65,8 +66,7 @@ public class PlayerListHBox extends BottomBarNodeHBox implements RiskUIElement, 
     }
 
     @Override
-    // FIXME: Bullshit at the moment, but i leave it here for future reference
-    // FIXME: Need to restructure the whole class actually
+
     public void update() {
 //        VBox turnVBox = (VBox) this.getChildren().get(2);
 //        for (int i = 0; i < turnVBox.getChildren().size() ; i++){

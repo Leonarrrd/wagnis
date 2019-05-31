@@ -2,12 +2,16 @@ package view.gui.boxes;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import view.gui.boxes.dialogboxes.*;
+import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
+import static datastructures.Phase.*;
 
 public class DialogVBox extends VBox implements RiskUIElement, Updatable {
     public DialogVBox() {
@@ -18,29 +22,30 @@ public class DialogVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void doStuff() {
-        this.setPrefHeight(180);
-        this.setMaxWidth(320);
-        this.setMaxHeight(200);
-
-        this.setAlignment(Pos.CENTER);
-
-        Text question = new Text("Do you want to nachrueck units?");
-        question.setStyle("-fx-font: 20 arial;");
-        this.getChildren().add(question);
-
-        HBox answers = new HBox();
-        answers.setAlignment(Pos.CENTER);
-        answers.setPadding(new Insets(50,0,0,0));
-        answers.setSpacing(30);
-        answers.getChildren().add(new Button("Yes"));
-        answers.getChildren().add(new Button("No"));
-
-        this.getChildren().add(answers);
-
+        this.getChildren().add(new PlaceUnitsVBox());
     }
 
     @Override
     public void update() {
-
+        switch(GUIControl.getInstance().getGame().getTurn().getPhase()) {
+            case PLACE_UNITS:
+                this.getChildren().set(0, new PlaceUnitsVBox());
+                break;
+            case ATTACK:
+                this.getChildren().set(0, new AttackVBox());
+                break;
+            case TRAIL_UNITS:
+                this.getChildren().set(0, new TrailUnitsVBox());
+                break;
+            case PERFORM_ANTOHER_ATTACK:
+                this.getChildren().set(0, new LaunchAnotherAttackVBox());
+                break;
+            case MOVE:
+                this.getChildren().set(0, new MoveVBox());
+                break;
+            case PERFORM_ANOTHER_MOVE:
+                this.getChildren().set(0, new PerformAnotherMoveVBox());
+                break;
+        }
     }
 }

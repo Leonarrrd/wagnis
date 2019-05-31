@@ -1,10 +1,6 @@
 package view.gui.panes;
 
-import controller.GameController;
 import datastructures.Color;
-import exceptions.CountriesAlreadyAssignedException;
-import exceptions.GameNotFoundException;
-import exceptions.InvalidFormattedDataException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,7 +10,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import model.Game;
 import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
@@ -22,8 +17,6 @@ import view.gui.helper.RiskUIElement;
 import view.gui.roots.GameBorderPane;
 import view.gui.viewhelper.PlayerColorItem;
 
-import javax.xml.bind.SchemaOutputResolver;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +62,8 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement {
 
         ObservableList<String> colors = FXCollections.observableArrayList(enumValues);
         comboBox.setItems(colors);
+        comboBox.getSelectionModel().select(playerColorItems.size());
+        comboBox.setDisable(true);
 
         return comboBox;
     }
@@ -128,15 +123,11 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement {
         List<Player> players = new ArrayList<>();
         for(PlayerColorItem pci : playerColorItems) {
             if(pci.getPlayerTextField().getText().equals("") || pci.getPlayerTextField().getText() == null) {
-                new ErrorAlert(Alert.AlertType.INFORMATION, "Game could not be started.", "Please select a name.", "Please make sure every Player has a name selected.");
+                new ErrorAlert("Game could not be started.", "Please select a name.", "Please make sure every Player has a name selected.");
                 return;
             }
             String playerName = pci.getPlayerTextField().getText();
 
-            if(pci.getPlayerComboBox().getSelectionModel().getSelectedItem() == null) {
-                new ErrorAlert(Alert.AlertType.INFORMATION, "Game could not be started.", "Please select a color.", "Please make sure every Player has a different color selected.");
-                return;
-            }
             Color playerColor = Color.valueOf((String) pci.getPlayerComboBox().getSelectionModel().getSelectedItem());
             Player p = new Player(playerName, playerColor);
             players.add(p);
