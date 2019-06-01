@@ -2,8 +2,10 @@ package view.gui.helper;
 
 import controller.GameController;
 import datastructures.Color;
+import datastructures.Phase;
 import exceptions.*;
 import javafx.scene.control.Alert;
+import model.AttackResult;
 import model.Country;
 import model.Game;
 import model.Player;
@@ -82,15 +84,40 @@ public class GUIControl {
         if (getGame().getPlayers().size() > 4) getGame().getPlayers().get(4).setColor(Color.MACADAMIA);
     }
 
+    public void placeUnits(int units) {
+        try {
+            GameController.getInstance().changeUnits(gameId, getGame().getCountries().get(selectedCountry), units);
+            componentMap.get(selectedCountry + "info-hbox").update();
+        } catch (GameNotFoundException | NoSuchCountryException e) {
+            new ErrorAlert(e);
+        }
+
+
+
+        forwardTurnPhase();
+    }
+
     public void fight(String attackingCountry, String defendingCountry, int attackingUnits, int defendingUnits) {
         Country attCountry = getGame().getCountries().get(attackingCountry);
         Country defCountry = getGame().getCountries().get(defendingCountry);
+        AttackResult ar = null;
         try {
-            GameController.getInstance().fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
+            ar = GameController.getInstance().fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
         } catch (NotEnoughUnitsException | CountriesNotAdjacentException | GameNotFoundException | NoSuchCountryException e) {
             new ErrorAlert(e);
         }
-        forwardTurnPhase();
+        componentMap.get(attackingCountry + "info-hbox").update();
+        componentMap.get(defendingCountry + "info-hbox").update();
+
+        if(ar.getWinner() != null) {
+            if(ar.getWinner().equals(defCountry)) {
+                forwardTurnPhase();
+            }
+            forwardTurnPhase();
+        } else {
+            return;
+        }
+
     }
 
     public void forwardTurnPhase() {
@@ -99,10 +126,18 @@ public class GUIControl {
             GameController.getInstance().switchTurns(gameId);
             Updatable dialogVBox = componentMap.get("dialog-vbox");
             dialogVBox.update();
+            componentMap.get("player-list-vbox").update();
 
         } catch (GameNotFoundException e) {
             new ErrorAlert(e);
         }
+    }
+
+    public void setTurnManually(Phase phase) {
+        getGame().getTurn().setPhase(phase);
+        Updatable dialogVBox = componentMap.get("dialog-vbox");
+        dialogVBox.update();
+        componentMap.get("player-list-vbox").update();
     }
 
     /**
@@ -112,7 +147,7 @@ public class GUIControl {
      */
     public void countryClicked(String colorCode) {
         selectedCountry = getCountryStringFromColorCode(colorCode);
-        switch(getGame().getTurn().getPhase()) {
+        switch (getGame().getTurn().getPhase()) {
             case ATTACK:
                 Updatable attackVBox = componentMap.get("attack-vbox");
                 attackVBox.update();
@@ -145,9 +180,6 @@ public class GUIControl {
         return "";
     }
 
-    public void update() {
-
-    }
 
     public Map<String, CountryViewHelper> getCountryViewMap() {
         return countryViewMap;
@@ -156,6 +188,5 @@ public class GUIControl {
     public String getSelectedCountry() {
         return selectedCountry;
     }
-
 
 }

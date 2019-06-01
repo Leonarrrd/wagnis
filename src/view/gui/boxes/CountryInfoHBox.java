@@ -34,7 +34,7 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
     public CountryInfoHBox(String countryString) {
         this.countryString = countryString;
         applyStyling(this, "country-info-hbox", "country_info_hbox.css");
-        addAsUpdateElement(countryString + "InfoHBox", this);
+        addAsUpdateElement(countryString + "info-hbox", this);
         doStuff();
     }
 

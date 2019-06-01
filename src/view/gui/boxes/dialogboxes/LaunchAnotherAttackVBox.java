@@ -1,5 +1,6 @@
 package view.gui.boxes.dialogboxes;
 
+import datastructures.Phase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -32,7 +33,7 @@ public class LaunchAnotherAttackVBox extends VBox implements RiskUIElement {
         yesButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().forwardTurnPhase();
+                GUIControl.getInstance().setTurnManually(Phase.ATTACK);
             }
         });
         answers.getChildren().add(yesButton);

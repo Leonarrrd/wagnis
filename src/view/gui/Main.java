@@ -15,15 +15,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-           Scene startupScene = new MainScene(new StartBorderPane());
-//        Scene startupScene = new MainScene(new GameBorderPane());
+        Scene startupScene = new MainScene(new StartBorderPane());
         stage.setTitle("Risiko - Leonard der Gestaltige & Big Assistent");
         stage.setScene(startupScene);
-        stage.setResizable(true);
-        stage.show();
-
-
-    }
+        stage.setResizable(false);
+        stage.show(); }
 
 
 }

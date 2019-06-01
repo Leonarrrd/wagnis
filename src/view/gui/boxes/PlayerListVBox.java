@@ -14,10 +14,10 @@ import java.util.List;
 
 public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
 
-    public PlayerListVBox(){
+    public PlayerListVBox() {
         super();
 
-        addAsUpdateElement("PlayerListVBox", this);
+        addAsUpdateElement("player-list-vbox", this);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
         playerListVBox.setAlignment(Pos.CENTER);
 
         List<Text> playerNames = new ArrayList<>();
-        for (Player player : GUIControl.getInstance().getGame().getPlayers()){
+        for (Player player : GUIControl.getInstance().getGame().getPlayers()) {
             Text text = new Text(player.getName());
             text.setStyle("-fx-font: normal bold 20px 'serif' ");
             playerNames.add(text);
@@ -40,7 +40,7 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
         VBox colorVBox = new VBox();
         colorVBox.setAlignment(Pos.CENTER);
         List<Text> colors = new ArrayList<>();
-        for (Player player : GUIControl.getInstance().getGame().getPlayers()){
+        for (Player player : GUIControl.getInstance().getGame().getPlayers()) {
             Text text = new Text(player.getColor().name());
             text.setStyle("-fx-font: normal bold 20px 'serif' ");
             colors.add(text);
@@ -50,9 +50,9 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
         VBox turnVBox = new VBox();
         turnVBox.setAlignment(Pos.CENTER);
         List<Text> turn = new ArrayList<>();
-        for (Player player : GUIControl.getInstance().getGame().getPlayers()){
+        for (Player player : GUIControl.getInstance().getGame().getPlayers()) {
             Text text = new Text("");
-            if (GUIControl.getInstance().getGame().getTurn().getPlayer().equals(player)){
+            if (GUIControl.getInstance().getGame().getTurn().getPlayer().equals(player)) {
                 text.setText(GUIControl.getInstance().getGame().getTurn().getPhase().name());
             }
             text.setStyle("-fx-font: normal bold 20px 'serif' ");
@@ -68,6 +68,8 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
     @Override
 
     public void update() {
+        this.getChildren().clear();
+        doStuff();
 //        VBox turnVBox = (VBox) this.getChildren().get(2);
 //        for (int i = 0; i < turnVBox.getChildren().size() ; i++){
 //            Node node = turnVBox.getChildren().get(i);
@@ -77,5 +79,6 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
 //                text.setText(GUIControl.getInstance().getGame().getTurn().getPhase().name());
 //            }
 //        }
+//    }
     }
 }

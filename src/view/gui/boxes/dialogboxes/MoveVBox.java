@@ -44,12 +44,21 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
             }
         });
 
+        Button skipButton = new Button("Skip");
+        skipButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                GUIControl.getInstance().forwardTurnPhase();
+            }
+        });
+
         this.getChildren().add(moveFromInfoText);
         this.getChildren().add(moveFromText);
         this.getChildren().add(moveToInfoText);
         this.getChildren().add(moveToText);
         this.getChildren().add(unitsToMoveWithSpinner);
         this.getChildren().add(moveButton);
+        this.getChildren().add(skipButton);
 
     }
 

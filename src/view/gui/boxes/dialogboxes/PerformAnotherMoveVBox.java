@@ -1,6 +1,7 @@
 package view.gui.boxes.dialogboxes;
 
 import controller.GameController;
+import datastructures.Phase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -34,7 +35,8 @@ public class PerformAnotherMoveVBox extends VBox implements RiskUIElement {
         yesButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().forwardTurnPhase();
+                GUIControl.getInstance().setTurnManually(Phase.MOVE);
+
             }
         });
 

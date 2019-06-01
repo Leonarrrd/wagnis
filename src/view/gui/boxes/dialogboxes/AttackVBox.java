@@ -1,17 +1,27 @@
 package view.gui.boxes.dialogboxes;
 
 import controller.GameController;
+import exceptions.GameNotFoundException;
+import exceptions.NoSuchCountryException;
+import exceptions.NoSuchPlayerException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.Country;
+import model.Game;
+import model.Player;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class AttackVBox extends VBox implements RiskUIElement, Updatable {
@@ -38,7 +48,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         final int initialValue = 1;
 
         //TODO: richtige value setzen
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1,5, initialValue);
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, initialValue);
         unitsToAttackWithSpinner.setValueFactory(valueFactory);
         Button attackButton = new Button("Launch Attack!");
 
@@ -49,6 +59,14 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             }
         });
 
+        Button skipButton = new Button("Skip");
+        skipButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                GUIControl.getInstance().forwardTurnPhase();
+            }
+        });
+
         this.getChildren().add(launchedFromInfoText);
         this.getChildren().add(attackingCountryText);
         this.getChildren().add(attackOnInfoText);
@@ -56,16 +74,45 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         this.getChildren().add(unitsToAttackWithInfoText);
         this.getChildren().add(unitsToAttackWithSpinner);
         this.getChildren().add(attackButton);
+        this.getChildren().add(skipButton);
 
     }
 
     @Override
     public void update() {
-        if(!firstCountrySelected) {
-            attackingCountryText.setText(GUIControl.getInstance().getSelectedCountry());
-        } else {
-            defendingCountryText.setText(GUIControl.getInstance().getSelectedCountry());
+
+        Game game = GUIControl.getInstance().getGame();
+        Player activePlayer = game.getTurn().getPlayer();
+        List<Country> countriesToAttackFrom;
+        try {
+            //TODO: Methodenaufruf zu lang
+            countriesToAttackFrom = new ArrayList(GameController.getInstance().getCountriesAttackCanBeLaunchedFrom(game.getId(), activePlayer).values());
+        } catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException e) {
+            e.printStackTrace();
         }
-        firstCountrySelected  = !firstCountrySelected;
+        if (!firstCountrySelected) {
+            if (activePlayer.getCountries().keySet().contains(GUIControl.getInstance().getSelectedCountry())) {
+                attackingCountryText.setText(GUIControl.getInstance().getSelectedCountry());
+                firstCountrySelected = !firstCountrySelected;
+
+            } else {
+                new Alert(Alert.AlertType.INFORMATION, "Player does not own " + GUIControl.getInstance().getSelectedCountry()).showAndWait();
+            }
+        } else {
+            Country firstCountry = game.getCountries().get(attackingCountryText.getText());
+            try {
+                if(firstCountry.getNeighbors().contains(game.getCountries().get(GUIControl.getInstance().getSelectedCountry()))
+                    && GameController.getInstance().getHostileNeighbors(game.getId(), firstCountry).containsKey(GUIControl.getInstance().getSelectedCountry())) {
+                defendingCountryText.setText(GUIControl.getInstance().getSelectedCountry());
+                    firstCountrySelected = !firstCountrySelected;
+
+                } else {
+                    new Alert(Alert.AlertType.INFORMATION, "Countries not adjacent or not hostile.").showAndWait();
+                }
+            } catch (GameNotFoundException | NoSuchCountryException e) {
+                new ErrorAlert(e);
+            }
+        }
+
     }
 }
