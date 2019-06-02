@@ -10,6 +10,7 @@ import model.Country;
 import model.Game;
 import model.Player;
 import view.gui.alerts.ErrorAlert;
+import view.gui.boxes.LogHBox;
 import view.gui.viewhelper.CountryViewHelper;
 
 import java.io.IOException;
@@ -86,8 +87,10 @@ public class GUIControl {
 
     public void placeUnits(int units) {
         try {
-            GameController.getInstance().changeUnits(gameId, getGame().getCountries().get(selectedCountry), units);
+            Country c = getGame().getCountries().get(selectedCountry);
+            GameController.getInstance().changeUnits(gameId, c, units);
             componentMap.get(selectedCountry + "info-hbox").update();
+            getLog().update(c.getOwner() +" placed " + units + " units on " + c.getName());
         } catch (GameNotFoundException | NoSuchCountryException e) {
             new ErrorAlert(e);
         }
@@ -109,14 +112,43 @@ public class GUIControl {
         componentMap.get(attackingCountry + "info-hbox").update();
         componentMap.get(defendingCountry + "info-hbox").update();
 
+
+        getLog().update("Attacking Player: " + attCountry.getOwner() +" with country: " + attackingCountry + " rolled: ");
+        for(int attDices : ar.getAttackerDices()) {
+            getLog().update(attDices + "");
+        }
+        getLog().update("Defending Player: " + defCountry.getOwner() +" with country: " + defendingCountry + " rolled: ");
+        for(int defDices : ar.getDefenderDices()) {
+            getLog().update(defDices + "");
+        }
+
+
         if(ar.getWinner() != null) {
             if(ar.getWinner().equals(defCountry)) {
+                getLog().update(defendingCountry + " successfully defended. It is owned by: " + defCountry.getOwner());
                 forwardTurnPhase();
+            } else {
+                getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defCountry.getOwner());
             }
             forwardTurnPhase();
         } else {
             return;
         }
+
+    }
+
+    public void move(String srcCountry, String destCountry, int amount) {
+        Country srcCountryObj = getGame().getCountries().get(srcCountry);
+        Country destCountryObj = getGame().getCountries().get(destCountry);
+        try {
+            GameController.getInstance().moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount);
+            getLog().update(srcCountryObj.getOwner().getName() + " moved " + amount + " from " + srcCountry + " to " + destCountry);
+
+        } catch (GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException | NoSuchPlayerException e) {
+            new ErrorAlert(e);
+        }
+        componentMap.get(srcCountry+ "info-hbox").update();
+        componentMap.get(destCountry + "info-hbox").update();
 
     }
 
@@ -128,7 +160,7 @@ public class GUIControl {
             dialogVBox.update();
             componentMap.get("player-list-vbox").update();
 
-        } catch (GameNotFoundException e) {
+        } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
             new ErrorAlert(e);
         }
     }
@@ -187,6 +219,10 @@ public class GUIControl {
 
     public String getSelectedCountry() {
         return selectedCountry;
+    }
+
+    private LogHBox getLog() {
+        return (LogHBox) componentMap.get("log-hbox");
     }
 
 }

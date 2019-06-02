@@ -50,7 +50,7 @@ public class TurnCUI extends AbstractCUI {
                         break;
                 }
                 postTurnCheck(game, gameWon, player);
-            } catch (GameNotFoundException e) {
+            } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
                 e.printStackTrace();
             }
         }

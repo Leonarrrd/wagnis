@@ -324,7 +324,7 @@ public class GameController {
      * switch turns (phase or phase and player)
      *
      */
-    public void switchTurns(UUID gameId) throws GameNotFoundException {
+    public void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         Game game = getGameById(gameId);
         tc.switchTurns(game);
     }

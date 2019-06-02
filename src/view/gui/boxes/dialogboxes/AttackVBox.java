@@ -44,18 +44,24 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         defendingCountryText = new Text("<click on second country>");
         Text unitsToAttackWithInfoText = new Text("Choose amount of units to attack with");
         final Spinner<Integer> unitsToAttackWithSpinner = new Spinner<>();
+        Text unitsToDefendWithInfoText = new Text("Choose amount of units to defend with");
+        final Spinner<Integer> unitsToDefendWithSpinner = new Spinner<>();
 
         final int initialValue = 1;
 
         //TODO: richtige value setzen
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, initialValue);
-        unitsToAttackWithSpinner.setValueFactory(valueFactory);
+        SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, initialValue);
+        SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, initialValue);
+
+        unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
+        unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
+
         Button attackButton = new Button("Launch Attack!");
 
         attackButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().fight(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue(), unitsToAttackWithSpinner.getValue());
+                GUIControl.getInstance().fight(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue(), unitsToDefendWithSpinner.getValue());
             }
         });
 
@@ -73,6 +79,8 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         this.getChildren().add(defendingCountryText);
         this.getChildren().add(unitsToAttackWithInfoText);
         this.getChildren().add(unitsToAttackWithSpinner);
+        this.getChildren().add(unitsToDefendWithInfoText);
+        this.getChildren().add(unitsToDefendWithSpinner);
         this.getChildren().add(attackButton);
         this.getChildren().add(skipButton);
 

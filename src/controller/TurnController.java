@@ -1,6 +1,9 @@
 package controller;
 
 import datastructures.Phase;
+import exceptions.CardAlreadyOwnedException;
+import exceptions.NoSuchCardException;
+import exceptions.NoSuchPlayerException;
 import model.Game;
 import model.Player;
 import model.Turn;
@@ -33,7 +36,7 @@ public class TurnController {
      * switch turns (phase or phase and player)
      *
      */
-    void switchTurns(Game game) {
+    void switchTurns(Game game) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
 
         Turn turn = game.getTurn();
 
@@ -55,6 +58,7 @@ public class TurnController {
                 break;
             case PERFORM_ANOTHER_MOVE:
                 turn.setPhase(Phase.PLACE_UNITS);
+                CardDeckController.getInstance().addCard(game, turn.getPlayer());
                 turn.setPlayer(getNextPlayer(game, turn.getPlayer()));
                 break;
             default:

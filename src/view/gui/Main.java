@@ -1,5 +1,6 @@
 package view.gui;
 
+import controller.GameController;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -19,7 +20,7 @@ public class Main extends Application {
         stage.setTitle("Risiko - Leonard der Gestaltige & Big Assistent");
         stage.setScene(startupScene);
         stage.setResizable(false);
-        stage.show(); }
+        stage.show();
 
-
+    }
 }

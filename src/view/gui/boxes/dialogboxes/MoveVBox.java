@@ -40,6 +40,7 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
         moveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                GUIControl.getInstance().move(moveFromText.getText(), moveToText.getText(), valueFactory.getValue());
                 GUIControl.getInstance().forwardTurnPhase();
             }
         });

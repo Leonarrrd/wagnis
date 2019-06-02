@@ -12,16 +12,18 @@ import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 
 public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
+
+    TextArea textArea;
+
     public LogHBox (){
         super();
-        addAsUpdateElement("LogHBox", this);
+        addAsUpdateElement("log-hbox", this);
     }
 
     @Override
     public void doStuff() {
-//        this.setPrefWidth(50);
 
-        TextArea textArea = new TextArea("Welcome to Risk!");
+        textArea = new TextArea("Welcome to Risk!");
         textArea.setMaxHeight(140);
         textArea.setPrefWidth(300);
         textArea.setEditable(false);
@@ -30,8 +32,6 @@ public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updatab
 
         textArea.appendText("\nThe current gamestate:");
         textArea.appendText(GUIControl.getInstance().getGame().toString());
-
-
         textArea.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
 
         this.getChildren().add(textArea);
@@ -39,6 +39,11 @@ public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updatab
 
     @Override
     public void update() {
-
     }
+
+    public void update(String text) {
+        textArea.appendText(text);
+        textArea.appendText("\n");
+    }
+
 }

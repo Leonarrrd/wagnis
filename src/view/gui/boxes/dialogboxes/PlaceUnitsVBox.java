@@ -70,6 +70,5 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
             new Alert(Alert.AlertType.INFORMATION, "Please select a country that belongs to you.").showAndWait();
         }
 
-
     }
 }
