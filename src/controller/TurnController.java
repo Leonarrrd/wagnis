@@ -2,6 +2,7 @@ package controller;
 
 import datastructures.Phase;
 import exceptions.CardAlreadyOwnedException;
+import exceptions.GameNotFoundException;
 import exceptions.NoSuchCardException;
 import exceptions.NoSuchPlayerException;
 import model.Game;
@@ -29,7 +30,14 @@ public class TurnController {
      */
     public void setTurn(Game game) {
         game.setTurn(new Turn(game.getPlayers().get(0), Phase.PLACE_UNITS));
-
+        // MARK ***************************** BULLSHIT **********************************
+        //    the method call should be refactored to somewhere else
+        try {
+            GameController.getInstance().awardUnits(game.getId(), game.getPlayers().get(0));
+        } catch (GameNotFoundException | NoSuchPlayerException e) {
+            e.printStackTrace();
+        }
+        // MARK ***************************** BULLSHIT **********************************
     }
 
    /**
@@ -60,6 +68,15 @@ public class TurnController {
                 turn.setPhase(Phase.PLACE_UNITS);
                 CardDeckController.getInstance().addCard(game, turn.getPlayer());
                 turn.setPlayer(getNextPlayer(game, turn.getPlayer()));
+                // MARK ***************************** BULLSHIT **********************************
+                //        the method call should be refactored to somewhere else
+                try {
+                    GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
+                } catch (GameNotFoundException e) {
+                    e.printStackTrace();
+                }
+                // MARK ***************************** BULLSHIT **********************************
+
                 break;
             default:
                 break;

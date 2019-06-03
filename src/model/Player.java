@@ -18,6 +18,9 @@ public class Player {
 
     private Mission mission;
     private boolean hasConqueredCountry = false;
+
+    private int unitsToPlace = 0;
+
     public Player(String name, Color color) {
         this.name = name;
         this.color = color;
@@ -69,6 +72,14 @@ public class Player {
 
     public void setHasConqueredCountry(boolean hasConqueredCountry) {
         this.hasConqueredCountry = hasConqueredCountry;
+    }
+
+    public int getUnitsToPlace() {
+        return unitsToPlace;
+    }
+
+    public void setUnitsToPlace(int unitsToPlace) {
+        this.unitsToPlace = unitsToPlace;
     }
 
     // FIXME: REMOVE THIS WHEN COLORS ARE IMPLEMENTED IN SAVESTATES

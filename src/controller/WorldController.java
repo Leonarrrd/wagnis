@@ -44,6 +44,9 @@ public class WorldController {
     }
 
     /**
+     * MARK: Misleading method name.
+     *  Gives the impression that the functionality would be that of setUnits() rather than addUnits()
+     *
      * Add units to the specified country
      *
      * @param country

@@ -1,6 +1,7 @@
 package view.gui.boxes.dialogboxes;
 
 import controller.GameController;
+import exceptions.NoSuchPlayerException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -35,9 +36,11 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
         Text selectCountryInfoText = new Text("Select Country to place units on");
         selectedCountryText = new Text("<no country selected>");
         unitsToPlaceSpinner = new Spinner<>();
-        final int initialValue = 54;
-        //TODO: richtige value setzen
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 55, initialValue);
+
+        //TODO: maximale units anzeigen
+        int maxValue = GUIControl.getInstance().getGame().getTurn().getPlayer().getUnitsToPlace();
+
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxValue, maxValue);
         unitsToPlaceSpinner.setValueFactory(valueFactory);
 
         placeUnitsButton = new Button("Place Units!");
@@ -60,14 +63,21 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
     public void update() {
 
         //TODO: oooooofff funktionsaufrufe
-        List<Country> playerCountries = new ArrayList(GUIControl.getInstance().getGame().getTurn().getPlayer().getCountries().values());
-        Country selectedCountry = GUIControl.getInstance().getGame().getCountries().get(GUIControl.getInstance().getSelectedCountry());
+
+        int maxValue = GUIControl.getInstance().getGame().getTurn().getPlayer().getUnitsToPlace();
+
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxValue, maxValue);
+        unitsToPlaceSpinner.setValueFactory(valueFactory);
+
+        List<Country> playerCountries = new ArrayList(GUIControl.getInstance().getCurrentPlayer().getCountries().values());
+//        Country selectedCountry = GUIControl.getInstance().getGame().getCountries().get(GUIControl.getInstance().getSelectedCountry());
+        Country selectedCountry = GUIControl.getInstance().getSelectedCountry();
 
         if (playerCountries.contains(selectedCountry)) {
-            selectedCountryText.setText(GUIControl.getInstance().getSelectedCountry());
+            selectedCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
             placeUnitsButton.setDisable(false);
         } else {
-            new Alert(Alert.AlertType.INFORMATION, "Please select a country that belongs to you.").showAndWait();
+            new Alert(Alert.AlertType.INFORMATION, "You don't own this country.").showAndWait();
         }
 
     }

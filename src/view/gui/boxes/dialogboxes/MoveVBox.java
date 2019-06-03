@@ -1,7 +1,9 @@
 package view.gui.boxes.dialogboxes;
 
+import controller.GameController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
@@ -15,6 +17,7 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
 
     Text moveFromText;
     Text moveToText;
+    Spinner<Integer> unitsToMoveWithSpinner;
     boolean firstCountrySelected = false;
 
     public MoveVBox() {
@@ -30,17 +33,18 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
         Text moveToInfoText = new Text("Country to move to");
         moveToText = new Text("<click on second country>");
 
-        //TODO: richtige value setzen
-        final Spinner<Integer> unitsToMoveWithSpinner = new Spinner<>();
-        final int initialValue = 1;
-        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, initialValue);
+        int maxUnitsToMove = GUIControl.getInstance().getSelectedCountry().getUnits() - 1;
+
+        unitsToMoveWithSpinner = new Spinner<>();
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
         unitsToMoveWithSpinner.setValueFactory(valueFactory);
 
         Button moveButton = new Button("Perform move action!");
         moveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().move(moveFromText.getText(), moveToText.getText(), valueFactory.getValue());
+                System.out.println(valueFactory.getValue());
+                GUIControl.getInstance().move(moveFromText.getText(), moveToText.getText(), unitsToMoveWithSpinner.getValue());
                 GUIControl.getInstance().forwardTurnPhase();
             }
         });
@@ -65,13 +69,22 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void update() {
-        if (!firstCountrySelected) {
-            moveFromText.setText(GUIControl.getInstance().getSelectedCountry());
+        // MARK: I made it so that the VBox does not update when the player selects a country that's not his
+        //  --> This way, we don't have to deal with the player trying
+        //      to perform move operations on countries that aren't his
+        if (GUIControl.getInstance().getCurrentPlayer().getCountries().containsValue(GUIControl.getInstance().getSelectedCountry())) {
+            if (!firstCountrySelected) {
+                // the Spinner does only get updated when the src country gets updated
+                moveFromText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+                int maxUnitsToMove = GUIControl.getInstance().getSelectedCountry().getUnits() - 1;
+                SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
+                unitsToMoveWithSpinner.setValueFactory(valueFactory);
+            } else {
+                moveToText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+            }
+            firstCountrySelected = !firstCountrySelected;
         } else {
-            moveToText.setText(GUIControl.getInstance().getSelectedCountry());
+            new Alert(Alert.AlertType.INFORMATION, "You don't own this country.").showAndWait();
         }
-
-        firstCountrySelected = !firstCountrySelected;
-
     }
 }

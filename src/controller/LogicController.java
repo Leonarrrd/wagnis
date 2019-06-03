@@ -30,14 +30,21 @@ public class LogicController {
      *
      * @return number of units the player can place this turn
      */
-    int awardUnits(Game game, Player player) throws NoSuchPlayerException {
+    void awardUnits(Game game, Player player) throws NoSuchPlayerException {
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player + " does not exist.");
         }
         int units = 3;
         units += this.addUnitsByCountries(game, player);
         units += this.addUnitsByContinents(game, player);
-        return units;
+        player.setUnitsToPlace(units);
+    }
+
+    void changeUnits(Game game, Player player, int unitChange) throws NoSuchPlayerException {
+        if(!game.getPlayers().contains(player)) {
+            throw new NoSuchPlayerException(player + " does not exist.");
+        }
+        player.setUnitsToPlace(player.getUnitsToPlace() + unitChange);
     }
 
     /**

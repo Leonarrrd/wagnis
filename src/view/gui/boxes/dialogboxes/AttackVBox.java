@@ -50,8 +50,8 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         final int initialValue = 1;
 
         //TODO: richtige value setzen
-        SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, initialValue);
-        SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 5, initialValue);
+        SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 3, initialValue);
+        SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 2, initialValue);
 
         unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
         unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
@@ -99,19 +99,19 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             e.printStackTrace();
         }
         if (!firstCountrySelected) {
-            if (activePlayer.getCountries().keySet().contains(GUIControl.getInstance().getSelectedCountry())) {
-                attackingCountryText.setText(GUIControl.getInstance().getSelectedCountry());
+            if (activePlayer.getCountries().keySet().contains(GUIControl.getInstance().getSelectedCountry().getName())) {
+                attackingCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
                 firstCountrySelected = !firstCountrySelected;
 
             } else {
-                new Alert(Alert.AlertType.INFORMATION, "Player does not own " + GUIControl.getInstance().getSelectedCountry()).showAndWait();
+                new Alert(Alert.AlertType.INFORMATION, "Player does not own " + GUIControl.getInstance().getSelectedCountry().getName()).showAndWait();
             }
         } else {
             Country firstCountry = game.getCountries().get(attackingCountryText.getText());
             try {
-                if(firstCountry.getNeighbors().contains(game.getCountries().get(GUIControl.getInstance().getSelectedCountry()))
-                    && GameController.getInstance().getHostileNeighbors(game.getId(), firstCountry).containsKey(GUIControl.getInstance().getSelectedCountry())) {
-                defendingCountryText.setText(GUIControl.getInstance().getSelectedCountry());
+                if(firstCountry.getNeighbors().contains(game.getCountries().get(GUIControl.getInstance().getSelectedCountry().getName()))
+                    && GameController.getInstance().getHostileNeighbors(game.getId(), firstCountry).containsKey(GUIControl.getInstance().getSelectedCountry().getName())) {
+                defendingCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
                     firstCountrySelected = !firstCountrySelected;
 
                 } else {

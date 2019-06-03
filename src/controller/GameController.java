@@ -192,9 +192,14 @@ public class GameController {
      *
      * @return number of units the player can place this turn
      */
-    public int awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
+    public void awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
-        return lc.awardUnits(game, player);
+        lc.awardUnits(game, player);
+    }
+
+    public void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException{
+        Game game = getGameById(gameId);
+        lc.changeUnits(game, player, unitChange);
     }
 
     /**
@@ -316,7 +321,7 @@ public class GameController {
      * @param gameId
      */
     public void setTurn(UUID gameId) throws GameNotFoundException {
-        Game game =getGameById(gameId);
+        Game game = getGameById(gameId);
         tc.setTurn(game);
     }
 
@@ -338,4 +343,6 @@ public class GameController {
         Game game = getGameById(gameId);
         grc.updatePlayerGraphMap(game, p);
     }
+
+
 }

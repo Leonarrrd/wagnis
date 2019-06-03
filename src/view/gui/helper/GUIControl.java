@@ -60,9 +60,9 @@ public class GUIControl {
         }
         game.setPlayers(players);
         try {
-            GameController.getInstance().setTurn(game.getId());
             GameController.getInstance().assignMissions(game.getId());
             GameController.getInstance().assignCountries(game.getId());
+            GameController.getInstance().setTurn(game.getId());
         } catch (Exception e) {
             new ErrorAlert(e);
         }
@@ -89,15 +89,20 @@ public class GUIControl {
         try {
             Country c = getGame().getCountries().get(selectedCountry);
             GameController.getInstance().changeUnits(gameId, c, units);
+            GameController.getInstance().changeUnitsToPlace(gameId, getGame().getTurn().getPlayer(), -units);
             componentMap.get(selectedCountry + "info-hbox").update();
             getLog().update(c.getOwner() +" placed " + units + " units on " + c.getName());
-        } catch (GameNotFoundException | NoSuchCountryException e) {
+        } catch (GameNotFoundException | NoSuchCountryException | NoSuchPlayerException e) {
             new ErrorAlert(e);
         }
-
-
-
-        forwardTurnPhase();
+        //FIXME: Erst prüfen ob noch weitere Einheiten platziert werden können
+        // Erst wenn keine Einheiten mehr platziert werden können springen wir in die nächste Phase
+        if (getGame().getTurn().getPlayer().getUnitsToPlace() == 0) {
+            forwardTurnPhase();
+        } else {
+            Updatable dialogVBox = componentMap.get("dialog-vbox");
+            dialogVBox.update();
+        }
     }
 
     public void fight(String attackingCountry, String defendingCountry, int attackingUnits, int defendingUnits) {
@@ -138,8 +143,8 @@ public class GUIControl {
     }
 
     public void move(String srcCountry, String destCountry, int amount) {
-        Country srcCountryObj = getGame().getCountries().get(srcCountry);
-        Country destCountryObj = getGame().getCountries().get(destCountry);
+        Country srcCountryObj = getCountryFromString(srcCountry);
+        Country destCountryObj = getCountryFromString(destCountry);
         try {
             GameController.getInstance().moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount);
             getLog().update(srcCountryObj.getOwner().getName() + " moved " + amount + " from " + srcCountry + " to " + destCountry);
@@ -154,7 +159,6 @@ public class GUIControl {
 
     public void forwardTurnPhase() {
         try {
-
             GameController.getInstance().switchTurns(gameId);
             Updatable dialogVBox = componentMap.get("dialog-vbox");
             dialogVBox.update();
@@ -175,41 +179,41 @@ public class GUIControl {
     /**
      * method called when a country is clicked
      *
-     * @param colorCode
+     * @param
      */
-    public void countryClicked(String colorCode) {
-        selectedCountry = getCountryStringFromColorCode(colorCode);
-        switch (getGame().getTurn().getPhase()) {
-            case ATTACK:
-                Updatable attackVBox = componentMap.get("attack-vbox");
-                attackVBox.update();
-                break;
-            case MOVE:
-                Updatable moveVBox = componentMap.get("move-vbox");
-                moveVBox.update();
-                break;
-            case PLACE_UNITS:
-                Updatable placeUnitsVBox = componentMap.get("place-units-vbox");
-                placeUnitsVBox.update();
-                break;
-        }
-
+    public void countryClicked(String countryString) {
+        // MARK: right now, selectedCountry will only be updated if a country is clicked
+            selectedCountry = countryString;
+            switch (getGame().getTurn().getPhase()) {
+                case ATTACK:
+                    Updatable attackVBox = componentMap.get("attack-vbox");
+                    attackVBox.update();
+                    break;
+                case MOVE:
+                    Updatable moveVBox = componentMap.get("move-vbox");
+                    moveVBox.update();
+                    break;
+                case PLACE_UNITS:
+                    Updatable placeUnitsVBox = componentMap.get("place-units-vbox");
+                    placeUnitsVBox.update();
+                    break;
+            }
     }
 
     /**
      * Looks up a the corresponding Country to a color Code
      * IMPORTANT: the caller of this method needs to handle the case that the player did not click on a country (nothing should happen then)
-     *
+     * MARK: Maybe throw an exception instead of returning null
      * @param colorCode
      * @return countryString if found, empty string if no country has been found for the param colorCode
      */
-    private String getCountryStringFromColorCode(String colorCode) {
+    public String getCountryStringFromColorCode(String colorCode) {
         for (String countryString : countryViewMap.keySet()) {
             if (countryViewMap.get(countryString).getColorCode().equals(colorCode)) {
                 return countryString;
             }
         }
-        return "";
+        return null;
     }
 
 
@@ -217,8 +221,21 @@ public class GUIControl {
         return countryViewMap;
     }
 
-    public String getSelectedCountry() {
-        return selectedCountry;
+    public Country getCountryFromString(String countryString) {
+        try {
+            return GameController.getInstance().getGameById(gameId).getCountries().get(countryString);
+        } catch (GameNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Country getSelectedCountry() {
+        return getGame().getCountries().get(selectedCountry);
+    }
+
+    public Player getCurrentPlayer() {
+        return getGame().getTurn().getPlayer();
     }
 
     private LogHBox getLog() {

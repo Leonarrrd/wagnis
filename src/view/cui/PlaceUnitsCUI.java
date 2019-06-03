@@ -83,12 +83,13 @@ public class PlaceUnitsCUI extends AbstractCUI {
     private int awardUnits(UUID gameId, Player player) throws GameNotFoundException {
         Game game = gc.getGameById(gameId);
 
-        int awardedUnits = 0;
         try {
-            awardedUnits = gc.awardUnits(gameId, player);
+            gc.awardUnits(gameId, player);
         } catch (NoSuchPlayerException e) {
             e.printStackTrace();
         }
+
+        int awardedUnits = player.getUnitsToPlace();
 
         System.out.println(player + " is awarded " + awardedUnits + " units.");
 

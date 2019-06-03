@@ -47,8 +47,9 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
             public void handle(MouseEvent event) {
                 String rawColorCode = mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString();
                 String colorCode = Util.trimColorCode(rawColorCode);
-                GUIControl.getInstance().countryClicked(colorCode);
-                System.out.println();
+                if (GUIControl.getInstance().getCountryStringFromColorCode(colorCode) != null) {
+                    GUIControl.getInstance().countryClicked(GUIControl.getInstance().getCountryStringFromColorCode(colorCode));
+                }
             }
         });
 
@@ -66,6 +67,5 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
 
         this.setBottom(bottomBar);
         this.setTop(pane);
-
     }
 }

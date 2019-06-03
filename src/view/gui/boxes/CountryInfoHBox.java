@@ -65,7 +65,7 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                System.out.println(countryString);
+                GUIControl.getInstance().countryClicked(countryString);
             }
         });
     }
