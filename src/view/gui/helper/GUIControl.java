@@ -12,6 +12,7 @@ import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.LogHBox;
 import view.gui.viewhelper.CountryViewHelper;
+import view.gui.viewhelper.LastFightCountries;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,6 +31,9 @@ public class GUIControl {
     private Map<String, CountryViewHelper> countryViewMap = MethodSlave.buildCountryViewMap();
     private GameController gc = GameController.getInstance();
     private String selectedCountry;
+    private LastFightCountries lastFightCountry;
+
+
 
     public Game getGame() {
 
@@ -133,13 +137,26 @@ public class GUIControl {
                 getLog().update(defendingCountry + " successfully defended. It is owned by: " + defCountry.getOwner());
                 forwardTurnPhase();
             } else {
+                lastFightCountry = new LastFightCountries(attCountry, defCountry);
                 getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defCountry.getOwner());
             }
+
             forwardTurnPhase();
         } else {
             return;
         }
 
+    }
+
+    public void trailUnits(int value) {
+        try {
+            GameController.getInstance().moveUnits(gameId, lastFightCountry.getSrcCountry(), lastFightCountry.getDestCountry(), value);
+            componentMap.get(lastFightCountry.getSrcCountry() + "info-hbox").update();
+            componentMap.get(lastFightCountry.getDestCountry() + "info-hbox").update();
+            setTurnManually(Phase.ATTACK);
+        } catch (GameNotFoundException | NotEnoughUnitsException | NoSuchCountryException | CountryNotOwnedException | NoSuchPlayerException e) {
+            new ErrorAlert(e);
+        }
     }
 
     public void move(String srcCountry, String destCountry, int amount) {
@@ -160,8 +177,7 @@ public class GUIControl {
     public void forwardTurnPhase() {
         try {
             GameController.getInstance().switchTurns(gameId);
-            Updatable dialogVBox = componentMap.get("dialog-vbox");
-            dialogVBox.update();
+            componentMap.get("dialog-vbox").update();
             componentMap.get("player-list-vbox").update();
 
         } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
@@ -241,5 +257,9 @@ public class GUIControl {
     private LogHBox getLog() {
         return (LogHBox) componentMap.get("log-hbox");
     }
+    public LastFightCountries getLastFightCountry() {
+        return lastFightCountry;
+    }
+
 
 }

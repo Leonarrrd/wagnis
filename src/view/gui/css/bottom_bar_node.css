@@ -1,7 +1,7 @@
 #bottom-bar-node {
     -fx-background-color: #AAAAAA;
-    -fx-border-style: solid inside;
-    -fx-border-width: 3;
+
+    -fx-border-color: #696969;
     -fx-alignment: center;
     -fx-max-width: 400;
 }

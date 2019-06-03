@@ -87,7 +87,7 @@ public class LogicController {
             throw new NoSuchCountryException("Country " + defendingCountry + " does not exist.");
         }
         //check if attack is valid based on units
-        if (attackingUnits > attackingCountry.getUnits()) {
+        if (attackingUnits > attackingCountry.getUnits() || attackingCountry.getUnits() == 1 ) {
             throw new NotEnoughUnitsException("Country " + attackingCountry + " does not hold enough units to attack with " + attackingUnits + " units.");
         }
 

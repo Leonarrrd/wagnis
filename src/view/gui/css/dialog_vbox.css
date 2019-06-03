@@ -1,13 +1,17 @@
 #dialog-vbox {
     -fx-background-color: #AAAAAA;
     /*-fx-background-color: transparent;*/
-    -fx-border-style: solid inside;
-    -fx-border-width: 3;
-    -fx-border-radius: 18 18 18 18;
-    -fx-border-color: #FC3D44;
+    -fx-border-color: #696969;
     -fx-pref-width: 180;
     -fx-max-width: 320;
     -fx-max-height: 200;
+    -fx-min-width: 320;
+    -fx-min-height: 200;
     -fx-alignment: center;
+    -fx-text-alignment: center;
+}
+
+#dialog-vbox:hover {
+    -fx-border-width: 3px;
 }
 

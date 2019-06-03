@@ -19,8 +19,10 @@ public class Main extends Application {
         Scene startupScene = new MainScene(new StartBorderPane());
         stage.setTitle("Risiko - Leonard der Gestaltige & Big Assistent");
         stage.setScene(startupScene);
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.show();
 
     }
+
+
 }
