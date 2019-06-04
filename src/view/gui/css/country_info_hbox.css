@@ -4,3 +4,7 @@
     /*-fx-border-width: 3;*/
     /*-fx-border-radius: 18 18 18 18;*/
 }
+
+.unitsText {
+    -fx-fill: #000;
+}

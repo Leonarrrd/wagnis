@@ -51,6 +51,7 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
 //        units = new Text("" + country.getUnits());
         units = new Text("" + GUIControl.getInstance().getGame().getCountries().get(countryString).getUnits());
         units.setStyle("-fx-font: 20 verdana;");
+        units.getStyleClass().add("unitsText");
 
         HBox unitsWrapper = new HBox();
         unitsWrapper.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(2))));
@@ -61,7 +62,6 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
         this.getChildren().add(flag);
         this.getChildren().add(unitsWrapper);
 
-        // FIXME: Not sure if we want this
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

@@ -1,6 +1,7 @@
 package view.gui.boxes.dialogboxes;
 
 import controller.GameController;
+import datastructures.Phase;
 import exceptions.GameNotFoundException;
 import exceptions.NoSuchCountryException;
 import exceptions.NoSuchPlayerException;
@@ -72,7 +73,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         skipButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().forwardTurnPhase();
+                GUIControl.getInstance().setTurnManually(Phase.PERFORM_ANTOHER_ATTACK);
             }
         });
 

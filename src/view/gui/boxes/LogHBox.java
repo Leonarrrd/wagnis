@@ -26,13 +26,14 @@ public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updatab
         textArea = new TextArea("Welcome to Risk!");
         textArea.setMaxHeight(140);
         textArea.setPrefWidth(300);
+        textArea.setMinWidth(400);
         textArea.setEditable(false);
         textArea.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
         textArea.setWrapText(true);
 
         textArea.appendText("\nThe current gamestate:");
         textArea.appendText(GUIControl.getInstance().getGame().toString());
-        textArea.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(5))));
+        textArea.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, new BorderWidths(1))));
 
         this.getChildren().add(textArea);
     }

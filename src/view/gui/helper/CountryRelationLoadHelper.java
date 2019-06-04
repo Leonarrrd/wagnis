@@ -1,6 +1,7 @@
 package view.gui.helper;
 
 import view.gui.boxes.CountryInfoHBox;
+import view.gui.viewhelper.Coordinate;
 import view.gui.viewhelper.CountryViewHelper;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.Map;
  * Class for methods that i didnt know where to put
  * Maybe make this some kind of init class?
  */
-public class MethodSlave {
+public class CountryRelationLoadHelper {
     /**
      * You may not like it, but this is what peak programming looks like
      * @return

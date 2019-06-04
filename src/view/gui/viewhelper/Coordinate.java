@@ -1,4 +1,4 @@
-package view.gui.helper;
+package view.gui.viewhelper;
 
 public class Coordinate {
     private int x;

@@ -1,7 +1,5 @@
 package view.gui.viewhelper;
 
-import view.gui.helper.Coordinate;
-
 public class CountryViewHelper {
     private Coordinate coordinate;
     private String colorCode;

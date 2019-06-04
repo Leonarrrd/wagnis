@@ -1,6 +1,6 @@
 #bottom-bar-node {
-    -fx-background-color: #AAAAAA;
-
+    -fx-background-color:
+            linear-gradient(rgba(255,255,255,1) 0%,rgba(241,241,241,1) 50%,rgba(225,225,225,1) 51%,rgba(246,246,246,1) 100%);
     -fx-border-color: #696969;
     -fx-alignment: center;
     -fx-max-width: 400;

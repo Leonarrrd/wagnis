@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import view.gui.boxes.BottomBarHBox;
 import view.gui.boxes.DialogVBox;
 import view.gui.helper.GUIControl;
-import view.gui.helper.MethodSlave;
+import view.gui.helper.CountryRelationLoadHelper;
 import view.gui.helper.RiskUIElement;
 import view.gui.util.Util;
 
@@ -46,7 +46,7 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
         Pane pane = new Pane();
         pane.getChildren().add(mapImageView);
         pane.getChildren().add(dialogVBox);
-        pane.getChildren().addAll(MethodSlave.buildCountryInfoBoxes());
+        pane.getChildren().addAll(CountryRelationLoadHelper.buildCountryInfoBoxes());
 
 
         BottomBarHBox bottomBar = new BottomBarHBox();
