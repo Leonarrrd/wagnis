@@ -72,25 +72,13 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
 
     /**
      * Maybe bad practice to build the URL from the enum.name()
-     * FIXME: Probably better to have the images loaded somewhere and just set them here instead of loading them from file again and again
      * @return an image URL to a flag image whose color matches the country owner
      */
-    public String getFlagImageUrl(){
-//        String url = "";
-//        switch (GUIControl.getInstance().getGame().getCountries().get(countryString).getOwner().getColor()){
-//            case RED:
-//                url = "file:assets/img/flagRed.png";
-//                break;
-//            case BLUE:
-//                url = "file:assets/img/flagBlue.png";
-//                break;
-//            //etc.
-//        }
-//        return url;
+    private String getFlagImageUrl(){
+
         return  "file:assets/img/flag"
                 + GUIControl.getInstance().getGame().getCountries().get(countryString).getOwner().getColor().name()
                 + ".png";
-//        return "file:assets/img/flagRed.png"; // FOR TESTING IF DUMMY IS NEEDED
     }
 
 

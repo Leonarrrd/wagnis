@@ -216,7 +216,7 @@ public class WorldController {
      * @param destCountry
      * @param amount
      */
-    void moveUnits(Game game, Country srcCountry, Country destCountry, int amount) throws NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, NoSuchPlayerException {
+    void moveUnits(Game game, Country srcCountry, Country destCountry, int amount) throws NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException {
         if (!game.getCountries().values().contains(srcCountry)) {
             throw new NoSuchCountryException(srcCountry + " does not exist.");
         }
@@ -229,9 +229,21 @@ public class WorldController {
         if (!srcCountry.getOwner().equals(destCountry.getOwner())) {
             throw new CountryNotOwnedException("The owner of " + srcCountry + " does not equal the owner of " + destCountry);
         }
+        if(!isConnected(srcCountry, destCountry)) {
+            throw new CountriesNotAdjacentException("Not in bla");
+        }
 
         srcCountry.setUnits(srcCountry.getUnits() - amount);
         destCountry.setUnits(destCountry.getUnits() + amount);
+    }
+
+    /**
+     *
+     * @param srcCountry
+     * @param destCountry
+     */
+    boolean isConnected(Country srcCountry, Country destCountry) {
+        return GraphController.getInstance().getPlayerGraphMap().get(srcCountry.getOwner()).evaluateCountriesAllowedToMoveTo(srcCountry.getName()).contains(destCountry.getName());
     }
 
     /**

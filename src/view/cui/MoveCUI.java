@@ -99,7 +99,7 @@ public class MoveCUI extends AbstractCUI {
 
             try {
                 gc.moveUnits(gameId, srcCountry, destCountry, unitsToMove);
-            } catch (GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException | NoSuchPlayerException e) {
+            } catch (GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException | CountriesNotAdjacentException e) {
                 e.printStackTrace();
             }
 

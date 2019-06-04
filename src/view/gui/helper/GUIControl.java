@@ -11,14 +11,12 @@ import model.Game;
 import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.LogHBox;
+import view.gui.panes.DiceGridPane;
 import view.gui.viewhelper.CountryViewHelper;
 import view.gui.viewhelper.LastFightCountries;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static javafx.scene.control.Alert.AlertType.ERROR;
 
@@ -32,8 +30,6 @@ public class GUIControl {
     private GameController gc = GameController.getInstance();
     private String selectedCountry;
     private LastFightCountries lastFightCountry;
-
-
 
     public Game getGame() {
         try {
@@ -107,6 +103,16 @@ public class GUIControl {
             Updatable dialogVBox = componentMap.get("dialog-vbox");
             dialogVBox.update();
         }
+
+        //MARK: auslagern in Methode im Controller
+        for (Player p : getGame().getPlayers()) {
+            try {
+                GameController.getInstance().updatePlayerGraphMap(gameId, p);
+            } catch (GameNotFoundException | NoSuchPlayerException e) {
+                new ErrorAlert(e);
+            }
+        }
+
     }
 
     public void fight(String attackingCountry, String defendingCountry, int attackingUnits, int defendingUnits) {
@@ -122,19 +128,30 @@ public class GUIControl {
         componentMap.get(defendingCountry + "info-hbox").update();
 
 
-        getLog().update("Attacking Player: " + attCountry.getOwner() +" with country: " + attackingCountry + " rolled: ");
-        for(int attDices : ar.getAttackerDices()) {
+        getLog().update("Attacking Player: " + attCountry.getOwner() + " with country: " + attackingCountry + " rolled: ");
+        for (int attDices : ar.getAttackerDices()) {
             getLog().update(attDices + "");
         }
-        getLog().update("Defending Player: " + defCountry.getOwner() +" with country: " + defendingCountry + " rolled: ");
-        for(int defDices : ar.getDefenderDices()) {
+        getLog().update("Defending Player: " + defCountry.getOwner() + " with country: " + defendingCountry + " rolled: ");
+        for (int defDices : ar.getDefenderDices()) {
             getLog().update(defDices + "");
         }
 
+        ((DiceGridPane) componentMap.get("dice-grid")).update(attCountry.getOwner().getColor().toString(), defCountry.getOwner().getColor().toString(), ar.getAttackerDices(), ar.getDefenderDices());
 
-        if(ar.getWinner() != null) {
-            if(ar.getWinner().equals(defCountry)) {
+
+        if (ar.getWinner() != null) {
+            if (ar.getWinner().equals(defCountry)) {
                 getLog().update(defendingCountry + " successfully defended. It is owned by: " + defCountry.getOwner());
+
+                //MARK: auslagern in Methode im Controller
+                for (Player p : getGame().getPlayers()) {
+                    try {
+                        GameController.getInstance().updatePlayerGraphMap(gameId, p);
+                    } catch (GameNotFoundException | NoSuchPlayerException e) {
+                        new ErrorAlert(e);
+                    }
+                }
                 forwardTurnPhase();
             } else {
                 lastFightCountry = new LastFightCountries(attCountry, defCountry);
@@ -153,7 +170,7 @@ public class GUIControl {
             componentMap.get(lastFightCountry.getSrcCountry() + "info-hbox").update();
             componentMap.get(lastFightCountry.getDestCountry() + "info-hbox").update();
             setTurnManually(Phase.ATTACK);
-        } catch (GameNotFoundException | NotEnoughUnitsException | NoSuchCountryException | CountryNotOwnedException | NoSuchPlayerException e) {
+        } catch (CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | NoSuchCountryException | CountryNotOwnedException e) {
             new ErrorAlert(e);
         }
     }
@@ -165,10 +182,10 @@ public class GUIControl {
             GameController.getInstance().moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount);
             getLog().update(srcCountryObj.getOwner().getName() + " moved " + amount + " from " + srcCountry + " to " + destCountry);
 
-        } catch (GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException | NoSuchPlayerException e) {
+        } catch (CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
             new ErrorAlert(e);
         }
-        componentMap.get(srcCountry+ "info-hbox").update();
+        componentMap.get(srcCountry + "info-hbox").update();
         componentMap.get(destCountry + "info-hbox").update();
 
     }
@@ -199,27 +216,28 @@ public class GUIControl {
      */
     public void countryClicked(String countryString) {
         // MARK: right now, selectedCountry will only be updated if a country is clicked
-            selectedCountry = countryString;
-            switch (getGame().getTurn().getPhase()) {
-                case ATTACK:
-                    Updatable attackVBox = componentMap.get("attack-vbox");
-                    attackVBox.update();
-                    break;
-                case MOVE:
-                    Updatable moveVBox = componentMap.get("move-vbox");
-                    moveVBox.update();
-                    break;
-                case PLACE_UNITS:
-                    Updatable placeUnitsVBox = componentMap.get("place-units-vbox");
-                    placeUnitsVBox.update();
-                    break;
-            }
+        selectedCountry = countryString;
+        switch (getGame().getTurn().getPhase()) {
+            case ATTACK:
+                Updatable attackVBox = componentMap.get("attack-vbox");
+                attackVBox.update();
+                break;
+            case MOVE:
+                Updatable moveVBox = componentMap.get("move-vbox");
+                moveVBox.update();
+                break;
+            case PLACE_UNITS:
+                Updatable placeUnitsVBox = componentMap.get("place-units-vbox");
+                placeUnitsVBox.update();
+                break;
+        }
     }
 
     /**
      * Looks up a the corresponding Country to a color Code
      * IMPORTANT: the caller of this method needs to handle the case that the player did not click on a country (nothing should happen then)
      * MARK: Maybe throw an exception instead of returning null
+     *
      * @param colorCode
      * @return countryString if found, empty string if no country has been found for the param colorCode
      */
@@ -257,6 +275,7 @@ public class GUIControl {
     private LogHBox getLog() {
         return (LogHBox) componentMap.get("log-hbox");
     }
+
     public LastFightCountries getLastFightCountry() {
         return lastFightCountry;
     }

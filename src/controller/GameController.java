@@ -298,7 +298,7 @@ public class GameController {
      * @param destCountry
      * @param amount
      */
-    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, NoSuchPlayerException {
+    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException {
         Game game = getGameById(gameId);
         wc.moveUnits(game, srcCountry, destCountry, amount);
     }
@@ -341,6 +341,17 @@ public class GameController {
     public void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         grc.updatePlayerGraphMap(game, p);
+    }
+
+
+    /**
+     * method that checks if countries are connected
+     * @param srcCountry
+     * @param destCountry
+     * @return
+     */
+    public boolean isConnected(Country srcCountry, Country destCountry) {
+        return wc.isConnected(srcCountry, destCountry);
     }
 
 
