@@ -72,7 +72,11 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
         // MARK: I made it so that the VBox does not update when the player selects a country that's not his
         //  --> This way, we don't have to deal with the player trying
         //      to perform move operations on countries that aren't his
-        if (GUIControl.getInstance().getCurrentPlayer().getCountries().containsValue(GUIControl.getInstance().getSelectedCountry())) {
+        if (!GUIControl.getInstance().getCurrentPlayer().getCountries().containsValue(GUIControl.getInstance().getSelectedCountry())) {
+            new Alert(Alert.AlertType.INFORMATION, "You don't own this country.").showAndWait();
+        } else if(GUIControl.getInstance().getSelectedCountry().getUnits() == 1) {
+            new Alert(Alert.AlertType.INFORMATION, "Only one unit on this country.").showAndWait();
+        } else {
             if (!firstCountrySelected) {
                 // the Spinner does only get updated when the src country gets updated
                 moveFromText.setText(GUIControl.getInstance().getSelectedCountry().getName());
@@ -83,8 +87,6 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
                 moveToText.setText(GUIControl.getInstance().getSelectedCountry().getName());
             }
             firstCountrySelected = !firstCountrySelected;
-        } else {
-            new Alert(Alert.AlertType.INFORMATION, "You don't own this country.").showAndWait();
         }
     }
 }

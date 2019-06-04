@@ -12,7 +12,7 @@ public class MissionHBox extends BottomBarNodeHBox implements RiskUIElement, Upd
 
     public MissionHBox() {
         super();
-        addAsUpdateElement("MissionHBox", this);
+        addAsUpdateElement("mission-hbox", this);
     }
 
     @Override
