@@ -82,6 +82,7 @@ public class GUIControl {
         }
         this.gameId = gameId;
         // FIXME: BULLSHIT FOR TESTING, since player colors arent implemented in savestates yet
+        getGame().getTurn().getPlayer().setUnitsToPlace(7);
         getGame().getPlayers().get(0).setColor(Color.RED);
         getGame().getPlayers().get(1).setColor(Color.BLUE);
         if (getGame().getPlayers().size() > 2) getGame().getPlayers().get(2).setColor(Color.GREEN);
@@ -95,7 +96,7 @@ public class GUIControl {
             GameController.getInstance().changeUnits(gameId, c, units);
             GameController.getInstance().changeUnitsToPlace(gameId, getGame().getTurn().getPlayer(), -units);
             componentMap.get(selectedCountry + "info-hbox").update();
-            getLog().update(c.getOwner() +" placed " + units + " units on " + c.getName());
+            getLog().update(c.getOwner() + " placed " + units + " units on " + c.getName());
         } catch (GameNotFoundException | NoSuchCountryException | NoSuchPlayerException e) {
             new ErrorAlert(e);
         }

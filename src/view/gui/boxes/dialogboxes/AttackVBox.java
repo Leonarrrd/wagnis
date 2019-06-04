@@ -28,6 +28,8 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
 
     Text attackingCountryText;
     Text defendingCountryText;
+    Spinner<Integer> unitsToAttackWithSpinner;
+    Spinner<Integer> unitsToDefendWithSpinner;
     boolean firstCountrySelected = false;
 
     public AttackVBox() {
@@ -43,15 +45,16 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         Text attackOnInfoText = new Text("Attack on");
         defendingCountryText = new Text("<click on second country>");
         Text unitsToAttackWithInfoText = new Text("Choose amount of units to attack with");
-        final Spinner<Integer> unitsToAttackWithSpinner = new Spinner<>();
+        unitsToAttackWithSpinner = new Spinner<>();
         Text unitsToDefendWithInfoText = new Text("Choose amount of units to defend with");
-        final Spinner<Integer> unitsToDefendWithSpinner = new Spinner<>();
+        unitsToDefendWithSpinner = new Spinner<>();
 
         final int initialValue = 1;
 
         //TODO: richtige value setzen
-        SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 3, initialValue);
-        SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 2, initialValue);
+
+        SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1, initialValue);
+        SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1, initialValue);
 
         unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
         unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
@@ -99,12 +102,14 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             e.printStackTrace();
         }
         if (!firstCountrySelected) {
-            if (activePlayer.getCountries().keySet().contains(GUIControl.getInstance().getSelectedCountry().getName())) {
+            if (!activePlayer.getCountries().values().contains(GUIControl.getInstance().getSelectedCountry())) {
+                new Alert(Alert.AlertType.INFORMATION, "You do not own " + GUIControl.getInstance().getSelectedCountry().getName()).showAndWait();
+
+            } else if (GUIControl.getInstance().getSelectedCountry().getUnits() <= 1) {
+                new Alert(Alert.AlertType.INFORMATION, "Only one unit on " + GUIControl.getInstance().getSelectedCountry().getName()).showAndWait();
+            } else {
                 attackingCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
                 firstCountrySelected = !firstCountrySelected;
-
-            } else {
-                new Alert(Alert.AlertType.INFORMATION, "Player does not own " + GUIControl.getInstance().getSelectedCountry().getName()).showAndWait();
             }
         } else {
             Country firstCountry = game.getCountries().get(attackingCountryText.getText());
@@ -122,5 +127,25 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             }
         }
 
+
+        int maxAttackers;
+        int maxDefenders;
+
+        if (game.getCountries().get(attackingCountryText.getText()).getUnits() > 3){
+            maxAttackers = 3;
+        } else {
+            maxAttackers = game.getCountries().get(attackingCountryText.getText()).getUnits() - 1;
+        }
+
+        if (game.getCountries().get(defendingCountryText.getText()).getUnits() > 2){
+            maxDefenders = 2;
+        } else {
+            maxDefenders = game.getCountries().get(defendingCountryText.getText()).getUnits();
+        }
+
+        SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxAttackers, maxAttackers);
+        SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxDefenders, maxDefenders);
+        unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
+        unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
     }
 }

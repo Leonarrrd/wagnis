@@ -1,3 +1,7 @@
+defenderUnits spinner shows 2 although only one unit
+reset attackdialogBox after country conquered
+move from country with only one unit possible
+
 // 29/05
 - Status | TODO | BOTH | Logik: Farben und Missionen
 - Status | TODO | BOTH | Logik: PlayerDies Methode

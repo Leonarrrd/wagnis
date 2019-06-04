@@ -92,7 +92,6 @@ public class GameController {
 
         Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents, loadedMissions, loadedCards);
         activeGames.put(game.getId(), game);
-
         return game;
     }
 
