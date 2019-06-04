@@ -66,6 +66,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             @Override
             public void handle(ActionEvent event) {
                 GUIControl.getInstance().fight(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue(), unitsToDefendWithSpinner.getValue());
+                updateSpinners();
             }
         });
 
@@ -95,7 +96,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
 
         Game game = GUIControl.getInstance().getGame();
         Player activePlayer = game.getTurn().getPlayer();
-        List<Country> countriesToAttackFrom;
+        List<Country> countriesToAttackFrom = new ArrayList<>();
         try {
             //TODO: Methodenaufruf zu lang
             countriesToAttackFrom = new ArrayList(GameController.getInstance().getCountriesAttackCanBeLaunchedFrom(game.getId(), activePlayer).values());
@@ -108,6 +109,8 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
 
             } else if (GUIControl.getInstance().getSelectedCountry().getUnits() <= 1) {
                 new Alert(Alert.AlertType.INFORMATION, "Only one unit on " + GUIControl.getInstance().getSelectedCountry().getName()).showAndWait();
+            } else if (!countriesToAttackFrom.contains(GUIControl.getInstance().getSelectedCountry())) {
+                new Alert(Alert.AlertType.INFORMATION,  GUIControl.getInstance().getSelectedCountry().getName()+ " has no hostile neighbours").showAndWait();
             } else {
                 attackingCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
                 firstCountrySelected = !firstCountrySelected;
@@ -128,25 +131,34 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             }
         }
 
+        updateSpinners();
+    }
 
-        int maxAttackers;
-        int maxDefenders;
+    void updateSpinners(){
+        Game game = GUIControl.getInstance().getGame();
 
-        if (game.getCountries().get(attackingCountryText.getText()).getUnits() > 3){
-            maxAttackers = 3;
-        } else {
-            maxAttackers = game.getCountries().get(attackingCountryText.getText()).getUnits() - 1;
+        if (game.getCountries().get(attackingCountryText.getText()) != null) {
+            int maxAttackers;
+            if (game.getCountries().get(attackingCountryText.getText()).getUnits() > 3) {
+                maxAttackers = 3;
+            } else {
+                maxAttackers = game.getCountries().get(attackingCountryText.getText()).getUnits() - 1;
+            }
+            SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxAttackers, maxAttackers);
+            unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
         }
 
-        if (game.getCountries().get(defendingCountryText.getText()).getUnits() > 2){
-            maxDefenders = 2;
-        } else {
-            maxDefenders = game.getCountries().get(defendingCountryText.getText()).getUnits();
+        if (game.getCountries().get(defendingCountryText.getText()) != null) {
+            int maxDefenders;
+            if (game.getCountries().get(defendingCountryText.getText()).getUnits() > 2) {
+                maxDefenders = 2;
+            } else {
+                maxDefenders = game.getCountries().get(defendingCountryText.getText()).getUnits();
+            }
+
+            SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxDefenders, maxDefenders);
+            unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
         }
 
-        SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxAttackers, maxAttackers);
-        SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxDefenders, maxDefenders);
-        unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
-        unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
     }
 }
