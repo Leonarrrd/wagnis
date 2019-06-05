@@ -242,9 +242,11 @@ public class WorldController {
      * @param srcCountry
      * @param destCountry
      */
+    // TODO: GAME UEBERGEBEN UND EXCEPTIONS
     boolean isConnected(Country srcCountry, Country destCountry) {
         return GraphController.getInstance().getPlayerGraphMap().get(srcCountry.getOwner()).evaluateCountriesAllowedToMoveTo(srcCountry.getName()).contains(destCountry.getName());
     }
+
 
     /**
      * changing the ownership of a country

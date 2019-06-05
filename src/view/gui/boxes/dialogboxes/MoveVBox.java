@@ -81,8 +81,8 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
                 if(GUIControl.getInstance().getSelectedCountry().getUnits() == 1) {
                     new Alert(Alert.AlertType.INFORMATION, "Only one unit on this country.").showAndWait();
                     // FIXME: Need to complete these methods first
-//                } else if (!GameController.getInstance().getCountriesAttackCanBeLaunchedFrom(GUIControl.getInstance().getGame().getId(), GUIControl.getInstance().getCurrentPlayer()).containsValue(GUIControl.getInstance().getSelectedCountry())){
-//                    new Alert(Alert.AlertType.INFORMATION, "Country is not connected to any of your other countries.").showAndWait();
+                } else if (GUIControl.getInstance().hasCountryToMoveTo(GUIControl.getInstance().getSelectedCountry())){
+                    new Alert(Alert.AlertType.INFORMATION, "Country is not connected to any of your other countries.").showAndWait();
                 } else {
                     // the Spinner does only get updated when the src country gets updated
                     moveFromText.setText(GUIControl.getInstance().getSelectedCountry().getName());

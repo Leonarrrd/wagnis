@@ -23,7 +23,6 @@ import view.gui.helper.Updatable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class AttackVBox extends VBox implements RiskUIElement, Updatable {
 
@@ -65,6 +64,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             @Override
             public void handle(ActionEvent event) {
                 GUIControl.getInstance().fight(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue(), unitsToDefendWithSpinner.getValue());
+
                 updateSpinners();
             }
         });
@@ -73,7 +73,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         skipButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().setTurnManually(Phase.PERFORM_ANTOHER_ATTACK);
+                GUIControl.getInstance().setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
             }
         });
 
@@ -136,29 +136,29 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
 
     void updateSpinners(){
         Game game = GUIControl.getInstance().getGame();
-
-        if (game.getCountries().get(attackingCountryText.getText()) != null) {
-            int maxAttackers;
-            if (game.getCountries().get(attackingCountryText.getText()).getUnits() > 3) {
-                maxAttackers = 3;
-            } else {
-                maxAttackers = game.getCountries().get(attackingCountryText.getText()).getUnits() - 1;
-            }
-            SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxAttackers, maxAttackers);
-            unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
-        }
-
-        if (game.getCountries().get(defendingCountryText.getText()) != null) {
-            int maxDefenders;
-            if (game.getCountries().get(defendingCountryText.getText()).getUnits() > 2) {
-                maxDefenders = 2;
-            } else {
-                maxDefenders = game.getCountries().get(defendingCountryText.getText()).getUnits();
+        if (game.getTurn().getPhase().equals(Phase.ATTACK)) {
+            if (game.getCountries().get(attackingCountryText.getText()) != null) {
+                int maxAttackers;
+                if (game.getCountries().get(attackingCountryText.getText()).getUnits() > 3) {
+                    maxAttackers = 3;
+                } else {
+                    maxAttackers = game.getCountries().get(attackingCountryText.getText()).getUnits() - 1;
+                }
+                SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxAttackers, maxAttackers);
+                unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
             }
 
-            SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxDefenders, maxDefenders);
-            unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
-        }
+            if (game.getCountries().get(defendingCountryText.getText()) != null) {
+                int maxDefenders;
+                if (game.getCountries().get(defendingCountryText.getText()).getUnits() > 2) {
+                    maxDefenders = 2;
+                } else {
+                    maxDefenders = game.getCountries().get(defendingCountryText.getText()).getUnits();
+                }
 
+                SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxDefenders, maxDefenders);
+                unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
+            }
+        }
     }
 }

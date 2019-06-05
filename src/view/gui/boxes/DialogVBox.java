@@ -34,7 +34,7 @@ public class DialogVBox extends VBox implements RiskUIElement, Updatable {
             case TRAIL_UNITS:
                 this.getChildren().set(0, new TrailUnitsVBox());
                 break;
-            case PERFORM_ANTOHER_ATTACK:
+            case PERFORM_ANOTHER_ATTACK:
                 this.getChildren().set(0, new LaunchAnotherAttackVBox());
                 break;
             case MOVE:

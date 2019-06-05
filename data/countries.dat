@@ -2,10 +2,10 @@
 2,Alberta,[1:6:7:9];
 3,Central America,[9:12];
 4,Eastern United States,[9:7:8];
-5,Greenland,[7:6:9:14];
+5,Greenland,[7:8:6:9:14];
 6,Northwest Territory,[1:6:7:2];
 7,Ontario,[6:5:8:4:9:2];
-8,Quebec,[7:6:5:4];
+8,Quebec,[7:6:5:4:5];
 9,Western United States,[2:7:4:3];
 10,Argentina,[12:11];
 11,Brazil,[12:10:24];

@@ -1,10 +1,11 @@
 package view.gui.helper;
 
 import controller.GameController;
+import controller.GraphController;
 import datastructures.Color;
+import datastructures.Graph;
 import datastructures.Phase;
 import exceptions.*;
-import javafx.scene.control.Alert;
 import model.AttackResult;
 import model.Country;
 import model.Game;
@@ -17,8 +18,6 @@ import view.gui.viewhelper.LastFightCountries;
 
 import java.io.IOException;
 import java.util.*;
-
-import static javafx.scene.control.Alert.AlertType.ERROR;
 
 
 public class GUIControl {
@@ -139,17 +138,15 @@ public class GUIControl {
 
         ((DiceGridPane) componentMap.get("dice-grid")).update(attCountry.getOwner().getColor().toString(), defCountry.getOwner().getColor().toString(), ar.getAttackerDices(), ar.getDefenderDices());
 
-
         if (ar.getWinner() != null) {
             if (ar.getWinner().equals(defCountry)) {
                 getLog().update(defendingCountry + " successfully defended. It is owned by: " + defCountry.getOwner());
-
-                forwardTurnPhase();
+                setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
             } else {
                 lastFightCountry = new LastFightCountries(attCountry, defCountry);
                 getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defCountry.getOwner());
+                forwardTurnPhase();
             }
-            forwardTurnPhase();
         } else {
             return;
         }
@@ -260,14 +257,8 @@ public class GUIControl {
     //  or hasCountriesToMoveto
     //  after that, go to MoveVBox and fix it
     public boolean hasCountryToMoveTo(Country country){
-        Player player = country.getOwner();
-        try {
-             return GameController.getInstance().getCountriesAttackCanBeLaunchedFrom(gameId, player).containsValue(country);
-        }
-        catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException e){
-            e.printStackTrace();
-        }
-        return false;
+            List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
+            return countriesInGraph.size() == 1;
     }
 
     public Country getSelectedCountry() {
