@@ -111,14 +111,7 @@ public class GUIControl {
             dialogVBox.update();
         }
 
-        //MARK: auslagern in Methode im Controller
-        for (Player p : getGame().getPlayers()) {
-            try {
-                GameController.getInstance().updatePlayerGraphMap(gameId, p);
-            } catch (GameNotFoundException | NoSuchPlayerException e) {
-                new ErrorAlert(e);
-            }
-        }
+
 
     }
 
@@ -151,14 +144,6 @@ public class GUIControl {
             if (ar.getWinner().equals(defCountry)) {
                 getLog().update(defendingCountry + " successfully defended. It is owned by: " + defCountry.getOwner());
 
-                //MARK: auslagern in Methode im Controller
-                for (Player p : getGame().getPlayers()) {
-                    try {
-                        GameController.getInstance().updatePlayerGraphMap(gameId, p);
-                    } catch (GameNotFoundException | NoSuchPlayerException e) {
-                        new ErrorAlert(e);
-                    }
-                }
                 forwardTurnPhase();
             } else {
                 lastFightCountry = new LastFightCountries(attCountry, defCountry);

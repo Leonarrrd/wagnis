@@ -28,7 +28,6 @@ public class TurnController {
 
     /**
      * inits turn object at the start of the game
-     *
      */
     public void setTurn(Game game) {
         game.setTurn(new Turn(game.getPlayers().get(0), Phase.PLACE_UNITS));
@@ -40,11 +39,10 @@ public class TurnController {
         }
     }
 
-   /**
+    /**
      * switch turns (phase or phase and player)
-     *
      */
-    void switchTurns(Game game) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
+    void switchTurns(Game game) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, GameNotFoundException {
 
         Turn turn = game.getTurn();
 
@@ -77,20 +75,21 @@ public class TurnController {
         // TODO: MAKE A PROPER POST TURN CHECK METHOD THAT CHECKS THE PHASE AND INVOKES METHODS ACCORDINGLY
         try {
             GameController.getInstance().postTurnCheck(game.getId(), turn.getPlayer());
-        } catch (GameNotFoundException | IOException e){
+        } catch (GameNotFoundException | IOException e) {
             e.printStackTrace();
         }
-        if (turn.getPhase() == Phase.USE_CARDS){
-            try {
-                GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
-            } catch (GameNotFoundException | NoSuchPlayerException e) {
-                e.printStackTrace();
-            }
+        if (turn.getPhase() == Phase.USE_CARDS) {
+            GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
+        }
+        for (Player p : game.getPlayers()) {
+            GraphController.getInstance().updatePlayerGraphMap(game, p);
+
         }
     }
 
     /**
      * Gets the player that has the turn after ther current player
+     *
      * @param game
      * @param player
      * @return player that has the next turn
