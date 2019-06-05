@@ -20,6 +20,7 @@ public class Card {
     public int getId() {
         return id;
     }
+
 }
 
 

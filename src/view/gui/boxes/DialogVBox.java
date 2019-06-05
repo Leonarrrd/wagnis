@@ -1,17 +1,10 @@
 package view.gui.boxes;
 
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import view.gui.boxes.dialogboxes.*;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
-import static datastructures.Phase.*;
 
 public class DialogVBox extends VBox implements RiskUIElement, Updatable {
     public DialogVBox() {
@@ -22,12 +15,16 @@ public class DialogVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void doStuff() {
-        this.getChildren().add(new PlaceUnitsVBox());
+        this.getChildren().add(new VBox());
+        this.update();
     }
 
     @Override
     public void update() {
         switch(GUIControl.getInstance().getGame().getTurn().getPhase()) {
+            case USE_CARDS:
+                this.getChildren().set(0, new UseCardsVBox());
+                break;
             case PLACE_UNITS:
                 this.getChildren().set(0, new PlaceUnitsVBox());
                 break;

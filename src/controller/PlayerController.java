@@ -2,6 +2,8 @@ package controller;
 
 import exceptions.InvalidPlayerNameException;
 import exceptions.MaximumNumberOfPlayersReachedException;
+import exceptions.NoSuchPlayerException;
+import model.Card;
 import model.Game;
 import model.Player;
 import utils.Utils;

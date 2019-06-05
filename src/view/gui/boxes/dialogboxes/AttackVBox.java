@@ -31,6 +31,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
     Text defendingCountryText;
     Spinner<Integer> unitsToAttackWithSpinner;
     Spinner<Integer> unitsToDefendWithSpinner;
+    Button attackButton;
     boolean firstCountrySelected = false;
 
     public AttackVBox() {
@@ -51,16 +52,14 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         unitsToDefendWithSpinner = new Spinner<>();
 
         final int initialValue = 1;
-
-        //TODO: richtige value setzen
-
         SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1, initialValue);
         SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1, initialValue);
 
         unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
         unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
 
-        Button attackButton = new Button("Launch Attack!");
+        attackButton = new Button("Launch Attack!");
+        attackButton.setDisable(true);
 
         attackButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -122,6 +121,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
                     && GameController.getInstance().getHostileNeighbors(game.getId(), firstCountry).containsKey(GUIControl.getInstance().getSelectedCountry().getName())) {
                 defendingCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
                     firstCountrySelected = !firstCountrySelected;
+                    attackButton.setDisable(false);
 
                 } else {
                     new Alert(Alert.AlertType.INFORMATION, "Countries not adjacent or not hostile.").showAndWait();

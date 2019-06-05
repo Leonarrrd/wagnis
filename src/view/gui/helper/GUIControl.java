@@ -76,13 +76,22 @@ public class GUIControl {
             new ErrorAlert(e);
         }
         this.gameId = gameId;
-        // FIXME: BULLSHIT FOR TESTING, since player colors arent implemented in savestates yet
-        getGame().getTurn().getPlayer().setUnitsToPlace(7);
-        getGame().getPlayers().get(0).setColor(Color.RED);
-        getGame().getPlayers().get(1).setColor(Color.BLUE);
+        getGame().getPlayers().get(0).setColor(Color.BLUE);
+        getGame().getPlayers().get(1).setColor(Color.RED);
         if (getGame().getPlayers().size() > 2) getGame().getPlayers().get(2).setColor(Color.GREEN);
         if (getGame().getPlayers().size() > 3) getGame().getPlayers().get(3).setColor(Color.YELLOW);
         if (getGame().getPlayers().size() > 4) getGame().getPlayers().get(4).setColor(Color.MACADAMIA);
+        // MARK: FOR TESTING
+        getGame().getTurn().getPlayer().setUnitsToPlace(7);
+    }
+
+    // TODO: still oversimplified
+    public void useCards(int oneStarCards, int twoStarCards){
+        try {
+            GameController.getInstance().useCards(gameId, getCurrentPlayer(), oneStarCards, twoStarCards);
+        } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException e) {
+            e.printStackTrace();
+        }
     }
 
     public void placeUnits(int units) {
@@ -95,8 +104,6 @@ public class GUIControl {
         } catch (GameNotFoundException | NoSuchCountryException | NoSuchPlayerException e) {
             new ErrorAlert(e);
         }
-        //FIXME: Erst prüfen ob noch weitere Einheiten platziert werden können
-        // Erst wenn keine Einheiten mehr platziert werden können springen wir in die nächste Phase
         if (getGame().getTurn().getPlayer().getUnitsToPlace() == 0) {
             forwardTurnPhase();
         } else {
@@ -262,6 +269,20 @@ public class GUIControl {
             e.printStackTrace();
             return null;
         }
+    }
+
+    // FIXME: getCountriesAttackCanBeLaunchedFrom needs to be replaced with getCountriesMoveCanBeDoneFrom
+    //  or hasCountriesToMoveto
+    //  after that, go to MoveVBox and fix it
+    public boolean hasCountryToMoveTo(Country country){
+        Player player = country.getOwner();
+        try {
+             return GameController.getInstance().getCountriesAttackCanBeLaunchedFrom(gameId, player).containsValue(country);
+        }
+        catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public Country getSelectedCountry() {

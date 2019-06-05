@@ -164,7 +164,7 @@ public class AttackCUI extends AbstractCUI {
 
                                 try {
                                     gc.moveUnits(gameId, srcCountry, destCountry, nachRueckUnits);
-                                } catch (CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException  e) {
+                                } catch (CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
                                     e.printStackTrace();
                                 }
                                 System.out.println(nachRueckUnits + " units have been moved.");

@@ -1,3 +1,14 @@
 #use-cards-vbox {
+    -fx-alignment: center;
+    -fx-spacing: 20;
+}
 
+.gridpane {
+    /*-fx-background-color: #FFFFFF;*/
+    /*-fx-border-style: solid inside;*/
+    -fx-max-width: 220;
+}
+
+.questionText {
+    -fx-font-size: 20;
 }

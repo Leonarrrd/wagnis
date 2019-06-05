@@ -78,6 +78,8 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
             placeUnitsButton.setDisable(false);
         } else {
             new Alert(Alert.AlertType.INFORMATION, "You don't own this country.").showAndWait();
+            placeUnitsButton.setDisable(true);
+            selectedCountryText.setText("<no country selected>");
         }
 
     }

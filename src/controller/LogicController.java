@@ -160,34 +160,56 @@ public class LogicController {
      * Calculates and returns the number of units the player is awarded for the value of his cards
      *
      * @param player
-     * @param cardsToBeUsed
+     * @param
      * @return
      */
-    int useCards(Game game, Player player, int cardsToBeUsed) throws NoSuchPlayerException, NoSuchCardException{
+    void useCards(Game game, Player player, int oneStarCards, int twoStarCards) throws NoSuchPlayerException, NoSuchCardException{
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player + " does not exist");
         }
 
-        boolean validCards = true;
-        for (int i = 0; i < cardsToBeUsed; i++) {
-            Card card = player.getCards().get(i);
-            if(!game.getCards().contains(card)) {
-                validCards = false;
+        // TODO: FIX THIS TOGETHER WITH THE WHOLE CARD SYSTEM
+//        boolean validCards = true;
+//        for (int i = 0; i < cardsToBeUsed; i++) {
+//            Card card = player.getCards().get(i);
+//            if(!game.getCards().contains(card)) {
+//                validCards = false;
+//            }
+//        }
+//        if(!validCards) {
+//            throw new NoSuchCardException("Card does not exist");
+//        }
+//
+        int oneStarCardsRemoved = 0;
+        int twoStarCardsRemoved = 0;
+
+        while (oneStarCardsRemoved < oneStarCards){
+            for (int i = 0; i < player.getCards().size(); i++){
+                if (player.getCards().get(i).getValue() == 1) {
+                    player.getCards().remove(i);
+                    oneStarCardsRemoved++;
+                }
+                break;
             }
         }
-        if(!validCards) {
-            throw new NoSuchCardException("Card does not exist");
+
+        while (twoStarCardsRemoved < twoStarCards){
+            for (int i = 0; i < player.getCards().size(); i++){
+                if (player.getCards().get(i).getValue() == 2) {
+                    player.getCards().remove(i);
+                    twoStarCardsRemoved++;
+                }
+                break;
+            }
         }
 
-        for (int i = 0; i < cardsToBeUsed; i++) {
-            player.getCards().remove(0);
-        }
-        return getUnitsForValue(cardsToBeUsed);
+        int bonusUnits = getUnitsForValue(oneStarCards + twoStarCards * 2);
+        player.setUnitsToPlace(player.getUnitsToPlace() + bonusUnits);
     }
 
-    int getUnitsForValue(int cardsToBeUsed){
+    int getUnitsForValue(int value){
         int unitsToGet;
-        switch (cardsToBeUsed){
+        switch (value){
             case 1:
                 unitsToGet = 1;
                 break;
@@ -306,5 +328,33 @@ public class LogicController {
             return winConditionMet;
         }
         return player.getMission().isAccomplished(player);
+    }
+
+    // TODO: should be refactored and checkWinCondition should be a separate method
+    void postTurnCheck(Game game, Player player) throws NoSuchPlayerException, IOException, GameNotFoundException {
+        if(!game.getPlayers().contains(player)) {
+            throw new NoSuchPlayerException(player + " does not exist.");
+        }
+
+        boolean winCondition = checkWinCondition(game, player);
+        if (winCondition) {
+            // TODO: REFACTOR THIS TO SOMEWHERE ELSE
+            System.out.println(player + "HAS WON THE GAME");
+            return;
+        }
+
+        if (player.hasConqueredCountry()) {
+            try {
+                try {
+                    // FIXME: WRONG
+                    GameController.getInstance().addCard(game.getId(), player);
+                } catch (NoSuchPlayerException | NoSuchCardException | CardAlreadyOwnedException e) {
+                    e.printStackTrace();
+                }
+                player.setHasConqueredCountry(false);
+            } catch (GameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

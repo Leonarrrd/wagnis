@@ -9,6 +9,8 @@ import model.Game;
 import model.Player;
 import model.Turn;
 
+import java.io.IOException;
+
 public class TurnController {
 
     private static TurnController instance;
@@ -30,14 +32,12 @@ public class TurnController {
      */
     public void setTurn(Game game) {
         game.setTurn(new Turn(game.getPlayers().get(0), Phase.PLACE_UNITS));
-        // MARK ***************************** BULLSHIT **********************************
-        //    the method call should be refactored to somewhere else
+        // TODO: the method call should PROBABLY be refactored to somewhere else
         try {
             GameController.getInstance().awardUnits(game.getId(), game.getPlayers().get(0));
         } catch (GameNotFoundException | NoSuchPlayerException e) {
             e.printStackTrace();
         }
-        // MARK ***************************** BULLSHIT **********************************
     }
 
    /**
@@ -49,6 +49,9 @@ public class TurnController {
         Turn turn = game.getTurn();
 
         switch (game.getTurn().getPhase()) {
+            case USE_CARDS:
+                turn.setPhase(Phase.PLACE_UNITS);
+                break;
             case PLACE_UNITS:
                 turn.setPhase(Phase.ATTACK);
                 break;
@@ -65,21 +68,24 @@ public class TurnController {
                 turn.setPhase(Phase.PERFORM_ANOTHER_MOVE);
                 break;
             case PERFORM_ANOTHER_MOVE:
-                turn.setPhase(Phase.PLACE_UNITS);
-                CardDeckController.getInstance().addCard(game, turn.getPlayer());
+                turn.setPhase(Phase.USE_CARDS);
                 turn.setPlayer(getNextPlayer(game, turn.getPlayer()));
-                // MARK ***************************** BULLSHIT **********************************
-                //        the method call should be refactored to somewhere else
-                try {
-                    GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
-                } catch (GameNotFoundException e) {
-                    e.printStackTrace();
-                }
-                // MARK ***************************** BULLSHIT **********************************
-
                 break;
             default:
                 break;
+        }
+        // TODO: MAKE A PROPER POST TURN CHECK METHOD THAT CHECKS THE PHASE AND INVOKES METHODS ACCORDINGLY
+        try {
+            GameController.getInstance().postTurnCheck(game.getId(), turn.getPlayer());
+        } catch (GameNotFoundException | IOException e){
+            e.printStackTrace();
+        }
+        if (turn.getPhase() == Phase.USE_CARDS){
+            try {
+                GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
+            } catch (GameNotFoundException | NoSuchPlayerException e) {
+                e.printStackTrace();
+            }
         }
     }
 

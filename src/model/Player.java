@@ -82,8 +82,16 @@ public class Player {
         this.unitsToPlace = unitsToPlace;
     }
 
-    // FIXME: REMOVE THIS WHEN COLORS ARE IMPLEMENTED IN SAVESTATES
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    public int getNumberOfCardsWithXStars(int stars) {
+        int total = 0;
+        for (Card card : cards){
+            if (card.getValue() == stars)
+                total++;
+        }
+        return total;
     }
 }

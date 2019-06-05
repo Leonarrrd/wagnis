@@ -207,12 +207,12 @@ public class GameController {
      * Calculates and returns the number of units the player is awarded for the value of his cards
      *
      * @param player
-     * @param cardsToBeUsed
+     * @param
      * @return
      */
-    public int useCards(UUID gameId, Player player, int cardsToBeUsed) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
+    public void useCards(UUID gameId, Player player, int oneStarCards, int twoStarCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
         Game game = getGameById(gameId);
-        return lc.useCards(game, player, cardsToBeUsed);
+        lc.useCards(game, player, oneStarCards, twoStarCards);
     }
 
 
@@ -343,6 +343,10 @@ public class GameController {
         grc.updatePlayerGraphMap(game, p);
     }
 
+    public void postTurnCheck(UUID gameId, Player player) throws GameNotFoundException, IOException, NoSuchPlayerException {
+        Game game = getGameById(gameId);
+        lc.postTurnCheck(game, player);
+    }
 
     /**
      * method that checks if countries are connected

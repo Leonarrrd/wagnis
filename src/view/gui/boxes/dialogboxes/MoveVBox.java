@@ -1,6 +1,7 @@
 package view.gui.boxes.dialogboxes;
 
 import controller.GameController;
+import controller.WorldController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -9,6 +10,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.Game;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
@@ -18,6 +20,7 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
     Text moveFromText;
     Text moveToText;
     Spinner<Integer> unitsToMoveWithSpinner;
+    Button moveButton;
     boolean firstCountrySelected = false;
 
     public MoveVBox() {
@@ -39,7 +42,9 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
         unitsToMoveWithSpinner.setValueFactory(valueFactory);
 
-        Button moveButton = new Button("Perform move action!");
+        moveButton = new Button("Perform move action!");
+        moveButton.setDisable(true);
+
         moveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -69,24 +74,35 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void update() {
-        // MARK: I made it so that the VBox does not update when the player selects a country that's not his
-        //  --> This way, we don't have to deal with the player trying
-        //      to perform move operations on countries that aren't his
         if (!GUIControl.getInstance().getCurrentPlayer().getCountries().containsValue(GUIControl.getInstance().getSelectedCountry())) {
             new Alert(Alert.AlertType.INFORMATION, "You don't own this country.").showAndWait();
-        } else if(GUIControl.getInstance().getSelectedCountry().getUnits() == 1) {
-            new Alert(Alert.AlertType.INFORMATION, "Only one unit on this country.").showAndWait();
         } else {
             if (!firstCountrySelected) {
-                // the Spinner does only get updated when the src country gets updated
-                moveFromText.setText(GUIControl.getInstance().getSelectedCountry().getName());
-                int maxUnitsToMove = GUIControl.getInstance().getSelectedCountry().getUnits() - 1;
-                SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
-                unitsToMoveWithSpinner.setValueFactory(valueFactory);
+                if(GUIControl.getInstance().getSelectedCountry().getUnits() == 1) {
+                    new Alert(Alert.AlertType.INFORMATION, "Only one unit on this country.").showAndWait();
+                    // FIXME: Need to complete these methods first
+//                } else if (!GameController.getInstance().getCountriesAttackCanBeLaunchedFrom(GUIControl.getInstance().getGame().getId(), GUIControl.getInstance().getCurrentPlayer()).containsValue(GUIControl.getInstance().getSelectedCountry())){
+//                    new Alert(Alert.AlertType.INFORMATION, "Country is not connected to any of your other countries.").showAndWait();
+                } else {
+                    // the Spinner does only get updated when the src country gets updated
+                    moveFromText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+                    int maxUnitsToMove = GUIControl.getInstance().getSelectedCountry().getUnits() - 1;
+                    SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
+                    unitsToMoveWithSpinner.setValueFactory(valueFactory);
+                    firstCountrySelected = !firstCountrySelected;
+                }
             } else {
-                moveToText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+                if (!GameController.getInstance().isConnected(GUIControl.getInstance().getSelectedCountry(),
+                        GUIControl.getInstance().getGame().getCountries().get(moveFromText.getText()))){
+                    new Alert(Alert.AlertType.INFORMATION, "Countries are not connected").showAndWait();
+                } else {
+                    moveToText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+                    firstCountrySelected = !firstCountrySelected;
+                    moveButton.setDisable(false);
+                }
+
             }
-            firstCountrySelected = !firstCountrySelected;
+
         }
     }
 }

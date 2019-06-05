@@ -115,11 +115,11 @@ public class PlaceUnitsCUI extends AbstractCUI {
                             checkForSpecialInput(numAsString, "Please enter a number");
                         }
                     }
-                    try {
-                        awardedUnits += gc.useCards(gameId, player, cardsToBeUsed);
-                    } catch (NoSuchCardException | NoSuchPlayerException e) {
-                        e.printStackTrace();
-                    }
+//                    try {
+//                        awardedUnits += gc.useCards(gameId, player, cardsToBeUsed);
+//                    } catch (NoSuchCardException | NoSuchPlayerException e) {
+//                        e.printStackTrace();
+//                    }
                 }
             }
         }
