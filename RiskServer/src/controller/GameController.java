@@ -1,8 +1,7 @@
 package controller;
 
-import model.AttackResult;
-import exceptions.*;
 import model.*;
+import exceptions.*;
 import persistence.FileReader;
 
 import java.io.IOException;
@@ -356,6 +355,10 @@ public class GameController {
      */
     public boolean isConnected(Country srcCountry, Country destCountry) {
         return wc.isConnected(srcCountry, destCountry);
+    }
+
+    public void testMethod() {
+        System.out.println("test");
     }
 
 

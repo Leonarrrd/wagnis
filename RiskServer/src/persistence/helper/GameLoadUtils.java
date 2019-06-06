@@ -10,7 +10,8 @@ import java.util.Map;
 
 public class GameLoadUtils {
 
-    public static final String PROJECT_DATA_DIR = System.getProperty("user.dir") + "/data/";
+    //TODO: wieder zurückändern
+    public static final String PROJECT_DATA_DIR = System.getProperty("user.dir") + "/../RiskServer/data/";
 
 
     public static String[] evaluatePlayerArrayFromDatString(String dataString) {
