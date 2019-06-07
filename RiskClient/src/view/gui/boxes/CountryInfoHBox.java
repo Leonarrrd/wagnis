@@ -2,6 +2,7 @@ package view.gui.boxes;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -68,6 +69,11 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
                 GUIControl.getInstance().countryClicked(countryString);
             }
         });
+
+        Tooltip t = new Tooltip(this.countryString);
+         Tooltip.install(this, t);
+
+
     }
 
     /**

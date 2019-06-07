@@ -3,6 +3,7 @@ package controller;
 import model.*;
 import exceptions.*;
 import persistence.FileReader;
+import persistence.FileWriter;
 
 import java.io.IOException;
 import java.util.*;
@@ -357,8 +358,18 @@ public class GameController {
         return wc.isConnected(srcCountry, destCountry);
     }
 
-    public void testMethod() {
-        System.out.println("test");
+    public void saveGame(UUID gameId) throws GameNotFoundException, IOException, DuplicateGameIdException {
+        Game game = getGameById(gameId);
+        FileWriter.getInstance().saveGame(game);
+    }
+
+    public void removeGame(UUID gameId) throws GameNotFoundException, IOException {
+        Game game = getGameById(gameId);
+        FileWriter.getInstance().removeGame(game);
+    }
+
+    public List<String> loadAvailableGameIds() throws IOException {
+        return FileReader.getInstance().loadAvailableGameIds();
     }
 
 

@@ -42,14 +42,14 @@ public abstract class AbstractCUI {
                 break;
             case "save":
                 try {
-                    FileWriter.getInstance().saveGame(game);
+                    GameController.getInstance().saveGame(gameId);
                 } catch (IOException | GameNotFoundException | DuplicateGameIdException e) {
                     e.printStackTrace();
                 }
                 break;
             case "delete":
                 try {
-                    FileWriter.getInstance().removeGame(game);
+                    GameController.getInstance().removeGame(gameId);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (GameNotFoundException e) {
