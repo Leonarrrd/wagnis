@@ -1,6 +1,11 @@
-1,Conquer North America and South America,continent,[1:2];
-2,Conquer South America and Asia,continent,[2:5];
-3,Conquer Europe and Oceania,continent,[3:6];
-4,Conquer Africa and Asia,continent,[4:5];
-5,Conquer Oceania and South America,continent,[6:2];
-6,Conquer 30 countries,country,30;
+1,continent,[1:2];
+2,continent,[2:5];
+3,continent,[3:6];
+4,continent,[4:5];
+5,continent,[6:2];
+7,elimination,RED,[1:3];
+8,elimination,BLUE,[2:4];
+9,elimination,GREEN,[3:5];
+10,elimination,YELLOW,[4:6];
+11,elimination,MACADAMIA,[1:6];
+12,country,30;

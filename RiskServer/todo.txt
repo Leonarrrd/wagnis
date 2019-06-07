@@ -1,15 +1,23 @@
--- mission needs to be updated
+// 05/06
+- Status | TODO | BOTH | Spiel speichern
+- Status | TODO | BOTH | Hover für Ländernamen
+- Status | TODO | BOTH | Mehr Missionen
+- Status | TODO | BOTH | Karten überarbeiten
+- Status | TODO | BOTH | Map fertig lichtbildladenen
+- Status | TODO | BOTH |
+
+
+
+
 // 29/05
-- Status | TODO | BOTH | Logik: Farben und Missionen
 - Status | TODO | BOTH | Logik: PlayerDies Methode
 
-- Status | TODO | PHILIPP | Länder klickbar machen (Farbe von Pixel Id zuweisen)
+- Status | DONE | PHILIPP | Länder klickbar machen (Farbe von Pixel Id zuweisen)
 - Status | TODO | LEO | Karte fertig bearbeiten
-- Status | TODO | LEO | Flagge.png + Flaggen Koordinaten mappen
-- Status | TODO | LEO | Einheitenzahlen dranschreiben
+- Status | DONE | LEO | Flagge.png + Flaggen Koordinaten mappen
+- Status | DONE | LEO | Einheitenzahlen dranschreiben
 
-- Status | TODO | LEO | PlayerListHBox mit Spielern + Phase
-- Status | TODO | LEO | CardsHBox rudimentär implementieren
+- Status | DONE | LEO | PlayerListHBox mit Spielern + Phase
 
 
 // 08/05

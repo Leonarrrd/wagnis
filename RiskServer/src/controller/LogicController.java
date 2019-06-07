@@ -332,13 +332,12 @@ public class LogicController {
         if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
         }
-        //FIXME: enter real win condition
-        boolean winConditionMet = player.getMission().isAccomplished(player);
+        boolean winConditionMet = player.getMission().isAccomplished(player, game);
         if(winConditionMet) {
             FileWriter.getInstance().removeGame(game);
             return winConditionMet;
         }
-        return player.getMission().isAccomplished(player);
+        return player.getMission().isAccomplished(player, game);
     }
 
     // TODO: should be refactored and checkWinCondition should be a separate method

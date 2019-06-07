@@ -3,24 +3,25 @@ package model;
 public abstract class Mission {
 
     private int id;
-    private String message;
 
-    public Mission(int id, String message){
-        this.message = message;
+    public Mission(int id){
         this.id = id;
     }
 
-    public String getMessage() {
-        return message;
-    }
 
     public int getId(){
         return id;
     }
 
     /**
+     * Builds and returns a description of how the mission can be accomplished
+     * @return
+     */
+    public abstract String getMessage();
+
+    /**
      * Checks if the win condition described by the message is met
      * @return
      */
-    public abstract boolean isAccomplished(Player owner);
+    public abstract boolean isAccomplished(Player owner, Game game);
 }

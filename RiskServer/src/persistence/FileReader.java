@@ -1,5 +1,6 @@
 package persistence;
 
+import datastructures.Color;
 import datastructures.Phase;
 import exceptions.GameNotFoundException;
 import exceptions.InvalidFormattedDataException;
@@ -113,11 +114,10 @@ public class FileReader {
         for (String entry : missionData) {
             String[] fields = entry.split(",");
             int missionId = Integer.parseInt(fields[0]);
-            String missionMessage = fields[1];
-            switch (fields[2]){
+            switch (fields[1]){
                 case "continent":
                     List<Continent> continentsToConquer = new ArrayList<>();
-                    int[] continentIndices = getIndicesFromDataSetArray(fields[3]);
+                    int[] continentIndices = getIndicesFromDataSetArray(fields[2]);
                     for (int indice : continentIndices){
                         for (Continent continent : continents){
                             if (indice == continent.getId()){
@@ -125,11 +125,28 @@ public class FileReader {
                             }
                         }
                     }
-                    missions.add(new ContinentMission(missionId, continentsToConquer, missionMessage));
+                    missions.add(new ContinentMission(missionId, continentsToConquer));
                     break;
                 case "country":
-                    int countriesToConquer = Integer.parseInt(fields[3]);
-                    missions.add(new CountryMission(missionId, countriesToConquer, missionMessage));
+                    int countriesToConquer = Integer.parseInt(fields[2]);
+                    missions.add(new CountryMission(missionId, countriesToConquer));
+                    break;
+                case "elimination":
+                    Color targetColor = null;
+                    for (Color color : Color.values()){
+                        if (color.toString().equals(fields[2]))
+                            targetColor = color;
+                    }
+                    List<Continent> continentsToConquerE = new ArrayList<>();
+                    int[] continentIndicesE = getIndicesFromDataSetArray(fields[3]);
+                    for (int indice : continentIndicesE){
+                        for (Continent continent : continents){
+                            if (indice == continent.getId()){
+                                continentsToConquerE.add(continent);
+                            }
+                        }
+                    }
+                    missions.add(new EliminationMission(missionId, targetColor, continentsToConquerE));
                     break;
             }
         }

@@ -171,7 +171,8 @@ public class FileWriter {
 
         }
         sb.append("}");
-        sb.append(",");
+
+
         // missions
         sb.append("[");
         for (Player p : game.getPlayers()) {

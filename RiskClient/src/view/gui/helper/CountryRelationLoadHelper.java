@@ -56,8 +56,8 @@ public class CountryRelationLoadHelper {
         countryViewMap.put("Siberia", new CountryViewHelper(new Coordinate(1050, 150), "19A51E"));
         countryViewMap.put("Ural", new CountryViewHelper(new Coordinate(970, 170), "406618"));
         countryViewMap.put("Yakutsk", new CountryViewHelper(new Coordinate(1155, 85), "26CC2B"));
-        countryViewMap.put("Eastern Australia", new CountryViewHelper(new Coordinate(1315, 645), "4B0049"));
-        countryViewMap.put("Western Australia", new CountryViewHelper(new Coordinate(1230, 635), "32004B"));
+        countryViewMap.put("Eastern Australia", new CountryViewHelper(new Coordinate(1315, 645), "D343CF"));
+        countryViewMap.put("Western Australia", new CountryViewHelper(new Coordinate(1230, 635), "884DA4"));
         countryViewMap.put("Indonesia", new CountryViewHelper(new Coordinate(1183, 508), "662D91"));
         countryViewMap.put("New Guinea", new CountryViewHelper(new Coordinate(1315, 535), "92278F"));
         countryViewMap.put("China", new CountryViewHelper(new Coordinate(1100, 340), "598527"));
