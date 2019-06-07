@@ -1,5 +1,6 @@
 package controller;
 
+import interfaces.IGameController;
 import model.*;
 import exceptions.*;
 import persistence.FileReader;
@@ -11,7 +12,7 @@ import java.util.*;
 /*
  * Class to handle game logic
  */
-public class GameController {
+public class GameController  implements IGameController {
 
     private Map<UUID, Game> activeGames = new HashMap<>();
 
