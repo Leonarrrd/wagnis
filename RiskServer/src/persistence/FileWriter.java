@@ -8,9 +8,10 @@ import model.Game;
 import model.Player;
 import persistence.helper.GameLoadUtils;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
-import java.util.UUID;
 
 public class FileWriter {
     private static FileWriter instance;
@@ -44,6 +45,7 @@ public class FileWriter {
 
     /**
      * Removes a game from persistence. E.g. when a game is over.
+     *
      * @param game
      */
     public void removeGame(Game game) throws IOException, GameNotFoundException {
@@ -51,7 +53,7 @@ public class FileWriter {
         String[] savedGameStrings = FileReader.getInstance().getStringLinesFromData("savedgames.dat");
         List<String> availableGames = FileReader.getInstance().loadAvailableGameIds();
         if (!availableGames.contains(game.getId().toString())) {
-            throw new GameNotFoundException("Game with id " + game.getId() + " could not be found.");
+            throw new GameNotFoundException(game.getId());
         }
 
 
@@ -63,10 +65,10 @@ public class FileWriter {
         }
         StringBuilder sb = new StringBuilder();
         for (String s : savedGameStrings) {
-            if(s != "") {
-            sb.append(s);
+            if (s != "") {
+                sb.append(s);
 
-            sb.append(";\n");
+                sb.append(";\n");
             }
         }
 
@@ -90,7 +92,7 @@ public class FileWriter {
         String[] savedGameStrings = FileReader.getInstance().getStringLinesFromData("savedgames.dat");
         List<String> availableGames = FileReader.getInstance().loadAvailableGameIds();
         if (!availableGames.contains(game.getId().toString())) {
-            throw new GameNotFoundException("Game with id " + game.getId() + " could not be found.");
+            throw new GameNotFoundException(game.getId());
         }
 
 
@@ -130,7 +132,7 @@ public class FileWriter {
             }
         }
         if (duplicateGame) {
-            throw new DuplicateGameIdException("Game with id " + game.getId() + " already exists.");
+            throw new DuplicateGameIdException(game.getId());
         }
         outputGameToNewLine(parseGameToRecord(game));
     }

@@ -185,7 +185,7 @@ public class FileReader {
         }
 
         if(!validGameId) {
-            throw new GameNotFoundException("There is no game id with " + gameId.toString() + "saved.");
+            throw new GameNotFoundException(gameId);
         }
 
         //evaluating the right dataset for the gameId
@@ -197,7 +197,7 @@ public class FileReader {
         }
 
         if (dataset == null || dataset.isEmpty()) {
-            throw new GameNotFoundException("Game with id " + gameId.toString() + "could not be found.");
+            throw new GameNotFoundException(gameId);
         }
 
         String[] commaSplit = dataset.split(",");
@@ -281,7 +281,7 @@ public class FileReader {
             }
         }
         if (activePlayer == null) {
-            throw new InvalidFormattedDataException("The active player could not be restored from Save file.");
+            throw new InvalidFormattedDataException();
         }
         //evaluate turn phase
         Phase phase = null;
@@ -296,7 +296,7 @@ public class FileReader {
                 phase = Phase.MOVE;
                 break;
             default:
-                throw new InvalidFormattedDataException("The turn phase could not be restored from save file.");
+                throw new InvalidFormattedDataException();
         }
 
         Turn turn = new Turn(activePlayer, phase);
@@ -322,7 +322,7 @@ public class FileReader {
      */
     private int[] getIndicesFromDataSetArray(String arrayString) throws InvalidFormattedDataException {
         if (!arrayString.contains("[") && !arrayString.contains("]")) {
-            throw new InvalidFormattedDataException("Array does not contain [ and ]. Use following format: [0:1:...:n]");
+            throw new InvalidFormattedDataException();
         }
 
         arrayString = arrayString.replace("[", "").replace("]", "");

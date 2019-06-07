@@ -43,7 +43,7 @@ public class LogicController {
      */
     void awardUnits(Game game, Player player) throws NoSuchPlayerException {
         if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist.");
+            throw new NoSuchPlayerException(player);
         }
         int units = 3;
         units += this.addUnitsByCountries(game, player);
@@ -53,7 +53,7 @@ public class LogicController {
 
     void changeUnits(Game game, Player player, int unitChange) throws NoSuchPlayerException {
         if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist.");
+            throw new NoSuchPlayerException(player);
         }
         player.setUnitsToPlace(player.getUnitsToPlace() + unitChange);
     }
@@ -66,7 +66,7 @@ public class LogicController {
      */
     int addUnitsByContinents(Game game, Player player) throws NoSuchPlayerException {
         if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist");
+            throw new NoSuchPlayerException(player);
         }
         int bonusUnits = 0;
         for (Continent continent : game.getContinents()) {
@@ -92,18 +92,18 @@ public class LogicController {
      */
     AttackResult fight(Game game, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, NoSuchCountryException {
         if(!game.getCountries().containsValue(attackingCountry)) {
-            throw new NoSuchCountryException("Country " + attackingCountry + " does not exist.");
+            throw new NoSuchCountryException(attackingCountry);
         }
         if(!game.getCountries().containsValue(defendingCountry)) {
-            throw new NoSuchCountryException("Country " + defendingCountry + " does not exist.");
+            throw new NoSuchCountryException(defendingCountry);
         }
         //check if attack is valid based on units
         if (attackingUnits > attackingCountry.getUnits() || attackingCountry.getUnits() == 1 ) {
-            throw new NotEnoughUnitsException("Country " + attackingCountry + " does not hold enough units to attack with " + attackingUnits + " units.");
+            throw new NotEnoughUnitsException(attackingCountry);
         }
 
         if (defendingUnits > defendingCountry.getUnits()) {
-            throw new NotEnoughUnitsException("Country " + defendingCountry + " does not hold enough units to defend with " + defendingUnits + " units.");
+            throw new NotEnoughUnitsException(defendingCountry);
         }
 
         //check if attack is valid based on adjacency
@@ -115,7 +115,7 @@ public class LogicController {
         }
 
         if (!adjacent) {
-            throw new CountriesNotAdjacentException(attackingCountry.getName() + " is ont adjacent with " + defendingCountry);
+            throw new CountriesNotAdjacentException(attackingCountry,defendingCountry);
         }
 
         List<Integer> attackerDices = rollDices(attackingUnits);
@@ -140,7 +140,7 @@ public class LogicController {
             return new AttackResult(defendingCountry, attackerDices, defenderDices);
         } else if (defendingCountry.getUnits() == 0) { // attacker won
             attackingCountry.getOwner().setHasConqueredCountry(true);
-            WorldController.getInstance().changeCountryOwnership(game, attackingCountry, defendingCountry, remainingAttackingUnits);
+            WorldController.getInstance().changeCountryOwnership(game, attackingCountry, defendingCountry);
             attackingCountry.setUnits(attackingCountry.getUnits() - remainingAttackingUnits);
             defendingCountry.setUnits(defendingCountry.getUnits() + remainingAttackingUnits);
             return new AttackResult(attackingCountry, attackerDices, defenderDices);
@@ -158,7 +158,7 @@ public class LogicController {
      */
     int addUnitsByCountries(Game game, Player player) throws NoSuchPlayerException {
         if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist.");
+            throw new NoSuchPlayerException(player);
         }
         int playerCountries = player.getCountries().size();
         int bonusUnits = (playerCountries - 9) / 3;
@@ -176,7 +176,7 @@ public class LogicController {
      */
     void useCards(Game game, Player player, int oneStarCards, int twoStarCards) throws NoSuchPlayerException, NoSuchCardException{
         if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist");
+            throw new NoSuchPlayerException(player);
         }
 
         // TODO: FIX THIS TOGETHER WITH THE WHOLE CARD SYSTEM
@@ -288,7 +288,7 @@ public class LogicController {
             GraphController.getInstance().updatePlayerGraphMap(game, p);
         }
         if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist.");
+            throw new NoSuchPlayerException(player);
         }
         boolean hasCountryToMoveFrom = false;
         for (Country country : WorldController.getInstance().getCountriesWithMoreThanOneUnit(game, player).values()) {
@@ -330,7 +330,7 @@ public class LogicController {
     //FIXME: IOException muss da besser gehandlet werden. Macht semantisch keinen Sinn.
     boolean checkWinCondition(Game game, Player player) throws NoSuchPlayerException, IOException, GameNotFoundException {
         if (!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist.");
+            throw new NoSuchPlayerException(player);
         }
         //FIXME: enter real win condition
         boolean winConditionMet = player.getMission().isAccomplished(player);
@@ -344,7 +344,7 @@ public class LogicController {
     // TODO: should be refactored and checkWinCondition should be a separate method
     void postTurnCheck(Game game, Player player) throws NoSuchPlayerException, IOException, GameNotFoundException {
         if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist.");
+            throw new NoSuchPlayerException(player);
         }
 
         boolean winCondition = checkWinCondition(game, player);

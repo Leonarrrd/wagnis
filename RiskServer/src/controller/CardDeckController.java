@@ -25,14 +25,14 @@ public class CardDeckController {
 
     void addCard(Game game, Player player) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist.");
+            throw new NoSuchPlayerException(player);
         }
         Card card = game.getCardDeck().get(0);
         if(player.getCards().contains(card)) {
-            throw new CardAlreadyOwnedException(player + " already owns the card.");
+            throw new CardAlreadyOwnedException(card, player);
         }
         if (!game.getCardDeck().contains(card)) {
-            throw new NoSuchCardException("Card does not exist");
+            throw new NoSuchCardException(card);
         }
 
         player.getCards().add(game.getCardDeck().remove(0));

@@ -43,7 +43,7 @@ public class GameController {
         if (game != null) {
             return game;
         } else {
-            throw new GameNotFoundException(" Game with id " + id.toString() + " could not be found.");
+            throw new GameNotFoundException(id);
         }
     }
 

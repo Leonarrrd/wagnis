@@ -30,7 +30,7 @@ public class GraphController {
 
     public void updatePlayerGraphMap(Game game, Player player) throws NoSuchPlayerException {
         if (!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player + " does not exist.");
+            throw new NoSuchPlayerException(player);
         }
         Graph graph = createGraph(player);
         playerGraphMap.put(player, graph);

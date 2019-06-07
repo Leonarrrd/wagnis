@@ -32,10 +32,10 @@ public class PlayerController {
      */
     Player addPlayer(Game game, String name) throws MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
         if (game.getPlayers().size() >= 5) {
-            throw new MaximumNumberOfPlayersReachedException("Maximum number of Players reached.");
+            throw new MaximumNumberOfPlayersReachedException(game.getPlayers().size());
         }
         if(Utils.stringContainsDelimitters(name)) {
-            throw new InvalidPlayerNameException("No delimiter signs allowed for Player name.");
+            throw new InvalidPlayerNameException(name);
         }
         Player newPlayer = new Player(name);
         game.getPlayers().add(newPlayer);
@@ -52,7 +52,7 @@ public class PlayerController {
      */
     void assignMissions(Game game) throws MaximumNumberOfPlayersReachedException {
         if(game.getPlayers().size() > 5) {
-            throw new MaximumNumberOfPlayersReachedException("There are too much players to assign missions for.");
+            throw new MaximumNumberOfPlayersReachedException(game.getPlayers().size());
         }
         for (int i = 0; i < game.getPlayers().size(); i++) {
             game.getPlayers().get(i).setMission(game.getMissions().get(i));

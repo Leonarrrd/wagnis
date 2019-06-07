@@ -1,7 +1,7 @@
 package exceptions;
 
 public class InvalidFormattedDataException extends Exception {
-    public InvalidFormattedDataException(String message) {
-        super(message);
+    public InvalidFormattedDataException() {
+        super("Data is not in the right format.");
     }
 }
