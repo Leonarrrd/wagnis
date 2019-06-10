@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import datastructures.CardBonus;
 import datastructures.Phase;
 import exceptions.CardAlreadyOwnedException;
@@ -309,6 +310,7 @@ public class LogicController {
      * updates country graphs on every phase
      * awards player units before using cards
      * awards player a card at the end of his turn (if country has been conquered)
+     * also checks if a player if out of the game and if true removes him
      * @param game
      * @param turn
      * @throws NoSuchPlayerException
@@ -318,22 +320,34 @@ public class LogicController {
      * @throws CardAlreadyOwnedException
      */
     void postPhaseCheck(Game game, Turn turn) throws NoSuchPlayerException, IOException, GameNotFoundException, NoSuchCardException, CardAlreadyOwnedException {
-        Player player = turn.getPlayer();
-        if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player);
+        Player currentPlayer = turn.getPlayer();
+        Phase phase = turn.getPhase();
+        if(!game.getPlayers().contains(currentPlayer)) {
+            throw new NoSuchPlayerException(currentPlayer);
         }
 
-        for (Player p : game.getPlayers()) {
-            GraphController.getInstance().updatePlayerGraphMap(game, p);
+        // update graphs aswell as check if player has been kicked out
+        if (phase.equals(Phase.TRAIL_UNITS)) {
+            Player toBeRemoved = null; // avoid ConcurrentModificationException
+            for (Player p : game.getPlayers()) {
+                GraphController.getInstance().updatePlayerGraphMap(game, p);
+                if (p.getCountries().values().isEmpty()){
+                    toBeRemoved = p;
+                    break;
+                }
+            }
+            if (toBeRemoved != null){
+                game.getPlayers().remove(toBeRemoved);
+            }
         }
 
-        if (turn.getPhase() == Phase.USE_CARDS) {
+        if (phase.equals(Phase.USE_CARDS)) {
             GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
         }
-        if (turn.getPhase() == Phase.MOVE) {
-            if (player.hasConqueredCountry()) {
-                    GameController.getInstance().addCardToPlayer(game.getId(), player);
-                    player.setHasConqueredCountry(false);
+        if (phase.equals(Phase.MOVE)) {
+            if (currentPlayer.hasConqueredCountry()) {
+                    GameController.getInstance().addCardToPlayer(game.getId(), currentPlayer);
+                    currentPlayer.setHasConqueredCountry(false);
             }
         }
     }
