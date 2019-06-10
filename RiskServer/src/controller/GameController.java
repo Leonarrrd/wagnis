@@ -1,5 +1,6 @@
 package controller;
 
+import interfaces.IGameController;
 import datastructures.CardBonus;
 import model.*;
 import exceptions.*;
@@ -12,7 +13,7 @@ import java.util.*;
 /*
  * Class to handle game logic
  */
-public class GameController {
+public class GameController  implements IGameController {
 
     private Map<UUID, Game> activeGames = new HashMap<>();
 
@@ -315,7 +316,7 @@ public class GameController {
 
 
     /**
-     *\
+     *
      * @param player
      * @return
      */
