@@ -1,4 +1,6 @@
 package model;
+import datastructures.CardBonus;
+import datastructures.CardSymbol;
 import datastructures.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -85,12 +87,52 @@ public class Player {
         this.color = color;
     }
 
-    public int getNumberOfCardsWithXStars(int stars) {
+    public int getNumberOfCardsWithSymbol(CardSymbol symbol) {
         int total = 0;
         for (Card card : cards){
-            if (card.getValue() == stars)
+            if (card.getSymbol().equals(symbol))
                 total++;
         }
         return total;
+    }
+
+    public List<Card> removeCards(CardBonus bonusType){
+        List<Card> cardsToPutIntoDeck = new ArrayList<>();
+        if (bonusType != CardBonus.MULTI) {
+            CardSymbol symbolToRemove = null;
+            switch (bonusType) {
+                case INFANTRY:
+                    symbolToRemove = CardSymbol.INFANTRY;
+                    break;
+                case CAVALRY:
+                    symbolToRemove = CardSymbol.CAVALRY;
+                    break;
+                case ARTILLERY:
+                    symbolToRemove = CardSymbol.ARTILLERY;
+                    break;
+            }
+
+            while (cardsToPutIntoDeck.size() < 3) {
+                for (Card card : cards) {
+                    if (card.getSymbol().equals(symbolToRemove)) {
+                        cardsToPutIntoDeck.add(card);
+                        cards.remove(card);
+                        System.out.println("removed");
+                        break;
+                    }
+                }
+            }
+        } else {
+            for (CardSymbol symbol : CardSymbol.values()) {
+                for (Card card : cards){
+                    if (card.getSymbol().equals(symbol)){
+                        cardsToPutIntoDeck.add(card);
+                        cards.remove(card);
+                        break;
+                    }
+                }
+            }
+        }
+        return cardsToPutIntoDeck;
     }
 }

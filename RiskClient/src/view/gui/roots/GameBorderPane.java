@@ -1,6 +1,10 @@
 package view.gui.roots;
 
+import exceptions.DuplicateGameIdException;
+import exceptions.GameNotFoundException;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -10,11 +14,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import view.gui.boxes.BottomBarHBox;
 import view.gui.boxes.DialogVBox;
+import view.gui.buttons.SaveButton;
 import view.gui.helper.GUIControl;
 import view.gui.helper.CountryRelationLoadHelper;
 import view.gui.helper.RiskUIElement;
 import view.gui.panes.DiceGridPane;
 import view.gui.util.Util;
+
+import java.io.IOException;
 
 import static view.gui.util.UIConstants.WINDOW_WIDTH;
 
@@ -42,21 +49,15 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
         });
 
         VBox dialogVBox = new DialogVBox();
-
-        dialogVBox.setLayoutY(640);
-        dialogVBox.setLayoutX(10);
-
-
         GridPane dices = new DiceGridPane();
-        dices.setLayoutY(720);
-        dices.setLayoutX(WINDOW_WIDTH-200);
-
+        SaveButton saveButton = new SaveButton();
 
         Pane pane = new Pane();
         pane.getChildren().add(mapImageView);
         pane.getChildren().add(dialogVBox);
         pane.getChildren().addAll(CountryRelationLoadHelper.buildCountryInfoBoxes());
         pane.getChildren().add(dices);
+        pane.getChildren().add(saveButton);
 
 
         BottomBarHBox bottomBar = new BottomBarHBox();

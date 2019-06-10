@@ -171,6 +171,7 @@ public class FileWriter {
 
         }
         sb.append("}");
+        sb.append("},");
 
 
         // missions

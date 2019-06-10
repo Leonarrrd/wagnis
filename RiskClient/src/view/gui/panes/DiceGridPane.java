@@ -11,6 +11,8 @@ import view.gui.helper.Updatable;
 
 import java.util.List;
 
+import static view.gui.util.UIConstants.WINDOW_WIDTH;
+
 public class DiceGridPane extends GridPane implements RiskUIElement, Updatable {
 
     private boolean visible;
@@ -22,8 +24,8 @@ public class DiceGridPane extends GridPane implements RiskUIElement, Updatable {
 
     @Override
     public void doStuff() {
-
-
+        setLayoutY(720);
+        setLayoutX(WINDOW_WIDTH-200);
     }
 
     @Override

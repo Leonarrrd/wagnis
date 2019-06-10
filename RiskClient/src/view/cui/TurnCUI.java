@@ -50,7 +50,7 @@ public class TurnCUI extends AbstractCUI {
                         break;
                 }
                 postTurnCheck(game, gameWon, player);
-            } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
+            } catch (GameNotFoundException | NoSuchCardException | IOException | NoSuchPlayerException | CardAlreadyOwnedException e) {
                 e.printStackTrace();
             }
         }
@@ -74,7 +74,7 @@ public class TurnCUI extends AbstractCUI {
             try {
                 System.out.println(player + " is awarded a card");
                 try {
-                    gc.addCard(gameId, player);
+                    gc.addCardToPlayer(gameId, player);
                 } catch (NoSuchPlayerException | NoSuchCardException | CardAlreadyOwnedException e) {
                     e.printStackTrace();
                 }

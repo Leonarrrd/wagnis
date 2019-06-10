@@ -84,9 +84,9 @@ public class GUIControl {
     }
 
     // TODO: still oversimplified
-    public void useCards(int oneStarCards, int twoStarCards){
+    public void useCards(int infantryCards, int cavalryCards, int artilleryCards){
         try {
-            GameController.getInstance().useCards(gameId, getCurrentPlayer(), oneStarCards, twoStarCards);
+            GameController.getInstance().useCards(gameId, getCurrentPlayer(), infantryCards, cavalryCards, artilleryCards);
         } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException e) {
             e.printStackTrace();
         }
@@ -154,7 +154,7 @@ public class GUIControl {
 
     public void trailUnits(int value) {
         try {
-            GameController.getInstance().moveUnits(gameId, lastFightCountry.getSrcCountry(), lastFightCountry.getDestCountry(), value);
+            gc.moveUnits(gameId, lastFightCountry.getSrcCountry(), lastFightCountry.getDestCountry(), value);
             componentMap.get(lastFightCountry.getSrcCountry() + "info-hbox").update();
             componentMap.get(lastFightCountry.getDestCountry() + "info-hbox").update();
             setTurnManually(Phase.ATTACK);
@@ -167,7 +167,7 @@ public class GUIControl {
         Country srcCountryObj = getCountryFromString(srcCountry);
         Country destCountryObj = getCountryFromString(destCountry);
         try {
-            GameController.getInstance().moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount);
+            gc.moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount);
             getLog().update(srcCountryObj.getOwner().getName() + " moved " + amount + " from " + srcCountry + " to " + destCountry);
 
         } catch (CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
@@ -180,12 +180,12 @@ public class GUIControl {
 
     public void forwardTurnPhase() {
         try {
-            GameController.getInstance().switchTurns(gameId);
+            gc.switchTurns(gameId);
             componentMap.get("dialog-vbox").update();
             componentMap.get("player-list-vbox").update();
             componentMap.get("mission-hbox").update();
             componentMap.get("cards-hbox").update();
-        } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
+        } catch (GameNotFoundException | IOException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
             new ErrorAlert(e);
         }
     }
@@ -245,16 +245,26 @@ public class GUIControl {
 
     public Country getCountryFromString(String countryString) {
         try {
-            return GameController.getInstance().getGameById(gameId).getCountries().get(countryString);
+            return gc.getGameById(gameId).getCountries().get(countryString);
         } catch (GameNotFoundException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    // FIXME: getCountriesAttackCanBeLaunchedFrom needs to be replaced with getCountriesMoveCanBeDoneFrom
-    //  or hasCountriesToMoveto
-    //  after that, go to MoveVBox and fix it
+    public Player checkForWinner() {
+        for (Player player : getGame().getPlayers()){
+            try {
+                if (gc.checkWinCondidtion(gameId, player)){
+                    return player;
+                }
+            } catch (GameNotFoundException | NoSuchPlayerException | IOException e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     public boolean hasCountryToMoveTo(Country country){
             List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
             return countriesInGraph.size() == 1;
@@ -276,5 +286,8 @@ public class GUIControl {
         return lastFightCountry;
     }
 
-
+    public void saveGame() throws GameNotFoundException, DuplicateGameIdException, IOException {
+        gc.saveGame(gameId);
+        getLog().update("Game has been saved successfully");
+    }
 }

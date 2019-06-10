@@ -4,17 +4,20 @@ package model;
 * Class for Card objects
  */
 
+import datastructures.CardSymbol;
+
 public class Card {
     private int id;
-    private int value;
+    private CardSymbol symbol;
 
-    public Card(int id, int value) {
+
+    public Card(int id, CardSymbol symbol) {
         this.id = id;
-        this.value = value;
+        this.symbol = symbol;
     }
 
-    public int getValue() {
-        return value;
+    public CardSymbol getSymbol() {
+        return symbol;
     }
 
     public int getId() {

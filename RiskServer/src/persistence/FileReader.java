@@ -303,15 +303,28 @@ public class FileReader {
         //evaluate turn phase
         Phase phase = null;
         switch (commaSplit[6]) {
-            case "ATTACK":
-                phase = Phase.ATTACK;
+            case "USE_CARDS":
+                phase = Phase.USE_CARDS;
                 break;
             case "PLACE_UNITS":
                 phase = Phase.PLACE_UNITS;
                 break;
+            case "ATTACK":
+                phase = Phase.ATTACK;
+                break;
+            case "TRAIL_UNITS":
+                phase = Phase.TRAIL_UNITS;
+                break;
+            case "PERFORM_ANOTHER_ATTACK":
+                phase = Phase.PERFORM_ANOTHER_ATTACK;
+                break;
+            case "PERFORM_ANOTHER_MOVE":
+                phase = Phase.PERFORM_ANOTHER_MOVE;
+                break;
             case "MOVE":
                 phase = Phase.MOVE;
                 break;
+
             default:
                 throw new InvalidFormattedDataException();
         }

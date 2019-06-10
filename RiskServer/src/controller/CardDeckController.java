@@ -1,5 +1,6 @@
 package controller;
 
+import datastructures.CardSymbol;
 import exceptions.CardAlreadyOwnedException;
 import exceptions.NoSuchCardException;
 import exceptions.NoSuchPlayerException;
@@ -8,6 +9,7 @@ import model.Game;
 import model.Player;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CardDeckController {
@@ -23,7 +25,7 @@ public class CardDeckController {
         return instance;
     }
 
-    void addCard(Game game, Player player) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
+    void addCardToPlayer(Game game, Player player) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
         }
@@ -38,15 +40,20 @@ public class CardDeckController {
         player.getCards().add(game.getCardDeck().remove(0));
     }
 
+    void addCardsToDeck(Game game, List<Card> cards){
+        game.getCardDeck().addAll(cards);
+    }
+
     List<Card> createCardDeck(){
         List<Card> cardDeck = new ArrayList<>();
         int id = 1;
-        for (int j = 0; j < 20; j++) {
-            for (int i = 0; i < 2; i++) {
-                cardDeck.add(new Card(id,i + 1));
+        for (CardSymbol symbol : CardSymbol.values()){
+            for (int i = 0; i < 10; i++){
+                cardDeck.add(new Card(id, symbol));
                 id++;
             }
         }
+        Collections.shuffle(cardDeck);
         return cardDeck;
     }
 }

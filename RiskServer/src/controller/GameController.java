@@ -1,5 +1,6 @@
 package controller;
 
+import datastructures.CardBonus;
 import model.*;
 import exceptions.*;
 import persistence.FileReader;
@@ -180,9 +181,18 @@ public class GameController {
         return wc.assignUnits(game);
     }
 
-    public void addCard(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
+    public void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         Game game = getGameById(gameId);
-        cdc.addCard(game, player);
+        cdc.addCardToPlayer(game, player);
+    }
+
+    void addCardsToDeck(UUID gameId, List<Card> cards) throws GameNotFoundException{
+        Game game = getGameById(gameId);
+        cdc.addCardsToDeck(game, cards);
+    }
+
+    public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards){
+        return lc.getTradeBonusType(infantryCards, cavalryCards, artilleryCards);
     }
 
     /**
@@ -210,9 +220,9 @@ public class GameController {
      * @param
      * @return
      */
-    public void useCards(UUID gameId, Player player, int oneStarCards, int twoStarCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
+    public void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
         Game game = getGameById(gameId);
-        lc.useCards(game, player, oneStarCards, twoStarCards);
+        lc.useCards(game, player, infantryCards, cavalryCards, artilleryCards);
     }
 
 
@@ -305,7 +315,7 @@ public class GameController {
 
 
     /**
-     *
+     *\
      * @param player
      * @return
      */
@@ -328,7 +338,7 @@ public class GameController {
      * switch turns (phase or phase and player)
      *
      */
-    public void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
+    public void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
         Game game = getGameById(gameId);
         tc.switchTurns(game);
     }
@@ -343,9 +353,9 @@ public class GameController {
         grc.updatePlayerGraphMap(game, p);
     }
 
-    public void postTurnCheck(UUID gameId, Player player) throws GameNotFoundException, IOException, NoSuchPlayerException {
+    public void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         Game game = getGameById(gameId);
-        lc.postTurnCheck(game, player);
+        lc.postPhaseCheck(game, turn);
     }
 
     /**

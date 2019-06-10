@@ -43,7 +43,7 @@ public class TurnController {
     /**
      * switch turns (phase or phase and player)
      */
-    void switchTurns(Game game) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, GameNotFoundException {
+    void switchTurns(Game game) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, GameNotFoundException, IOException {
 
         Turn turn = game.getTurn();
 
@@ -73,19 +73,7 @@ public class TurnController {
             default:
                 break;
         }
-        // TODO: MAKE A PROPER POST TURN CHECK METHOD THAT CHECKS THE PHASE AND INVOKES METHODS ACCORDINGLY
-        try {
-            GameController.getInstance().postTurnCheck(game.getId(), turn.getPlayer());
-        } catch (GameNotFoundException | IOException e) {
-            e.printStackTrace();
-        }
-        if (turn.getPhase() == Phase.USE_CARDS) {
-            GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
-        }
-        for (Player p : game.getPlayers()) {
-            GraphController.getInstance().updatePlayerGraphMap(game, p);
-
-        }
+        GameController.getInstance().postPhaseCheck(game.getId(), turn);
     }
 
     /**

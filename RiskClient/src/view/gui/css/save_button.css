@@ -1,0 +1,4 @@
+#save-button {
+    -fx-graphic: url("file:assets/img/save_game_button.png");
+    -fx-background-color: rgba(255, 255, 255, 1);
+}

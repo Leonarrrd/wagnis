@@ -1,9 +1,9 @@
 // 05/06
 - Status | TODO | BOTH | Spiel speichern
-- Status | TODO | BOTH | Hover für Ländernamen
-- Status | TODO | BOTH | Mehr Missionen
-- Status | TODO | BOTH | Karten überarbeiten
-- Status | TODO | BOTH | Map fertig lichtbildladenen
+- Status | DONE | BOTH | Hover für Ländernamen
+- Status | DONE| BOTH | Mehr Missionen
+- Status | DONE | BOTH | Karten überarbeiten
+- Status | DONE | BOTH | Map fertig lichtbildladenen
 - Status | TODO | BOTH |
 
 

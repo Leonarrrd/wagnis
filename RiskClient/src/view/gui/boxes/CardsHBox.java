@@ -1,5 +1,6 @@
 package view.gui.boxes;
 
+import datastructures.CardSymbol;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -9,8 +10,9 @@ import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 
 public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
-    private Text oneStarCards;
-    private Text twoStarCards;
+    private Text infantryCards;
+    private Text cavalryCards;
+    private Text artilleryCards;
     public CardsHBox() {
         super();
         addAsUpdateElement("cards-hbox", this);
@@ -22,21 +24,24 @@ public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updat
 //        this.getStyleClass().add("cards-hbox");
 
         Player player = GUIControl.getInstance().getGame().getTurn().getPlayer();
-        this.oneStarCards = new Text("One Star Cards: " + player.getNumberOfCardsWithXStars(1));
-        this.twoStarCards = new Text("Two Star Cards: " + player.getNumberOfCardsWithXStars(2));
+        this.infantryCards = new Text("Infantry: " + player.getNumberOfCardsWithSymbol(CardSymbol.INFANTRY));
+        this.cavalryCards = new Text("Cavalry: " + player.getNumberOfCardsWithSymbol(CardSymbol.CAVALRY));
+        this.artilleryCards = new Text("Artillery: " + player.getNumberOfCardsWithSymbol(CardSymbol.ARTILLERY));
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.getChildren().add(new Text("Your cards:"));
-        vBox.getChildren().add(oneStarCards);
-        vBox.getChildren().add(twoStarCards);
+        vBox.getChildren().add(infantryCards);
+        vBox.getChildren().add(cavalryCards);
+        vBox.getChildren().add(artilleryCards);
         this.getChildren().add(vBox);
     }
 
     @Override
     public void update() {
         Player player = GUIControl.getInstance().getGame().getTurn().getPlayer();
-        this.oneStarCards.setText("One Star Cards: " + player.getNumberOfCardsWithXStars(1));
-        this.twoStarCards.setText("Two Star Cards: " + player.getNumberOfCardsWithXStars(2));
+        this.infantryCards.setText("Infantry: " + player.getNumberOfCardsWithSymbol(CardSymbol.INFANTRY));
+        this.cavalryCards.setText("Cavalry: " + player.getNumberOfCardsWithSymbol(CardSymbol.CAVALRY));
+        this.artilleryCards.setText("Artillery: " + player.getNumberOfCardsWithSymbol(CardSymbol.ARTILLERY));
     }
 
 }

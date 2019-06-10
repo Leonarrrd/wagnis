@@ -1,6 +1,7 @@
 package controller;
 
-import exceptions.*;
+import datastructures.CardBonus;
+import datastructures.Phase;
 import exceptions.CardAlreadyOwnedException;
 import exceptions.CountriesNotAdjacentException;
 import exceptions.GameNotFoundException;
@@ -165,6 +166,25 @@ public class LogicController {
         return (bonusUnits > 0) ? bonusUnits : 0;
     }
 
+    public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards){
+        if (infantryCards + cavalryCards + artilleryCards != 3){
+            return null;
+        }
+        if (infantryCards == 3){
+            return CardBonus.INFANTRY;
+        }
+        if (cavalryCards == 3){
+            return CardBonus.CAVALRY;
+        }
+        if (artilleryCards == 3){
+            return CardBonus.ARTILLERY;
+        }
+        if (infantryCards == 1 && cavalryCards == 1 && artilleryCards == 1){
+            return CardBonus.MULTI;
+        }
+        return null;
+    }
+
     /**
      * TODO: OVERSIMPLIFIED AT THE MOMENT
      * Removes the cards the player wants to use from his hand
@@ -174,87 +194,32 @@ public class LogicController {
      * @param
      * @return
      */
-    void useCards(Game game, Player player, int oneStarCards, int twoStarCards) throws NoSuchPlayerException, NoSuchCardException{
+    void useCards(Game game, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws NoSuchPlayerException, NoSuchCardException{
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
         }
 
-        // TODO: FIX THIS TOGETHER WITH THE WHOLE CARD SYSTEM
-//        boolean validCards = true;
-//        for (int i = 0; i < cardsToBeUsed; i++) {
-//            Card card = player.getCards().get(i);
-//            if(!game.getCards().contains(card)) {
-//                validCards = false;
-//            }
-//        }
-//        if(!validCards) {
-//            throw new NoSuchCardException("Card does not exist");
-//        }
-//
-        int oneStarCardsRemoved = 0;
-        int twoStarCardsRemoved = 0;
+        CardBonus bonusType = getTradeBonusType(infantryCards, cavalryCards, artilleryCards);
+        List<Card> cardsToPutIntoDeck = player.removeCards(bonusType);
+        game.getCardDeck().addAll(cardsToPutIntoDeck);
 
-        while (oneStarCardsRemoved < oneStarCards){
-            for (int i = 0; i < player.getCards().size(); i++){
-                if (player.getCards().get(i).getValue() == 1) {
-                    player.getCards().remove(i);
-                    oneStarCardsRemoved++;
-                }
+
+        int bonusUnits = 0;
+        switch (bonusType){
+            case INFANTRY:
+                bonusUnits = 2;
                 break;
-            }
-        }
-
-        while (twoStarCardsRemoved < twoStarCards){
-            for (int i = 0; i < player.getCards().size(); i++){
-                if (player.getCards().get(i).getValue() == 2) {
-                    player.getCards().remove(i);
-                    twoStarCardsRemoved++;
-                }
+            case CAVALRY:
+                bonusUnits = 3;
                 break;
-            }
+            case ARTILLERY:
+                bonusUnits = 4;
+                break;
+            case MULTI:
+                bonusUnits = 5;
+                break;
         }
-
-        int bonusUnits = getUnitsForValue(oneStarCards + twoStarCards * 2);
         player.setUnitsToPlace(player.getUnitsToPlace() + bonusUnits);
-    }
-
-    int getUnitsForValue(int value){
-        int unitsToGet;
-        switch (value){
-            case 1:
-                unitsToGet = 1;
-                break;
-            case 2:
-                unitsToGet = 2;
-                break;
-            case 3:
-                unitsToGet = 4;
-                break;
-            case 4:
-                unitsToGet = 7;
-                break;
-            case 5:
-                unitsToGet = 10;
-                break;
-            case 6:
-                unitsToGet = 13;
-                break;
-            case 7:
-                unitsToGet = 17;
-                break;
-            case 8:
-                unitsToGet = 21;
-                break;
-            case 9:
-                unitsToGet = 25;
-                break;
-            case 10:
-                unitsToGet = 30;
-                break;
-            default:
-                unitsToGet = 0;
-        }
-        return  unitsToGet;
     }
 
     /**
@@ -320,10 +285,8 @@ public class LogicController {
     }
 
     /**
-     * AT THE MOMENT FOR PRESENTATION PURPOSES ONLY
-     * At the moment, the only win condition is to conquer all countries
-     * Will be updated to player missions once they are implemented
-     *
+     * checks if the win condition of param player is met
+     * if true: removes the savegame from file
      * @param player
      * @return
      */
@@ -332,6 +295,7 @@ public class LogicController {
         if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
         }
+
         boolean winConditionMet = player.getMission().isAccomplished(player, game);
         if(winConditionMet) {
             FileWriter.getInstance().removeGame(game);
@@ -340,30 +304,36 @@ public class LogicController {
         return player.getMission().isAccomplished(player, game);
     }
 
-    // TODO: should be refactored and checkWinCondition should be a separate method
-    void postTurnCheck(Game game, Player player) throws NoSuchPlayerException, IOException, GameNotFoundException {
+    /**
+     * checks that get performed every time a phase switch happens
+     * updates country graphs on every phase
+     * awards player units before using cards
+     * awards player a card at the end of his turn (if country has been conquered)
+     * @param game
+     * @param turn
+     * @throws NoSuchPlayerException
+     * @throws IOException
+     * @throws GameNotFoundException
+     * @throws NoSuchCardException
+     * @throws CardAlreadyOwnedException
+     */
+    void postPhaseCheck(Game game, Turn turn) throws NoSuchPlayerException, IOException, GameNotFoundException, NoSuchCardException, CardAlreadyOwnedException {
+        Player player = turn.getPlayer();
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
         }
 
-        boolean winCondition = checkWinCondition(game, player);
-        if (winCondition) {
-            // TODO: REFACTOR THIS TO SOMEWHERE ELSE
-            System.out.println(player + "HAS WON THE GAME");
-            return;
+        for (Player p : game.getPlayers()) {
+            GraphController.getInstance().updatePlayerGraphMap(game, p);
         }
 
-        if (player.hasConqueredCountry()) {
-            try {
-                try {
-                    // FIXME: WRONG
-                    GameController.getInstance().addCard(game.getId(), player);
-                } catch (NoSuchPlayerException | NoSuchCardException | CardAlreadyOwnedException e) {
-                    e.printStackTrace();
-                }
-                player.setHasConqueredCountry(false);
-            } catch (GameNotFoundException e) {
-                e.printStackTrace();
+        if (turn.getPhase() == Phase.USE_CARDS) {
+            GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
+        }
+        if (turn.getPhase() == Phase.MOVE) {
+            if (player.hasConqueredCountry()) {
+                    GameController.getInstance().addCardToPlayer(game.getId(), player);
+                    player.setHasConqueredCountry(false);
             }
         }
     }
