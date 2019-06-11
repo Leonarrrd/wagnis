@@ -1,11 +1,9 @@
 package view.gui.sockets;
 
+import datastructures.CardBonus;
 import exceptions.*;
 import interfaces.IGameController;
-import model.AttackResult;
-import model.Country;
-import model.Game;
-import model.Player;
+import model.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -64,8 +62,18 @@ public class GameControllerFassade implements IGameController {
     }
 
     @Override
-    public void addCard(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
+    public void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
 
+    }
+
+    @Override
+    public void addCardsToDeck(UUID gameId, List<Card> cards) {
+
+    }
+
+    @Override
+    public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards) {
+        return null;
     }
 
     @Override
@@ -79,7 +87,7 @@ public class GameControllerFassade implements IGameController {
     }
 
     @Override
-    public void useCards(UUID gameId, Player player, int oneStarCards, int twoStarCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
+    public void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
 
     }
 
@@ -129,7 +137,7 @@ public class GameControllerFassade implements IGameController {
     }
 
     @Override
-    public void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
+    public void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
 
     }
 
@@ -139,7 +147,7 @@ public class GameControllerFassade implements IGameController {
     }
 
     @Override
-    public void postTurnCheck(UUID gameId, Player player) throws GameNotFoundException, IOException, NoSuchPlayerException {
+    public void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
 
     }
 

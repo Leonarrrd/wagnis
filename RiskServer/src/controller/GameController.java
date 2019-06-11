@@ -13,7 +13,7 @@ import java.util.*;
 /*
  * Class to handle game logic
  */
-public class GameController {
+public class GameController implements IGameController {
 
     private Map<UUID, Game> activeGames = new HashMap<>();
 
@@ -37,10 +37,12 @@ public class GameController {
 
     /**
      * gets the game by providing a game id.
+     *
      * @param id
      * @return the main game object
      * @throws GameNotFoundException if the game does not exist
      */
+    @Override
     public Game getGameById(UUID id) throws GameNotFoundException {
         Game game = activeGames.get(id);
         if (game != null) {
@@ -52,11 +54,13 @@ public class GameController {
 
     /**
      * inits a new game
+     *
      * @return
      * @throws IOException
      * @throws InvalidFormattedDataException
      * @throws GameNotFoundException
      */
+    @Override
     public Game initNewGame() throws IOException, InvalidFormattedDataException {
         Map<String, Country> countries = null;
         List<Continent> continents = null;
@@ -69,7 +73,7 @@ public class GameController {
         continents = FileReader.getInstance().loadContinents(new ArrayList(countries.values()));
         missions = FileReader.getInstance().loadMissions(continents);
         cards = cdc.createCardDeck();
-        cardDeck = (ArrayList) ((ArrayList)cards).clone();
+        cardDeck = (ArrayList) ((ArrayList) cards).clone();
 
         Game game = new Game(UUID.randomUUID(), countries, continents, missions, cards, cardDeck);
         activeGames.put(game.getId(), game);
@@ -79,12 +83,14 @@ public class GameController {
 
     /**
      * load an exisitng game from saved games
+     *
      * @param gameId
      * @return
      * @throws IOException
      * @throws GameNotFoundException
      * @throws InvalidFormattedDataException
      */
+    @Override
     public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException {
         List<Country> loadedCountries = new ArrayList<>(FileReader.getInstance().loadCountries().values());
         List<Continent> loadedContinents = new ArrayList<>(FileReader.getInstance().loadContinents(loadedCountries));
@@ -105,6 +111,7 @@ public class GameController {
      * @param playerName
      * @throws GameNotFoundException
      */
+    @Override
     public void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
         Game game = getGameById(gameId);
         pc.addPlayer(game, playerName);
@@ -112,12 +119,14 @@ public class GameController {
 
     /**
      * TODO: kann die raus? add description
+     *
      * @param gameId
      * @param countryAsString
      * @param player
      * @throws GameNotFoundException
      * @throws CountryAlreadyOccupiedException
      */
+    @Override
     public void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException {
         Game game = getGameById(gameId);
         wc.addCountry(game, countryAsString, player);
@@ -129,6 +138,7 @@ public class GameController {
      * @param country
      * @param units   units to add
      */
+    @Override
     public void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException {
         Game game = getGameById(gameId);
         wc.changeUnits(game, country, units);
@@ -136,11 +146,13 @@ public class GameController {
 
     /**
      * TODO: add description
+     *
      * @param gameId
      * @param country
      * @param frozenUnits
      * @throws GameNotFoundException
      */
+    @Override
     public void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) throws GameNotFoundException, NoSuchCountryException {
         Game game = getGameById(gameId);
         wc.changeFrozenUnits(game, country, frozenUnits);
@@ -154,6 +166,7 @@ public class GameController {
      * @param gameId
      * @throws GameNotFoundException
      */
+    @Override
     public void assignCountries(UUID gameId) throws GameNotFoundException, CountriesAlreadyAssignedException {
         Game game = getGameById(gameId);
         wc.assignCountries(game);
@@ -163,9 +176,11 @@ public class GameController {
      * Assigns missions to players
      * Missions are assigned randomly because the missions list is shuffled on creation
      * An assigned mission will be removed from the list
+     *
      * @param gameId
      * @throws GameNotFoundException
      */
+    @Override
     public void assignMissions(UUID gameId) throws GameNotFoundException, MaximumNumberOfPlayersReachedException {
         Game game = getGameById(gameId);
         pc.assignMissions(game);
@@ -177,22 +192,26 @@ public class GameController {
      *
      * @return the amount of units assigned
      */
+    @Override
     public int assignUnits(UUID gameId) throws GameNotFoundException, InvalidNumberOfPlayersException {
         Game game = getGameById(gameId);
         return wc.assignUnits(game);
     }
 
+    @Override
     public void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         Game game = getGameById(gameId);
         cdc.addCardToPlayer(game, player);
     }
 
-    void addCardsToDeck(UUID gameId, List<Card> cards) throws GameNotFoundException{
+    @Override
+    public void addCardsToDeck(UUID gameId, List<Card> cards) throws GameNotFoundException {
         Game game = getGameById(gameId);
         cdc.addCardsToDeck(game, cards);
     }
 
-    public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards){
+    @Override
+    public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards) {
         return lc.getTradeBonusType(infantryCards, cavalryCards, artilleryCards);
     }
 
@@ -202,12 +221,14 @@ public class GameController {
      *
      * @return number of units the player can place this turn
      */
+    @Override
     public void awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         lc.awardUnits(game, player);
     }
 
-    public void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException{
+    @Override
+    public void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         lc.changeUnits(game, player, unitChange);
     }
@@ -221,6 +242,7 @@ public class GameController {
      * @param
      * @return
      */
+    @Override
     public void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         lc.useCards(game, player, infantryCards, cavalryCards, artilleryCards);
@@ -235,6 +257,7 @@ public class GameController {
      * @param player
      * @return map of countries with more than one unit
      */
+    @Override
     public Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return wc.getCountriesAttackCanBeLaunchedFrom(game, player);
@@ -245,6 +268,7 @@ public class GameController {
      * @param player
      * @return countries with more than one unit
      */
+    @Override
     public Map<String, Country> getCountriesWithMoreThanOneUnit(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         return wc.getCountriesWithMoreThanOneUnit(game, player);
@@ -256,6 +280,7 @@ public class GameController {
      * @param player
      * @return
      */
+    @Override
     public boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return lc.hasCountryToMoveFrom(game, player);
@@ -267,6 +292,7 @@ public class GameController {
      * @param player
      * @return
      */
+    @Override
     public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return lc.hasCountryToAttackFrom(game, player);
@@ -279,6 +305,7 @@ public class GameController {
      * @param country
      * @return
      */
+    @Override
     public Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return wc.getHostileNeighbors(game, country);
@@ -297,6 +324,7 @@ public class GameController {
      * @param defendingUnits
      * @return null if both sides still have enough units to fight, the winner of the war otherwise
      */
+    @Override
     public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return lc.fight(game, attackingCountry, defendingCountry, attackingUnits, defendingUnits);
@@ -309,6 +337,7 @@ public class GameController {
      * @param destCountry
      * @param amount
      */
+    @Override
     public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException {
         Game game = getGameById(gameId);
         wc.moveUnits(game, srcCountry, destCountry, amount);
@@ -316,10 +345,10 @@ public class GameController {
 
 
     /**
-     *
      * @param player
      * @return
      */
+    @Override
     public boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException {
         Game game = getGameById(gameId);
         return lc.checkWinCondition(game, player);
@@ -330,6 +359,7 @@ public class GameController {
      *
      * @param gameId
      */
+    @Override
     public void setTurn(UUID gameId) throws GameNotFoundException {
         Game game = getGameById(gameId);
         tc.setTurn(game);
@@ -337,8 +367,8 @@ public class GameController {
 
     /**
      * switch turns (phase or phase and player)
-     *
      */
+    @Override
     public void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
         Game game = getGameById(gameId);
         tc.switchTurns(game);
@@ -346,14 +376,17 @@ public class GameController {
 
     /**
      * updates the player graph
+     *
      * @param gameId
      * @param p
      */
+    @Override
     public void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         grc.updatePlayerGraphMap(game, p);
     }
 
+    @Override
     public void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         Game game = getGameById(gameId);
         lc.postPhaseCheck(game, turn);
@@ -361,24 +394,29 @@ public class GameController {
 
     /**
      * method that checks if countries are connected
+     *
      * @param srcCountry
      * @param destCountry
      * @return
      */
+    @Override
     public boolean isConnected(Country srcCountry, Country destCountry) {
         return wc.isConnected(srcCountry, destCountry);
     }
 
+    @Override
     public void saveGame(UUID gameId) throws GameNotFoundException, IOException, DuplicateGameIdException {
         Game game = getGameById(gameId);
         FileWriter.getInstance().saveGame(game);
     }
 
+    @Override
     public void removeGame(UUID gameId) throws GameNotFoundException, IOException {
         Game game = getGameById(gameId);
         FileWriter.getInstance().removeGame(game);
     }
 
+    @Override
     public List<String> loadAvailableGameIds() throws IOException {
         return FileReader.getInstance().loadAvailableGameIds();
     }
