@@ -13,7 +13,7 @@ import java.util.*;
 /*
  * Class to handle game logic
  */
-public class GameController  implements IGameController {
+public class GameController {
 
     private Map<UUID, Game> activeGames = new HashMap<>();
 
