@@ -6,11 +6,61 @@ import interfaces.IGameController;
 import model.*;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class GameControllerFassade implements IGameController {
+import static view.gui.util.UIConstants.SOCKET_PORT;
+
+/**
+ * Client-side implementation of the game logic
+ * Implements IGameController
+ * The corresponding GameController on the server also implements IGameController
+ * A connection is made by sockets
+ */
+public class GameControllerFacade implements IGameController {
+
+    private static IGameController instance;
+    private Socket clientSocket;
+    private PrintWriter printWriter;
+
+    private GameControllerFacade() {
+        initSocket();
+    }
+
+    public static IGameController getInstance() {
+        if (instance == null) {
+            instance = new GameControllerFacade();
+        }
+        return instance;
+    }
+
+    public static void main(String... args) {
+        getInstance();
+    }
+
+    private void initSocket() {
+        try {
+            clientSocket = new Socket("localhost", SOCKET_PORT);
+            printWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            printWriter.println("Hello from socket");
+            printWriter.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        printWriter.println("Socket " + clientSocket.getLocalPort() + " connected!");
+        printWriter.flush();
+        printWriter.println("Hallo new");
+        printWriter.flush();
+    }
+
+
     /**
      * Client-side implementation
      * {@inheritDoc }

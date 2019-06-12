@@ -11,6 +11,7 @@ public class ServerThread extends Thread {
     }
 
     public void run() {
+        System.out.println("Socket connected!");
         InputStream is = null;
         BufferedReader br = null;
         DataOutputStream out = null;
@@ -32,12 +33,12 @@ public class ServerThread extends Thread {
                     socket.close();
                 } else {
                     //MARK: DO ALL THE GAME LOGIC HERE
+                    System.out.println(line);
                 }
             } catch(IOException e) {
                 e.printStackTrace();
                 return;
             }
         }
-
     }
 }
