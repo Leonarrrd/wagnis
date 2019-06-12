@@ -56,8 +56,9 @@ public class GameControllerFacade implements IGameController {
 
         printWriter.println("Socket " + clientSocket.getLocalPort() + " connected!");
         printWriter.flush();
-        printWriter.println("Hallo new");
+        printWriter.println("attack");
         printWriter.flush();
+        printWriter.close();
     }
 
 

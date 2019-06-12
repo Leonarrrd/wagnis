@@ -1,7 +1,12 @@
 package server;
 
+import controller.GameController;
+import exceptions.GameNotFoundException;
+import model.Game;
+
 import java.io.*;
 import java.net.Socket;
+import java.util.UUID;
 
 public class ServerThread extends Thread {
     private Socket socket;
@@ -26,18 +31,42 @@ public class ServerThread extends Thread {
         }
 
         String line;
-        while(true) {
+        while (true) {
             try {
                 line = br.readLine();
-                if((line == null) ||line.equalsIgnoreCase("quit")) {
+
+                //TODO: SPLIT line to format;
+                //MARK: Exception werfen?
+                if ((line == null) || line.equalsIgnoreCase("quit")) {
                     socket.close();
                 } else {
                     //MARK: DO ALL THE GAME LOGIC HERE
-                    System.out.println(line);
+                    UUID gameId = UUID.fromString("blabal");
+                    Game game = GameController.getInstance().getGameById(gameId);
+                    switch (game.getTurn().getPhase()) {
+                        case USE_CARDS:
+
+                            break;
+                        case PLACE_UNITS:
+                            break;
+                        case ATTACK:
+                            break;
+                        case TRAIL_UNITS:
+                            break;
+                        case PERFORM_ANOTHER_ATTACK:
+                            break;
+                        case MOVE:
+                            break;
+                        case PERFORM_ANOTHER_MOVE:
+                            break;
+                        default:
+                            break;
+                    }
+
                 }
-            } catch(IOException e) {
+
+            } catch (GameNotFoundException | IOException e) {
                 e.printStackTrace();
-                return;
             }
         }
     }

@@ -12,6 +12,7 @@ import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.LogHBox;
 import view.gui.panes.DiceGridPane;
+import view.gui.sockets.GameControllerFacade;
 import view.gui.viewhelper.CountryViewHelper;
 import view.gui.viewhelper.LastFightCountries;
 
@@ -266,6 +267,7 @@ public class GUIControl {
     }
 
     public boolean hasCountryToMoveTo(Country country){
+        //FIXME: GameController statt GraphController
             List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
             return countriesInGraph.size() == 1;
     }
