@@ -6,6 +6,8 @@ import model.*;
 import exceptions.*;
 import persistence.FileReader;
 import persistence.FileWriter;
+import helpermodels.GameInit;
+import serverhelper.InitHelper;
 
 import java.io.IOException;
 import java.util.*;
@@ -37,6 +39,12 @@ public class GameController implements IGameController {
         return instance;
     }
 
+
+    @Override
+    public void createGameRoom(UUID gameId, String hostPlayerName) {
+        InitHelper.createNewGame(gameId, hostPlayerName);
+    }
+
     /**
      * Server-side implementation
      * {@inheritDoc }
@@ -56,7 +64,7 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public Game initNewGame() throws IOException, InvalidFormattedDataException {
+    public void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException, NoSuchPlayerException {
         Map<String, Country> countries = null;
         List<Continent> continents = null;
         List<Mission> missions = null;
@@ -70,10 +78,23 @@ public class GameController implements IGameController {
         cards = cdc.createCardDeck();
         cardDeck = (ArrayList) ((ArrayList) cards).clone();
 
-        Game game = new Game(UUID.randomUUID(), countries, continents, missions, cards, cardDeck);
+        GameInit gameInit = InitHelper.getGameInitById(gameId);
+        Game game = new Game(gameInit.getGameId(), countries, continents, missions, cards, cardDeck);
+
+        for (String player : gameInit.getPlayerList()){
+            pc.addPlayer(game, player);
+        }
+
         activeGames.put(game.getId(), game);
 
-        return game;
+
+        pc.assignMissions(game);
+        wc.assignCountries(game);
+        tc.setTurn(game);
+
+
+        System.out.println(game.toString());
+
     }
 
     /**
@@ -308,7 +329,7 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void setTurn(UUID gameId) throws GameNotFoundException {
+    public void setTurn(UUID gameId) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         tc.setTurn(game);
     }

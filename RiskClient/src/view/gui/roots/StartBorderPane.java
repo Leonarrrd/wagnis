@@ -1,6 +1,7 @@
 package view.gui.roots;
 
 import javafx.scene.layout.BorderPane;
+import view.gui.boxes.JoinGameVBox;
 import view.gui.boxes.RiskTitleHBox;
 import view.gui.boxes.StartMenuLeftVBox;
 import view.gui.helper.RiskUIElement;
@@ -22,6 +23,11 @@ public class StartBorderPane extends BorderPane implements RiskUIElement, StartM
     @Override
     public void newGameSelected() {
         this.setCenter(new StartNewGameGridPane());
+    }
+
+    @Override
+    public void joinGameSelected() {
+        this.setCenter(new JoinGameVBox());
     }
 
     @Override

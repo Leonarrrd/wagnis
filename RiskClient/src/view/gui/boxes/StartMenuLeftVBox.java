@@ -10,6 +10,7 @@ public class StartMenuLeftVBox extends VBox implements RiskUIElement {
 
     public interface StartActionListener {
         void newGameSelected();
+        void joinGameSelected();
         void loadGameSelected();
         void exitGameSelected();
     }
@@ -36,6 +37,16 @@ public class StartMenuLeftVBox extends VBox implements RiskUIElement {
             }
         });
         this.getChildren().add(newGameTextBox);
+
+        Text joinGameText = new Text("Join Game");
+        joinGameText.getStyleClass().add("start-menu-left-text");
+        joinGameText.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                startActionListener.joinGameSelected();
+            }
+        });
+        this.getChildren().add(joinGameText);
 
         Text loadGameText = new Text("Load Game");
         loadGameText.getStyleClass().add("start-menu-left-text");

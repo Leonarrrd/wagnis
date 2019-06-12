@@ -30,14 +30,11 @@ public class TurnController {
     /**
      * inits turn object at the start of the game
      */
-    public void setTurn(Game game) {
+    public void setTurn(Game game) throws NoSuchPlayerException {
         game.setTurn(new Turn(game.getPlayers().get(0), Phase.PLACE_UNITS));
         // TODO: the method call should PROBABLY be refactored to somewhere else
-        try {
-            GameController.getInstance().awardUnits(game.getId(), game.getPlayers().get(0));
-        } catch (GameNotFoundException | NoSuchPlayerException e) {
-            e.printStackTrace();
-        }
+            LogicController.getInstance().awardUnits(game, game.getPlayers().get(0));
+
     }
 
     /**

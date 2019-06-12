@@ -2,12 +2,20 @@ package interfaces;
 
 import datastructures.CardBonus;
 import exceptions.*;
+import helpermodels.GameInit;
 import model.*;
 
 import java.io.IOException;
 import java.util.*;
 
 public interface IGameController {
+
+    /**
+     * TODO: add commentary
+     * @param hostPlayerName
+     */
+    void createGameRoom(UUID gameId, String hostPlayerName);
+
 
     /**
      * Gets the game from the active game map by providing an ID
@@ -25,7 +33,7 @@ public interface IGameController {
      * @throws IOException If files needed to load the game could not be found (e.g. the country.dat file)
      * @throws InvalidFormattedDataException If files that are needed are saved in the wrong format (e.g. the country.dat file)
      */
-    Game initNewGame() throws IOException, InvalidFormattedDataException;
+    void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException, NoSuchPlayerException;
 
     /**
      * Loads a saved game
@@ -207,7 +215,7 @@ public interface IGameController {
 
     boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
-    void setTurn(UUID gameId) throws GameNotFoundException;
+    void setTurn(UUID gameId) throws GameNotFoundException, NoSuchPlayerException;
 
     void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException;
 

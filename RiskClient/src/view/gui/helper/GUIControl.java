@@ -49,25 +49,6 @@ public class GUIControl {
         return instance;
     }
 
-    public void initNewGame(List<Player> players) {
-        Game game = null;
-        try {
-            game = GameController.getInstance().initNewGame();
-        } catch (IOException | InvalidFormattedDataException e) {
-            new ErrorAlert(e);
-        }
-        game.setPlayers(players);
-        try {
-            GameController.getInstance().assignMissions(game.getId());
-            GameController.getInstance().assignCountries(game.getId());
-            GameController.getInstance().setTurn(game.getId());
-        } catch (Exception e) {
-            new ErrorAlert(e);
-        }
-        this.gameId = game.getId();
-    }
-
-
     public void initLoadedGame(UUID gameId) {
         try {
             gc.loadGame(gameId);

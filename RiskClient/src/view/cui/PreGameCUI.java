@@ -28,11 +28,8 @@ public class PreGameCUI extends AbstractCUI {
             new TurnCUI().run();
         } else {
             Game game = null;
-            try {
-                game = gc.initNewGame();
-            } catch (IOException | InvalidFormattedDataException e) {
-                e.printStackTrace();
-            }
+                game = null;
+
             setGameId(game.getId());
             System.out.println("Game with id " + gameId + " initialized.");
             while (!preGameDone) {
@@ -61,7 +58,7 @@ public class PreGameCUI extends AbstractCUI {
             try {
                 gc.setTurn(gameId);
                 gc.assignMissions(gameId);
-            } catch (GameNotFoundException | MaximumNumberOfPlayersReachedException e) {
+            } catch (GameNotFoundException | MaximumNumberOfPlayersReachedException | NoSuchPlayerException e) {
                 e.printStackTrace();
             }
             countryAssignmentphase(gameId);

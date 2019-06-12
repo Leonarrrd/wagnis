@@ -1,11 +1,14 @@
 package server;
 
 import controller.GameController;
-import exceptions.GameNotFoundException;
+import exceptions.*;
+import helpermodels.GameInit;
 import model.Game;
+import serverhelper.InitHelper;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLOutput;
 import java.util.UUID;
 
 public class ServerThread extends Thread {
@@ -40,32 +43,41 @@ public class ServerThread extends Thread {
                 if ((line == null) || line.equalsIgnoreCase("quit")) {
                     socket.close();
                 } else {
-                    //MARK: DO ALL THE GAME LOGIC HERE
-                    UUID gameId = UUID.fromString("blabal");
-                    Game game = GameController.getInstance().getGameById(gameId);
-                    switch (game.getTurn().getPhase()) {
-                        case USE_CARDS:
-
-                            break;
-                        case PLACE_UNITS:
-                            break;
-                        case ATTACK:
-                            break;
-                        case TRAIL_UNITS:
-                            break;
-                        case PERFORM_ANOTHER_ATTACK:
-                            break;
-                        case MOVE:
-                            break;
-                        case PERFORM_ANOTHER_MOVE:
-                            break;
-                        default:
-                            break;
+                    if (line.split(",")[0].equals("gamecreate")) {
+                        GameController.getInstance().createGameRoom(UUID.fromString(line.split(",")[1]), line.split(",")[2]);
+                        System.out.println("Room created: " + line.split(",")[1]);
+                    } else if (line.split(",")[0].equals("gameinit")) {
+                        System.out.println("player joined: " + line.split(",")[2]);
+                        InitHelper.addPlayer(UUID.fromString(line.split(",")[1]), line.split(",")[2]);
+                    } else if (line.split(",")[0].equals("gamestart")) {
+                        System.out.println("Game Starts...");
+                        GameController.getInstance().initNewGame(UUID.fromString(line.split(",")[1]));
+                    }else {
+                        //MARK: DO ALL THE GAME LOGIC HERE
+                        UUID gameId = UUID.fromString("blabal");
+                        Game game = GameController.getInstance().getGameById(gameId);
+                        switch (game.getTurn().getPhase()) {
+                            case USE_CARDS:
+                                break;
+                            case PLACE_UNITS:
+                                break;
+                            case ATTACK:
+                                break;
+                            case TRAIL_UNITS:
+                                break;
+                            case PERFORM_ANOTHER_ATTACK:
+                                break;
+                            case MOVE:
+                                break;
+                            case PERFORM_ANOTHER_MOVE:
+                                break;
+                            default:
+                                break;
+                        }
                     }
-
                 }
 
-            } catch (GameNotFoundException | IOException e) {
+            } catch (GameNotFoundException | IOException | CountriesAlreadyAssignedException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | NoSuchPlayerException e) {
                 e.printStackTrace();
             }
         }

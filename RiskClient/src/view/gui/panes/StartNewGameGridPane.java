@@ -1,6 +1,7 @@
 package view.gui.panes;
 
 import datastructures.Color;
+import exceptions.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,10 +15,13 @@ import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.roots.GameBorderPane;
+import view.gui.sockets.GameControllerFacade;
 import view.gui.viewhelper.PlayerColorItem;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class StartNewGameGridPane extends GridPane implements RiskUIElement {
 
@@ -31,109 +35,25 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement {
     @Override
     public void doStuff() {
 
-        playerColorItems.add(new PlayerColorItem(playerTextField(), colorComboBox()));
-        playerColorItems.add(new PlayerColorItem(playerTextField(), colorComboBox()));
-        fillGridWithListItems();
-        this.add(addAnotherPlayerButton(), 0, playerColorItems.size());
-        this.add(startGameButton(), 2, playerColorItems.size()+2);
-    }
 
+        UUID gameId = UUID.randomUUID();
 
-    private void updatePlayerFields() {
-        this.getChildren().clear();
-        fillGridWithListItems();
-        if (playerColorItems.size() < 5) {
-            this.add(addAnotherPlayerButton(), 0, playerColorItems.size());
-        }
-        if(playerColorItems.size() > 2) {
-            this.add(removePlayerButton(), 2, playerColorItems.size()-1);
-        }
-        this.add(startGameButton(), 2, playerColorItems.size()+2);
+        GameControllerFacade.getInstance().createGameRoom(gameId,"Hannes");
 
-    }
-
-    private ComboBox colorComboBox() {
-        ComboBox<String> comboBox = new ComboBox<>();
-        List<String> enumValues = new ArrayList<>();
-        for (Object o : Color.class.getEnumConstants()) {
-            enumValues.add(o.toString());
-        }
-
-        ObservableList<String> colors = FXCollections.observableArrayList(enumValues);
-        comboBox.setItems(colors);
-        comboBox.getSelectionModel().select(playerColorItems.size());
-        comboBox.setDisable(true);
-
-        return comboBox;
-    }
-
-    private TextField playerTextField() {
-        TextField textField = new TextField();
-
-        return textField;
-    }
-
-    private Button addAnotherPlayerButton() {
-        Button addAnotherPlayerButton = new Button("+");
-        addAnotherPlayerButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                playerColorItems.add(new PlayerColorItem(playerTextField(), colorComboBox()));
-                updatePlayerFields();
-            }
-        });
-        return addAnotherPlayerButton;
-    }
-
-    private Button removePlayerButton() {
-        Button removePlayerButton = new Button("-");
-        removePlayerButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                playerColorItems.remove(playerColorItems.size()-1);
-                updatePlayerFields();
-            }
-        });
-        return removePlayerButton;
-    }
-
-    private Button startGameButton() {
         Button startGameButton = new Button("Start game");
         startGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                startGame();
+                try {
+                    GameControllerFacade.getInstance().initNewGame(gameId);
+                } catch (IOException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | GameNotFoundException | CountriesAlreadyAssignedException | NoSuchPlayerException e) {
+                    e.printStackTrace();
+                }
             }
         });
-        return startGameButton;
+
+        this.add(startGameButton, 0,0);
+
     }
 
-    private void fillGridWithListItems() {
-        for (int i = 0; i < playerColorItems.size(); i++) {
-            this.add(playerColorItems.get(i).getPlayerTextField(), 0, i);
-            this.add(playerColorItems.get(i).getPlayerComboBox(), 1, i);
-        }
-    }
-
-
-    private void startGame() {
-        //MARK: access to game logic
-        //NOTE: Maybe refactor some of this to GUIControl?
-        List<Player> players = new ArrayList<>();
-        for(PlayerColorItem pci : playerColorItems) {
-            if(pci.getPlayerTextField().getText().equals("") || pci.getPlayerTextField().getText() == null) {
-                new ErrorAlert("Game could not be started.", "Please select a name.", "Please make sure every Player has a name selected.");
-                return;
-            }
-            String playerName = pci.getPlayerTextField().getText();
-
-            Color playerColor = Color.valueOf((String) pci.getPlayerComboBox().getSelectionModel().getSelectedItem());
-            Player p = new Player(playerName, playerColor);
-            players.add(p);
-        }
-
-        GUIControl.getInstance().initNewGame(players);
-
-        getScene().setRoot(new GameBorderPane());
-    }
 }
