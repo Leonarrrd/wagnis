@@ -22,7 +22,7 @@ public class StartBorderPane extends BorderPane implements RiskUIElement, StartM
 
     @Override
     public void newGameSelected() {
-        this.setCenter(new StartNewGameGridPane());
+        this.setCenter(new StartNewGameGridPane(true));
     }
 
     @Override

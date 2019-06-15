@@ -30,11 +30,18 @@ import java.util.UUID;
 public class StartNewGameGridPane extends GridPane implements RiskUIElement, Updatable {
 
     VBox playerList = new VBox();
+    private boolean isHost;
 
-    public StartNewGameGridPane() {
+
+    public StartNewGameGridPane(boolean isHost) {
+        this.isHost = isHost;
         applyStyling(this, "start-new-game-grid-pane", "start_new_game_grid_pane.css");
         addAsUpdateElement(getId(), this);
-        doStuff();
+        this.add(playerList, 0, 0);
+
+        if (isHost) {
+            doStuff();
+        }
     }
 
     @Override
@@ -44,13 +51,12 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
         UUID gameId = UUID.randomUUID();
         String hostPlayerName = "Hannes";
         GameControllerFacade.getInstance().createGameRoom(gameId, hostPlayerName, null);
-
+        GUIControl.getInstance().getPlayersInLobby().add(hostPlayerName);
         Text text = new Text(hostPlayerName);
         text.getStyleClass().add("player-name-text");
 
         playerList.getChildren().add(text);
 
-        this.add(playerList, 0, 0);
 
         Button startGameButton = new Button("Start game");
         startGameButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -70,6 +76,7 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
 
     @Override
     public void update() {
+
         playerList.getChildren().clear();
         for (String playerName : GUIControl.getInstance().getPlayersInLobby()) {
             playerList.getChildren().add(playerNameText(playerName));
@@ -78,7 +85,7 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
 
     private Text playerNameText(String playerName) {
 
-        Text text = new Text();
+        Text text = new Text(playerName);
         text.getStyleClass().add("player-name-text");
         return text;
 

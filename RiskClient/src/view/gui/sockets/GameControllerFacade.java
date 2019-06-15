@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static helper.Events.CREATE_GAME;
+import static helper.Events.PLAYER_JOIN;
+import static helper.Events.START_GAME;
 import static view.gui.util.UIConstants.SOCKET_PORT;
 
 /**
@@ -27,6 +30,7 @@ public class GameControllerFacade implements IGameController {
     public Socket clientSocket;
     private PrintWriter printWriter;
     private BufferedReader reader;
+    private ObjectInputStream ois;
 
     private GameControllerFacade() {
         initSocket();
@@ -66,11 +70,11 @@ public class GameControllerFacade implements IGameController {
     @Override
     public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) {
 
-            printWriter.println("gamecreate," + gameId.toString() + "," + hostPlayerName + "," + clientSocket.getInetAddress().toString());
-            printWriter.flush();
+        printWriter.println(CREATE_GAME + "," + gameId.toString() + "," + hostPlayerName + "," + clientSocket.getInetAddress().toString());
+        printWriter.flush();
 
-            Thread waitThread = new LobbyWaitThread(reader);
-            waitThread.start();
+        Thread waitThread = new LobbyWaitThread(reader);
+        waitThread.start();
 
     }
 
@@ -89,11 +93,16 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException {
-        printWriter.println("gamestart," + gameId.toString());
+        printWriter.println(START_GAME + "," + gameId.toString());
         printWriter.flush();
 
-        String response = reader.readLine();
-        System.out.println(response);
+        //new LobbyWaitThread(reader).start();
+        try {
+            Object obj = new ObjectInputStream(clientSocket.getInputStream()).readObject();
+            System.out.println(obj);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -113,7 +122,7 @@ public class GameControllerFacade implements IGameController {
     public void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
         try {
             printWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            printWriter.println("playerjoin," + gameId.toString() + "," + playerName);
+            printWriter.println(PLAYER_JOIN + "," + gameId.toString() + "," + playerName);
             printWriter.flush();
             Thread waitThread = new LobbyWaitThread(reader);
             waitThread.start();

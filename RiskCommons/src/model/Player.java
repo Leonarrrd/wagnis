@@ -2,6 +2,8 @@ package model;
 import datastructures.CardBonus;
 import datastructures.CardSymbol;
 import datastructures.Color;
+
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.Map;
 /*
 * Class  for player objects
  */
-public class Player {
+public class Player implements Serializable {
     private String name;
     private Color color;
     private Map<String, Country> countries = new HashMap<>(); // maybe better as Map<String, Country>?

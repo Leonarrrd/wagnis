@@ -1,6 +1,8 @@
 package model;
 
-public abstract class Mission {
+import java.io.Serializable;
+
+public abstract class Mission implements Serializable {
 
     private int id;
 

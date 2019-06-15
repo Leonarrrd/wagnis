@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AttackResult {
+public class AttackResult implements Serializable {
     private List<Integer> attackerDices;
     private List<Integer> defenderDices;
     private Country winner;

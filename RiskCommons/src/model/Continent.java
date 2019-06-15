@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Continent {
+public class Continent implements Serializable {
     private int id;
     private String name;
     private int bonusUnits;

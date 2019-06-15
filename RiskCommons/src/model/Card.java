@@ -6,7 +6,9 @@ package model;
 
 import datastructures.CardSymbol;
 
-public class Card {
+import java.io.Serializable;
+
+public class Card implements Serializable {
     private int id;
     private CardSymbol symbol;
 

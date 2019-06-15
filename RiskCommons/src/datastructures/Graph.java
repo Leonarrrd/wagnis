@@ -3,10 +3,11 @@ package datastructures;
 
 import model.Country;
 
+import java.io.Serializable;
 import java.util.*;
 
 
-public class Graph {
+public class Graph implements Serializable {
 
     private Map<Country, List<Country>> adjVertices;
 

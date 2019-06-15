@@ -2,7 +2,9 @@ package model;
 
 import datastructures.Phase;
 
-public class Turn {
+import java.io.Serializable;
+
+public class Turn implements Serializable {
 
     private Player player;
     private Phase phase;

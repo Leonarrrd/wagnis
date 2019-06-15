@@ -1,13 +1,12 @@
 package controller;
 
-import com.sun.corba.se.spi.activation.Server;
 import interfaces.IGameController;
 import datastructures.CardBonus;
 import model.*;
 import exceptions.*;
 import persistence.FileReader;
 import persistence.FileWriter;
-import helpermodels.GameInit;
+import helper.GameInit;
 import server.ServerManager;
 
 import java.io.IOException;

@@ -1,5 +1,7 @@
 package datastructures;
 
-public enum Color {
+import java.io.Serializable;
+
+public enum Color implements Serializable {
     BLUE, RED, GREEN, YELLOW, MACADAMIA
 }

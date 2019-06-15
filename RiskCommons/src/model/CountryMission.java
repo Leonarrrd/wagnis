@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class CountryMission extends Mission {
+public class CountryMission extends Mission implements Serializable {
 
     private int countriesToConquer = 30;
 

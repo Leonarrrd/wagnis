@@ -1,11 +1,12 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
 /*
  * Class for Country objects
  */
-public class Country {
+public class Country implements Serializable {
     private int id;
     private String name;
     private Player owner;

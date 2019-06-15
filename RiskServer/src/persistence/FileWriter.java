@@ -144,7 +144,7 @@ public class FileWriter {
      * @param game
      * @return
      */
-    private String parseGameToRecord(Game game) {
+    public static String parseGameToRecord(Game game) {
         StringBuilder sb = new StringBuilder();
         //Gameid
         sb.append(game.getId().toString());
@@ -207,6 +207,9 @@ public class FileWriter {
 
         return sb.toString();
     }
+
+
+
 
     /**
      * Writes the Persistence Representation of a game to a new line in the file that holds the game via FileOutputStream.

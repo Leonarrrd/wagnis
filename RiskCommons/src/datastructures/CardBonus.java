@@ -1,5 +1,7 @@
 package datastructures;
 
-public enum CardBonus {
+import java.io.Serializable;
+
+public enum CardBonus implements Serializable {
     INFANTRY, CAVALRY, ARTILLERY, MULTI
 }

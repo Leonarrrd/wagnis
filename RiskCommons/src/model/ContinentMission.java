@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ContinentMission extends Mission {
+public class ContinentMission extends Mission implements Serializable {
 
     private List<Continent> continentsToConquer;
 

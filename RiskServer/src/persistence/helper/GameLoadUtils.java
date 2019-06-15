@@ -1,6 +1,7 @@
 package persistence.helper;
 
-import model.Mission;
+
+
 import persistence.helpermodels.RawCountryData;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class GameLoadUtils {
     public static final String PROJECT_DATA_DIR = System.getProperty("user.dir") + "/../RiskServer/data/";
 
 
-    public static String[] evaluatePlayerArrayFromDatString(String dataString) {
+    public static String[] evaluatePlayerArrayFromDataString(String dataString) {
         dataString = dataString.replace("[", "").replace("]", "");
         String[] split = dataString.split(":");
         return split;

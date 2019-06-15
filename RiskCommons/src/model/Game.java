@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.*;
 
 /*
@@ -7,7 +8,7 @@ import java.util.*;
  * Holds (all?) information about the current game state
  * Could potentially be amplified to hold all game information so that we could save and load games
  */
-public class Game {
+public class Game implements Serializable {
 
     private UUID id;
     private List<Player> players = new ArrayList<Player>();

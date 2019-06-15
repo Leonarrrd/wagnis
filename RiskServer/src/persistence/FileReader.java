@@ -154,12 +154,6 @@ public class FileReader {
         return missions;
     }
 
-    /*public static void main(String... args) throws IOException, GameNotFoundException, InvalidFormattedDataException {
-        List<Country> countries = new ArrayList(getInstance().loadCountries().values());
-        List<Continent> continents = getInstance().loadContinents(countries);
-        getInstance().loadGame(UUID.fromString("c16f70fc-1fa2-41a5-919c-2332e97debf2"), countries, continents);
-    }*/
-
     /**
      * Loads available saved games
      * @return
@@ -224,7 +218,7 @@ public class FileReader {
         UUID nGameId = UUID.fromString(commaSplit[0]);
 
         //evaluate Player array
-        String[] playerNames = GameLoadUtils.evaluatePlayerArrayFromDatString(commaSplit[1]);
+        String[] playerNames = GameLoadUtils.evaluatePlayerArrayFromDataString(commaSplit[1]);
         List<Player> players = new ArrayList();
         for (String s : playerNames) {
             players.add(new Player(s));

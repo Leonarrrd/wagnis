@@ -5,6 +5,7 @@ import controller.GraphController;
 import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
+import javafx.scene.layout.GridPane;
 import model.AttackResult;
 import model.Country;
 import model.Game;
@@ -12,6 +13,8 @@ import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.LogHBox;
 import view.gui.panes.DiceGridPane;
+import view.gui.panes.StartNewGameGridPane;
+import view.gui.roots.GameBorderPane;
 import view.gui.sockets.GameControllerFacade;
 import view.gui.viewhelper.CountryViewHelper;
 import view.gui.viewhelper.LastFightCountries;
@@ -68,6 +71,12 @@ public class GUIControl {
         if (getGame().getPlayers().size() > 4) getGame().getPlayers().get(4).setColor(Color.MACADAMIA);
         // MARK: FOR TESTING
         getGame().getTurn().getPlayer().setUnitsToPlace(7);
+    }
+
+    public void switchToGameScene(UUID gameId) {
+        this.gameId = gameId;
+        //FIXME:!!!!
+        ((GridPane)componentMap.get("start-new-game-grid-pane")).getScene().setRoot(new GameBorderPane());
     }
 
     // TODO: still oversimplified

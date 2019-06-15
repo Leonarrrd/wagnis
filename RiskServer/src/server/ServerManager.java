@@ -1,7 +1,7 @@
 package server;
 
 import exceptions.GameNotFoundException;
-import helpermodels.GameInit;
+import helper.GameInit;
 
 import java.net.Socket;
 import java.util.*;

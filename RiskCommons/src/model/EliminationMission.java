@@ -2,9 +2,10 @@ package model;
 
 import datastructures.Color;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class EliminationMission extends Mission {
+public class EliminationMission extends Mission  implements Serializable {
     private Color targetColor;
     private List<Continent> continentsToConquer;
 
