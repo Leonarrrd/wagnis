@@ -14,6 +14,8 @@ public class Server {
 
         try {
             serverSocket = new ServerSocket(PORT);
+            System.out.println("Server started on " + PORT + ".");
+
         } catch (IOException e) {
             e.printStackTrace();
         }

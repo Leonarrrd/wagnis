@@ -5,9 +5,7 @@ import exceptions.*;
 import interfaces.IGameController;
 import model.*;
 
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +24,7 @@ public class GameControllerFacade implements IGameController {
     private static IGameController instance;
     public Socket clientSocket;
     private PrintWriter printWriter;
+    private BufferedReader reader;
 
     private GameControllerFacade() {
         initSocket();
@@ -46,6 +45,7 @@ public class GameControllerFacade implements IGameController {
         try {
             clientSocket = new Socket("localhost", SOCKET_PORT);
             printWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -89,6 +89,9 @@ public class GameControllerFacade implements IGameController {
     public void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException {
         printWriter.println("gamestart," + gameId.toString());
         printWriter.flush();
+
+        String response = reader.readLine();
+        System.out.println(response);
     }
 
     /**

@@ -22,12 +22,12 @@ public class ServerThread extends Thread {
         System.out.println("Socket connected!");
         InputStream is = null;
         BufferedReader br = null;
-        DataOutputStream out = null;
+        PrintWriter out = null;
 
         try {
             is = socket.getInputStream();
             br = new BufferedReader(new InputStreamReader(is));
-            out = new DataOutputStream(socket.getOutputStream());
+            out = new PrintWriter(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -52,6 +52,8 @@ public class ServerThread extends Thread {
                     } else if (line.split(",")[0].equals("gamestart")) {
                         System.out.println("Game Starts...");
                         GameController.getInstance().initNewGame(UUID.fromString(line.split(",")[1]));
+                        out.println("hello");
+                        out.flush();
                     }else {
                         //MARK: DO ALL THE GAME LOGIC HERE
                         UUID gameId = UUID.fromString("blabal");
