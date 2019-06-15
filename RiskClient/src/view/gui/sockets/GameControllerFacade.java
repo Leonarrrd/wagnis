@@ -4,6 +4,8 @@ import datastructures.CardBonus;
 import exceptions.*;
 import interfaces.IGameController;
 import model.*;
+import view.gui.helper.GUIControl;
+import view.gui.sockets.threads.LobbyWaitThread;
 
 import java.io.*;
 import java.net.Socket;
@@ -62,14 +64,14 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void createGameRoom(UUID gameId, String hostPlayerName) {
-        try {
-            printWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            printWriter.println("gamecreate," + gameId.toString() + "," + hostPlayerName);
+    public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) {
+
+            printWriter.println("gamecreate," + gameId.toString() + "," + hostPlayerName + "," + clientSocket.getInetAddress().toString());
             printWriter.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+            Thread waitThread = new LobbyWaitThread(reader);
+            waitThread.start();
+
     }
 
     /**
@@ -111,8 +113,10 @@ public class GameControllerFacade implements IGameController {
     public void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
         try {
             printWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            printWriter.println("gameinit," + gameId.toString() + "," + playerName);
+            printWriter.println("playerjoin," + gameId.toString() + "," + playerName);
             printWriter.flush();
+            Thread waitThread = new LobbyWaitThread(reader);
+            waitThread.start();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -6,6 +6,7 @@ import helpermodels.GameInit;
 import model.*;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.*;
 
 public interface IGameController {
@@ -14,7 +15,7 @@ public interface IGameController {
      * TODO: add commentary
      * @param hostPlayerName
      */
-    void createGameRoom(UUID gameId, String hostPlayerName);
+    void createGameRoom(UUID gameId, String hostPlayerName, Socket socket);
 
 
     /**

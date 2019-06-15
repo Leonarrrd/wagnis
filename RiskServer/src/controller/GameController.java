@@ -1,5 +1,6 @@
 package controller;
 
+import com.sun.corba.se.spi.activation.Server;
 import interfaces.IGameController;
 import datastructures.CardBonus;
 import model.*;
@@ -7,9 +8,10 @@ import exceptions.*;
 import persistence.FileReader;
 import persistence.FileWriter;
 import helpermodels.GameInit;
-import serverhelper.InitHelper;
+import server.ServerManager;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.*;
 
 /**
@@ -41,8 +43,8 @@ public class GameController implements IGameController {
 
 
     @Override
-    public void createGameRoom(UUID gameId, String hostPlayerName) {
-        InitHelper.createNewGame(gameId, hostPlayerName);
+    public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) {
+        ServerManager.getInstance().createNewGame(gameId, hostPlayerName, socket);
     }
 
     /**
@@ -78,7 +80,8 @@ public class GameController implements IGameController {
         cards = cdc.createCardDeck();
         cardDeck = (ArrayList) ((ArrayList) cards).clone();
 
-        GameInit gameInit = InitHelper.getGameInitById(gameId);
+        GameInit gameInit = ServerManager.getInstance().getGameInitById(gameId);
+
         Game game = new Game(gameInit.getGameId(), countries, continents, missions, cards, cardDeck);
 
         for (String player : gameInit.getPlayerList()){

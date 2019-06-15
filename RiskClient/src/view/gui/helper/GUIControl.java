@@ -29,6 +29,7 @@ public class GUIControl {
     private GameController gc = GameController.getInstance();
     private String selectedCountry;
     private LastFightCountries lastFightCountry;
+    private List<String> playersInLobby = new ArrayList();
 
     public Game getGame() {
         try {
@@ -47,6 +48,10 @@ public class GUIControl {
             instance = new GUIControl();
         }
         return instance;
+    }
+
+    public void playerJoined() {
+        componentMap.get("start-new-game-grid-pane").update();
     }
 
     public void initLoadedGame(UUID gameId) {
@@ -272,5 +277,13 @@ public class GUIControl {
     public void saveGame() throws GameNotFoundException, DuplicateGameIdException, IOException {
         gc.saveGame(gameId);
         getLog().update("Game has been saved successfully");
+    }
+
+    public void setPlayersInLobby(List<String> playersInLobby) {
+        this.playersInLobby = playersInLobby;
+    }
+
+    public List<String> getPlayersInLobby() {
+        return playersInLobby;
     }
 }

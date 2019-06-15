@@ -4,3 +4,8 @@
     -fx-alignment: center;
 }
 
+.player-name-text {
+    -fx-fill: white;
+    -fx-font-size: 20pt;
+}
+

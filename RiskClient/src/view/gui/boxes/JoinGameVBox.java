@@ -11,6 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import view.gui.alerts.ErrorAlert;
 import view.gui.helper.RiskUIElement;
+import view.gui.panes.StartNewGameGridPane;
+import view.gui.roots.StartBorderPane;
 import view.gui.sockets.GameControllerFacade;
 
 import java.util.UUID;
@@ -36,6 +38,7 @@ public class JoinGameVBox extends VBox implements RiskUIElement {
             @Override
             public void handle(ActionEvent event) {
                 try {
+                    ((StartBorderPane)getParent()).setCenter(new StartNewGameGridPane());
                     GameControllerFacade.getInstance().addPlayer(UUID.fromString(textFieldId.getText()), playerName.getText());
                 } catch (GameNotFoundException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException e) {
                     new ErrorAlert(e);
@@ -43,5 +46,7 @@ public class JoinGameVBox extends VBox implements RiskUIElement {
             }
         });
         getChildren().add(joinGame);
+
+
     }
 }
