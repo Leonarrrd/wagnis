@@ -83,7 +83,7 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public Game getGameById(UUID id) throws GameNotFoundException, IOException, ClassNotFoundException {
+    public Game getGameById(UUID id) throws IOException, ClassNotFoundException {
 
         oos.writeUTF(GET_GAME + "," + id.toString());
 
@@ -97,7 +97,7 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException {
+    public void initNewGame(UUID gameId) throws IOException {
         oos.writeUTF(START_GAME + "," + gameId.toString());
         oos.flush();
     }
@@ -107,7 +107,7 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
+    public Game loadGame(UUID gameId) throws IOException, ClassNotFoundException {
         oos.writeUTF(LOAD_GAME + "," + gameId.toString());
 
         oos.flush();
@@ -134,8 +134,8 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException, IOException {
-        oos.writeUTF(ADD_COUNTRY + "," + gameId.toString() + "," +countryAsString + "," + player.getName());
+    public void addCountry(UUID gameId, String countryAsString, Player player) throws IOException {
+        oos.writeUTF(ADD_COUNTRY + "," + gameId.toString() + "," + countryAsString + "," + player.getName());
         oos.flush();
     }
 
@@ -144,7 +144,7 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
+    public void changeUnits(UUID gameId, Country country, int units) throws IOException {
         oos.writeUTF(CHANGE_UNITS + "," + gameId.toString() + "," + country.getName() + "," + units);
         oos.flush();
     }
@@ -154,7 +154,7 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) throws GameNotFoundException, NoSuchCountryException {
+    public void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) {
         //TODO: not used
     }
 
@@ -163,7 +163,7 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void assignCountries(UUID gameId) throws GameNotFoundException, CountriesAlreadyAssignedException {
+    public void assignCountries(UUID gameId)  {
         throw new UnsupportedOperationException("This method does not need to be called on client side.");
     }
 
@@ -172,8 +172,8 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void assignMissions(UUID gameId) throws GameNotFoundException, MaximumNumberOfPlayersReachedException {
-
+    public void assignMissions(UUID gameId) {
+        throw new UnsupportedOperationException("This method does not need to be called on client side.");
     }
 
     /**
@@ -181,7 +181,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public int assignUnits(UUID gameId) throws GameNotFoundException, InvalidNumberOfPlayersException {
+    public int assignUnits(UUID gameId) throws IOException {
+        oos.writeUTF(ASSIGN_UNITS + "," + gameId.toString());
+        oos.flush();
         return 0;
     }
 
@@ -190,8 +192,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
-
+    public void addCardToPlayer(UUID gameId, Player player) throws IOException {
+        oos.writeUTF(ADD_CARD + "," + gameId.toString() + "," + player.getName());
+        oos.flush();
     }
 
     /**
@@ -200,7 +203,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void addCardsToDeck(UUID gameId, List<Card> cards) {
-
+        throw new UnsupportedOperationException("This method does not need to be called on client side.");
     }
 
     /**
@@ -209,6 +212,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards) {
+        //MARK: I don't know what to do with this
         return null;
     }
 
@@ -217,7 +221,101 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
+    public void awardUnits(UUID gameId, Player player) throws IOException {
+        oos.writeUTF(AWARD_UNITS + "," + gameId.toString() + "," + player.getName());
+        oos.flush();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws IOException {
+        oos.writeUTF(CHANGE_UNITS_TO_PLACE + "," + gameId.toString() + "," + player.getName() + "," + unitChange);
+        oos.flush();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws IOException {
+        oos.writeUTF(USE_CARDS + "," + gameId.toString() + "," + player.getName() + "," + infantryCards + "," + cavalryCards + "," + artilleryCards);
+        oos.flush();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws IOException, ClassNotFoundException {
+        oos.writeUTF(GET_COUNTRIES_ATTACK_CAN_BE_LAUNCHED_FROM + "," + gameId.toString());
+        oos.flush();
+
+        return (Map<String, Country>) ois.readObject();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public Map<String, Country> getCountriesWithMoreThanOneUnit(UUID gameId, Player player) throws IOException, ClassNotFoundException {
+        oos.writeUTF(GET_COUNTRIES_WITH_MORE_THAN_ONE_UNIT + "," + gameId.toString() + "," + player.getName());
+        oos.flush();
+
+        return (Map<String, Country>) ois.readObject();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public boolean hasCountryToMoveFrom(UUID gameId, Player player) throws IOException {
+        oos.writeUTF(HAS_COUNTRY_TO_MOVE_FROM + "," + gameId.toString() + "," + player.getName());
+        oos.flush();
+
+        return ois.readBoolean();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws IOException {
+        oos.writeUTF(HAS_COUNTRY_TO_ATTACK_FROM + "," + gameId.toString() + "," + player.getName());
+        oos.flush();
+
+        return ois.readBoolean();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws IOException, ClassNotFoundException {
+        oos.writeUTF(GET_HOSTILE_NEIGHBORS + "," + gameId.toString() + "," + country.getName());
+        oos.flush();
+
+        return (Map<String, Country>) ois.readObject();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws IOException, ClassNotFoundException {
+        oos.writeUTF(FIGHT +  "," + gameId.toString() + "," +attackingCountry.getName() + "," + defendingCountry.getName() + "," + attackingUnits + ","+ defendingUnits);
+        oos.flush();
+
+        return (AttackResult) ois.readObject();
 
     }
 
@@ -226,8 +324,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException {
-
+    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws IOException {
+        oos.writeUTF(MOVE + "," + gameId.toString() + "," + srcCountry.getName() + "," + destCountry.getName() + "," + amount);
+        oos.flush();
     }
 
     /**
@@ -235,80 +334,11 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
+    public boolean checkWinCondidtion(UUID gameId, Player player) throws IOException {
+        oos.writeUTF(CHECK_WIN_CONDITION + "," + gameId.toString() + "," + player.getName());
+        oos.flush();
 
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
-        return null;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getCountriesWithMoreThanOneUnit(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
-        return null;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
-        return false;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
-        return false;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException {
-        return null;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException {
-        return null;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException {
-
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException {
-        return false;
+        return ois.readBoolean();
     }
 
     /**
@@ -317,7 +347,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void setTurn(UUID gameId) throws GameNotFoundException {
-
+        //TODO: do we need this
     }
 
     /**
@@ -325,8 +355,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
-
+    public void switchTurns(UUID gameId) throws IOException {
+        oos.writeUTF(SWITCH_TURNS + "," + gameId.toString());
+        oos.flush();
     }
 
     /**
@@ -334,8 +365,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException {
-
+    public void updatePlayerGraphMap(UUID gameId, Player p) throws IOException {
+        oos.writeUTF(UPDATE_PLAYER_GRAPH_MAP + "," + gameId.toString() + "," + p.getName());
+        oos.flush();
     }
 
     /**
@@ -343,8 +375,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
-
+    public void postPhaseCheck(UUID gameId, Turn turn) throws IOException {
+        oos.writeUTF(POST_PHASE_CHECK + "," + gameId.toString() + "," + turn.getPhase().toString());
+        oos.flush();
     }
 
     /**
@@ -352,8 +385,11 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public boolean isConnected(Country srcCountry, Country destCountry) {
-        return false;
+    public boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) throws IOException {
+        oos.writeUTF(IS_CONNECTED + "," + gameId.toString() + "," + srcCountry.getName() + "," + destCountry.getName());
+        oos.flush();
+
+        return ois.readBoolean();
     }
 
     /**
@@ -361,8 +397,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void saveGame(UUID gameId) throws GameNotFoundException, IOException, DuplicateGameIdException {
-
+    public void saveGame(UUID gameId) throws IOException {
+        oos.writeUTF(SAVE_GAME + "," + gameId.toString());
+        oos.flush();
     }
 
     /**
@@ -370,8 +407,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void removeGame(UUID gameId) throws GameNotFoundException, IOException {
-
+    public void removeGame(UUID gameId) throws IOException {
+        oos.writeUTF(REMOVE_GAME + "," + gameId.toString());
+        oos.flush();
     }
 
     /**
@@ -379,7 +417,10 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public List<String> loadAvailableGameIds() throws IOException {
-        return null;
+    public List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException {
+        oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
+        oos.flush();
+
+        return (List<String>) ois.readObject();
     }
 }

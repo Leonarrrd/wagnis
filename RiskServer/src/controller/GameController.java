@@ -377,8 +377,8 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public boolean isConnected(Country srcCountry, Country destCountry) {
-        return wc.isConnected(srcCountry, destCountry);
+    public boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) {
+        return wc.isConnected(gameId, srcCountry, destCountry);
     }
 
     /**

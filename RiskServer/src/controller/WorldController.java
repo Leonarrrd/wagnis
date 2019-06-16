@@ -228,7 +228,7 @@ public class WorldController {
         if (!srcCountry.getOwner().equals(destCountry.getOwner())) {
             throw new CountryNotOwnedException(srcCountry);
         }
-        if(!isConnected(srcCountry, destCountry)) {
+        if(!isConnected(game.getId(), srcCountry, destCountry)) {
             throw new CountriesNotAdjacentException(srcCountry, destCountry);
         }
 
@@ -242,7 +242,7 @@ public class WorldController {
      * @param destCountry
      */
     // TODO: GAME UEBERGEBEN UND EXCEPTIONS
-    boolean isConnected(Country srcCountry, Country destCountry) {
+    boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) {
         return GraphController.getInstance().getPlayerGraphMap().get(srcCountry.getOwner()).evaluateCountriesAllowedToMoveTo(srcCountry.getName()).contains(destCountry.getName());
     }
 

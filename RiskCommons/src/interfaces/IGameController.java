@@ -122,7 +122,7 @@ public interface IGameController {
      * @throws GameNotFoundException
      * @throws InvalidNumberOfPlayersException
      */
-    int assignUnits(UUID gameId) throws GameNotFoundException, InvalidNumberOfPlayersException;
+    int assignUnits(UUID gameId) throws GameNotFoundException, InvalidNumberOfPlayersException, IOException;
 
     /**
      * Adds a card to a player after a successful attack
@@ -134,7 +134,7 @@ public interface IGameController {
      * @throws NoSuchCardException if the card with the provided id does not exist
      * @throws CardAlreadyOwnedException if the player already owns this exact card
      */
-    void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException;
+    void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException;
 
     /**
      * Adds cards to the Card Deck that is "drawn" from
@@ -164,7 +164,7 @@ public interface IGameController {
      * @throws GameNotFoundException if the game with the provided Id could not be found
      * @throws NoSuchPlayerException if the player to award units to does not exist
      */
-    void awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException;
+    void awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
     /**
      * Changes the units that can be placed by a player
@@ -176,22 +176,22 @@ public interface IGameController {
      * @throws GameNotFoundException if the game with the provided Id could not be found
      * @throws NoSuchPlayerException
      */
-    void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException;
+    void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
 
-    void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException;
+    void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException, IOException;
 
-    Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException;
+    Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException, ClassNotFoundException;
 
-    Map<String, Country> getCountriesWithMoreThanOneUnit(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException;
-
-
-    boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException;
+    Map<String, Country> getCountriesWithMoreThanOneUnit(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException, ClassNotFoundException;
 
 
-    boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException;
+    boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException;
 
-    Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException;
+
+    boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException;
+
+    Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException;
 
     /**
      * Carries out one round of an attack
@@ -210,9 +210,9 @@ public interface IGameController {
      * @throws GameNotFoundException if the game with the provided game Id could not be found
      * @throws NoSuchCountryException if the given countries do not exist
      */
-    AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException;
+    AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException;
 
-    void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException;
+    void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException, IOException;
 
 
     boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
@@ -221,17 +221,17 @@ public interface IGameController {
 
     void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException;
 
-    void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException;
+    void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
     void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException;
 
-    boolean isConnected(Country srcCountry, Country destCountry);
+    boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) throws IOException;
 
     void saveGame(UUID gameId) throws GameNotFoundException, IOException, DuplicateGameIdException;
 
     void removeGame(UUID gameId) throws GameNotFoundException, IOException;
 
-    List<String> loadAvailableGameIds() throws IOException;
+    List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException;
 
 
 }
