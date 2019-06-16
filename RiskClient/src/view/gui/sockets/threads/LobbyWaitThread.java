@@ -7,9 +7,7 @@ import model.Game;
 import view.gui.helper.GUIControl;
 import view.gui.sockets.GameControllerFacade;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +18,10 @@ import static helper.Events.START_GAME;
 
 public class LobbyWaitThread extends Thread {
 
-    private BufferedReader reader;
+    private ObjectInputStream reader;
 
 
-    public LobbyWaitThread(BufferedReader reader) {
+    public LobbyWaitThread(ObjectInputStream reader) {
         this.reader = reader;
 
     }
@@ -34,7 +32,8 @@ public class LobbyWaitThread extends Thread {
         System.out.println("waiting for response...");
         while (true) {
             try {
-                String response = reader.readLine();
+                String response = reader.readUTF();
+
                 if (response != null) {
                     String[] split = response.split(",");
                     if (split[0] != null) {
@@ -52,38 +51,26 @@ public class LobbyWaitThread extends Thread {
                                 }
                             });
 
-                        }
-                        if (split[0].equals(START_GAME)) {
-                            //TODO: GUI update game
-                            System.out.println("Game started");
-                            UUID gameId = UUID.fromString(split[1]);
-
-
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-
-                                    try {
-                                        GameControllerFacade.getInstance().initNewGame(gameId);
-                                    } catch (IOException | InvalidFormattedDataException | InvalidPlayerNameException | MaximumNumberOfPlayersReachedException | CountriesAlreadyAssignedException | GameNotFoundException | NoSuchPlayerException e) {
-                                        e.printStackTrace();
-                                    }
-                                    GUIControl.getInstance().switchToGameScene(gameId);
-                                }
-                            });
-
+                        } else if (split[0].equals(START_GAME)) {
+                            Game game = (Game) reader.readObject();
+                            GameController.getInstance().activeGames.put(game.getId(), game);
+                            GUIControl.getInstance().switchToGameScene(game.getId());
                             this.interrupt();
-
+                            break;
                         }
+
+
                     }
+
                 }
 
-            } catch (IOException  e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
 
         }
     }
-};
+
+}
 

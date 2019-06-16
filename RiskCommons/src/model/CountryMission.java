@@ -5,6 +5,9 @@ import java.util.List;
 
 public class CountryMission extends Mission implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+
     private int countriesToConquer = 30;
 
     public CountryMission(int id, int countriesToConquer){

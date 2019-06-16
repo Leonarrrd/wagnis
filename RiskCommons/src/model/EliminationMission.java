@@ -6,6 +6,10 @@ import java.io.Serializable;
 import java.util.List;
 
 public class EliminationMission extends Mission  implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+
     private Color targetColor;
     private List<Continent> continentsToConquer;
 

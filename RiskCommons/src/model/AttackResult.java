@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 
 public class AttackResult implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+
     private List<Integer> attackerDices;
     private List<Integer> defenderDices;
     private Country winner;

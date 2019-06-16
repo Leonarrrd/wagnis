@@ -13,6 +13,10 @@ import java.util.Map;
 * Class  for player objects
  */
 public class Player implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+
     private String name;
     private Color color;
     private Map<String, Country> countries = new HashMap<>(); // maybe better as Map<String, Country>?

@@ -1,6 +1,7 @@
 package interfaces;
 
 import datastructures.CardBonus;
+import datastructures.Color;
 import exceptions.*;
 import model.*;
 
@@ -14,7 +15,7 @@ public interface IGameController {
      * TODO: add commentary
      * @param hostPlayerName
      */
-    void createGameRoom(UUID gameId, String hostPlayerName, Socket socket);
+    void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) throws Exception;
 
 
     /**
@@ -24,7 +25,7 @@ public interface IGameController {
      * @return The active Game-Object
      * @throws GameNotFoundException if the game could not be found with the provided Id
      */
-    Game getGameById(UUID id) throws GameNotFoundException;
+    Game getGameById(UUID id) throws GameNotFoundException, IOException, ClassNotFoundException;
 
     /**
      * Initalizes a new game
@@ -44,18 +45,19 @@ public interface IGameController {
      * @throws GameNotFoundException if the game with the provided Id could not be found
      * @throws InvalidFormattedDataException if the saved game file is corrupted
      */
-    Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException;
+    Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException;
 
     /**
      * Methods that adds a player to the game
      *
      * @param gameId The game Id of the game that the player should be added to
      * @param playerName The name the player should have
+     * @param color The player's color
      * @throws GameNotFoundException if the game with the provided Id could not be found
      * @throws MaximumNumberOfPlayersReachedException if there are already enough players added
      * @throws InvalidPlayerNameException if the Name uses delimitters or other invalid characters
      */
-    void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException;
+    void addPlayer(UUID gameId, String playerName, Color color) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, IOException;
 
     /**
      * TODO: add comments
@@ -68,7 +70,7 @@ public interface IGameController {
      * @throws CountryAlreadyOccupiedException
      * @throws NoSuchCountryException
      */
-    void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException;
+    void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException, IOException;
 
     /**
      * Changes the units from a country by providing the Country-Object and the units
@@ -79,7 +81,7 @@ public interface IGameController {
      * @throws GameNotFoundException if the game with the provided Id could not be found
      * @throws NoSuchCountryException if the country the units should be added to does not exist
      */
-    void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException;
+    void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException, IOException;
 
     /**
      * TODO: Add commentary

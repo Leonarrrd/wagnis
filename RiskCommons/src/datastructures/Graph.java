@@ -8,6 +8,8 @@ import java.util.*;
 
 
 public class Graph implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 
     private Map<Country, List<Country>> adjVertices;
 

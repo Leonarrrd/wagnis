@@ -39,7 +39,7 @@ public class PreGameCUI extends AbstractCUI {
                 try {
                     if (!ans.equals("done")) {
 
-                        gc.addPlayer(game.getId(), ans);
+                        //gc.addPlayer(game.getId(), ans);
 
                         System.out.println(ans + " has been added.");
                         if (gc.getGameById(gameId).getPlayers().size() == 5) {
@@ -51,7 +51,7 @@ public class PreGameCUI extends AbstractCUI {
                     } else {
                         preGameDone = true;
                     }
-                } catch (GameNotFoundException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException e) {
+                } catch (GameNotFoundException e) {
                     e.printStackTrace();
                 }
             }

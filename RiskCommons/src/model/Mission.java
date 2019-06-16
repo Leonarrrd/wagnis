@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 public abstract class Mission implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+
     private int id;
 
     public Mission(int id){

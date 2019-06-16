@@ -5,6 +5,9 @@ import java.util.List;
 
 public class ContinentMission extends Mission implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+
     private List<Continent> continentsToConquer;
 
     public ContinentMission(int id, List<Continent> continentsToConquer){

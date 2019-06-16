@@ -1,6 +1,7 @@
 package view.gui.sockets;
 
 import datastructures.CardBonus;
+import datastructures.Color;
 import exceptions.*;
 import interfaces.IGameController;
 import model.*;
@@ -13,9 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import static helper.Events.CREATE_GAME;
-import static helper.Events.PLAYER_JOIN;
-import static helper.Events.START_GAME;
+import static helper.Events.*;
 import static view.gui.util.UIConstants.SOCKET_PORT;
 
 /**
@@ -28,9 +27,10 @@ public class GameControllerFacade implements IGameController {
 
     private static IGameController instance;
     public Socket clientSocket;
-    private PrintWriter printWriter;
-    private BufferedReader reader;
-    private ObjectInputStream ois;
+    OutputStream os;
+    InputStream is;
+    ObjectInputStream ois;
+    ObjectOutputStream oos;
 
     private GameControllerFacade() {
         initSocket();
@@ -50,17 +50,16 @@ public class GameControllerFacade implements IGameController {
     private void initSocket() {
         try {
             clientSocket = new Socket("localhost", SOCKET_PORT);
-            printWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            os = clientSocket.getOutputStream();
+            is = clientSocket.getInputStream();
+            oos = new ObjectOutputStream(clientSocket.getOutputStream());
+            ois = new ObjectInputStream(clientSocket.getInputStream());
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        //printWriter.println("Socket " + clientSocket.getLocalPort() + " connected!");
-
-        printWriter.flush();
     }
 
     /**
@@ -68,12 +67,64 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) {
+    public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) throws IOException {
 
-        printWriter.println(CREATE_GAME + "," + gameId.toString() + "," + hostPlayerName + "," + clientSocket.getInetAddress().toString());
-        printWriter.flush();
 
-        Thread waitThread = new LobbyWaitThread(reader);
+        oos.writeUTF(CREATE_GAME + "," + gameId.toString() + "," + hostPlayerName + "," + clientSocket.getInetAddress().toString());
+        oos.flush();
+
+
+        Thread waitThread = new LobbyWaitThread(ois);
+        waitThread.start();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public Game getGameById(UUID id) throws GameNotFoundException, IOException, ClassNotFoundException {
+
+        oos.writeUTF(GET_GAME + "," + id.toString());
+
+        oos.flush();
+        return (Game) ois.readObject();
+
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException {
+        oos.writeUTF(START_GAME + "," + gameId.toString());
+        oos.flush();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
+        oos.writeUTF(LOAD_GAME + "," + gameId.toString());
+
+        oos.flush();
+        return (Game) ois.readObject();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public void addPlayer(UUID gameId, String playerName, Color color) throws IOException {
+
+        oos.writeUTF(PLAYER_JOIN + "," + gameId.toString() + "," + playerName);
+        oos.flush();
+
+        Thread waitThread = new LobbyWaitThread(ois);
         waitThread.start();
 
     }
@@ -83,8 +134,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public Game getGameById(UUID id) throws GameNotFoundException {
-        return null;
+    public void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException, IOException {
+        oos.writeUTF(ADD_COUNTRY + "," + gameId.toString() + "," +countryAsString + "," + player.getName());
+        oos.flush();
     }
 
     /**
@@ -92,61 +144,9 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException {
-        printWriter.println(START_GAME + "," + gameId.toString());
-        printWriter.flush();
-
-        //new LobbyWaitThread(reader).start();
-        try {
-            Object obj = new ObjectInputStream(clientSocket.getInputStream()).readObject();
-            System.out.println(obj);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException {
-        return null;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
-        try {
-            printWriter = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            printWriter.println(PLAYER_JOIN + "," + gameId.toString() + "," + playerName);
-            printWriter.flush();
-            Thread waitThread = new LobbyWaitThread(reader);
-            waitThread.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException {
-
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException {
-
+    public void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
+        oos.writeUTF(CHANGE_UNITS + "," + gameId.toString() + "," + country.getName() + "," + units);
+        oos.flush();
     }
 
     /**
@@ -155,7 +155,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) throws GameNotFoundException, NoSuchCountryException {
-
+        //TODO: not used
     }
 
     /**
@@ -164,7 +164,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void assignCountries(UUID gameId) throws GameNotFoundException, CountriesAlreadyAssignedException {
-
+        throw new UnsupportedOperationException("This method does not need to be called on client side.");
     }
 
     /**

@@ -6,13 +6,10 @@ import model.Game;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static helper.Events.CREATE_GAME;
-import static helper.Events.PLAYER_JOIN;
-import static helper.Events.START_GAME;
+import static helper.Events.*;
 
 public class ServerThread extends Thread {
     private Socket socket;
@@ -23,14 +20,21 @@ public class ServerThread extends Thread {
 
     public void run() {
         System.out.println("Socket connected!");
-        InputStream is = null;
-        BufferedReader br = null;
-        PrintWriter out = null;
+        InputStream is;
+        ObjectInputStream ois;
+        OutputStream os;
+        ObjectOutputStream oos;
+
 
         try {
             is = socket.getInputStream();
-            br = new BufferedReader(new InputStreamReader(is));
-            out = new PrintWriter(socket.getOutputStream());
+            ois = new ObjectInputStream(is);
+            os = socket.getOutputStream();
+            oos = new ObjectOutputStream(os);
+
+            ServerManager.getInstance().getSocketObjectOutputStreamMap().put(socket, oos);
+            ServerManager.getInstance().getSocketObjectInputStreamMap().put(socket, ois);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -38,9 +42,10 @@ public class ServerThread extends Thread {
         }
 
         String line;
+
         while (true) {
             try {
-                line = br.readLine();
+                line = ois.readUTF();
 
                 //TODO: SPLIT line to format;
                 //MARK: Exception werfen?
@@ -51,7 +56,7 @@ public class ServerThread extends Thread {
                     if (split[0].equals(CREATE_GAME)) {
                         GameController.getInstance().createGameRoom(UUID.fromString(split[1]), split[2], socket);
                         System.out.println("Room created: " + split[1]);
-                    } else if (line.split(",")[0].equals(PLAYER_JOIN)) {
+                    } else if (split[0].equals(PLAYER_JOIN)) {
                         UUID gameId = UUID.fromString(split[1]);
                         String playerName = split[2];
                         System.out.println("player joined: " + playerName);
@@ -66,23 +71,37 @@ public class ServerThread extends Thread {
                         }
 
                         for (Socket s : ServerManager.getInstance().getGameInitById(gameId).getSockets()) {
-                            PrintWriter pw = new PrintWriter(s.getOutputStream());
-                            pw.println(PLAYER_JOIN + "," + sb.toString());
-                            pw.flush();
+                            ObjectOutputStream sOos = ServerManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                            sOos.writeUTF(PLAYER_JOIN + "," + sb.toString());
+                            sOos.flush();
                         }
-                    } else if (line.split(",")[0].equals(START_GAME)) {
+                    } else if (split[0].equals(START_GAME)) {
                         System.out.println("Game Starts...");
+
                         UUID gameId = UUID.fromString(split[1]);
+                        for (Socket s : ServerManager.getInstance().getGameInitById(gameId).getSockets()) {
+                            ObjectOutputStream sOos = ServerManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                            sOos.writeUTF(START_GAME);
+                            sOos.flush();
+                        }
                         GameController.getInstance().initNewGame(gameId);
                         List<Socket> gameSockets = ServerManager.getInstance().getGameInitById(gameId).getSockets();
                         ServerManager.getInstance().getGameIdSocketMap().put(gameId, gameSockets);
 
                         for (Socket s : ServerManager.getInstance().getGameIdSocketMap().get(gameId)) {
-                            PrintWriter pw = new PrintWriter(s.getOutputStream());
-                            pw.println(START_GAME + "," + gameId.toString());
-                            pw.flush();
 
+                            Game game = GameController.getInstance().getGameById(gameId);
+                            ObjectOutputStream sOos = ServerManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                            sOos.writeObject(game);
+                             sOos.flush();
                         }
+
+                    } else if (split[0].equals(GET_GAME)) {
+                        UUID gameId = UUID.fromString(split[1]);
+                        Game game = GameController.getInstance().getGameById(gameId);
+                        ObjectOutputStream sOos = ServerManager.getInstance().getSocketObjectOutputStreamMap().get(socket);
+                        sOos.writeObject(game);
+                        sOos.flush();
 
                     } else {
                         //MARK: DO ALL THE GAME LOGIC HERE
@@ -109,8 +128,15 @@ public class ServerThread extends Thread {
                     }
                 }
 
-            } catch (GameNotFoundException | IOException | CountriesAlreadyAssignedException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | NoSuchPlayerException e) {
+            } catch (GameNotFoundException |  CountriesAlreadyAssignedException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | NoSuchPlayerException e) {
                 e.printStackTrace();
+            } catch (IOException e) {
+                try {
+                    socket.close();
+                    break;
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
     }

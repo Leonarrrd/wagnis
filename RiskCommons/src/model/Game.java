@@ -10,6 +10,9 @@ import java.util.*;
  */
 public class Game implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
+
     private UUID id;
     private List<Player> players = new ArrayList<Player>();
     private Map<String, Country> countries;

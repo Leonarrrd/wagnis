@@ -1,5 +1,6 @@
 package controller;
 
+import datastructures.Color;
 import exceptions.InvalidPlayerNameException;
 import exceptions.MaximumNumberOfPlayersReachedException;
 import exceptions.NoSuchPlayerException;
@@ -30,14 +31,14 @@ public class PlayerController {
      * @throws MaximumNumberOfPlayersReachedException
      * @throws InvalidPlayerNameException
      */
-    Player addPlayer(Game game, String name) throws MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
+    Player addPlayer(Game game, String name, Color color) throws MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
         if (game.getPlayers().size() >= 5) {
             throw new MaximumNumberOfPlayersReachedException(game.getPlayers().size());
         }
         if(Utils.stringContainsDelimitters(name)) {
             throw new InvalidPlayerNameException(name);
         }
-        Player newPlayer = new Player(name);
+        Player newPlayer = new Player(name, color);
         game.getPlayers().add(newPlayer);
         return newPlayer;
 

@@ -36,7 +36,7 @@ public class GUIControl {
 
     public Game getGame() {
         try {
-            return gc.getGameById(gameId);
+            return GameControllerFacade.getInstance().getGameById(gameId);
         } catch (GameNotFoundException e) {
             new ErrorAlert(e);
             return null;
@@ -75,7 +75,8 @@ public class GUIControl {
 
     public void switchToGameScene(UUID gameId) {
         this.gameId = gameId;
-        //FIXME:!!!!
+
+        //FIXME:!!!! workaround to access the scene
         ((GridPane)componentMap.get("start-new-game-grid-pane")).getScene().setRoot(new GameBorderPane());
     }
 

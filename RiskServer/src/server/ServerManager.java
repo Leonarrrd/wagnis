@@ -3,6 +3,8 @@ package server;
 import exceptions.GameNotFoundException;
 import helper.GameInit;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
 
@@ -12,6 +14,8 @@ public class ServerManager {
     private List<GameInit> gameInitList = new ArrayList();
     private List<String> sockets = new ArrayList();
     private Map<UUID, List<Socket>> gameIdSocketMap = new HashMap<>();
+    private Map<Socket, ObjectOutputStream> socketObjectOutputStreamMap = new HashMap<>();
+    private Map<Socket, ObjectInputStream> socketObjectInputStreamMap = new HashMap<>();
 
 
     private ServerManager() {
@@ -59,5 +63,13 @@ public class ServerManager {
 
     public Map<UUID, List<Socket>> getGameIdSocketMap() {
         return gameIdSocketMap;
+    }
+
+    public Map<Socket, ObjectOutputStream> getSocketObjectOutputStreamMap() {
+        return socketObjectOutputStreamMap;
+    }
+
+    public Map<Socket, ObjectInputStream> getSocketObjectInputStreamMap() {
+        return socketObjectInputStreamMap;
     }
 }

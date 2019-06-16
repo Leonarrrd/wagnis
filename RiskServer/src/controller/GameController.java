@@ -1,5 +1,6 @@
 package controller;
 
+import datastructures.Color;
 import interfaces.IGameController;
 import datastructures.CardBonus;
 import model.*;
@@ -20,7 +21,9 @@ import java.util.*;
  */
 public class GameController implements IGameController {
 
-    private Map<UUID, Game> activeGames = new HashMap<>();
+    //FIXME: Temporary workaround to test server client game initialization
+    //FIXME: make 'public' 'private' again if it's done.
+    public Map<UUID, Game> activeGames = new HashMap<>();
 
     private static GameController instance;
     private LogicController lc = LogicController.getInstance();
@@ -83,8 +86,11 @@ public class GameController implements IGameController {
 
         Game game = new Game(gameInit.getGameId(), countries, continents, missions, cards, cardDeck);
 
-        for (String player : gameInit.getPlayerList()){
-            pc.addPlayer(game, player);
+        //TODO: Farben könnte man auch noch schöner zuweisen.
+        for (int i = 0; i < gameInit.getPlayerList().size(); i++) {
+            Color color = Color.values()[i];
+            pc.addPlayer(game, gameInit.getPlayerList().get(i), color);
+
         }
 
         activeGames.put(game.getId(), game);
@@ -122,9 +128,9 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void addPlayer(UUID gameId, String playerName) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
+    public void addPlayer(UUID gameId, String playerName, Color color) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
         Game game = getGameById(gameId);
-        pc.addPlayer(game, playerName);
+        pc.addPlayer(game, playerName, color);
     }
 
     /**

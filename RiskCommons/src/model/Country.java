@@ -7,6 +7,10 @@ import java.util.*;
  * Class for Country objects
  */
 public class Country implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+
     private int id;
     private String name;
     private Player owner;
