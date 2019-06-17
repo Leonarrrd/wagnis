@@ -10,7 +10,7 @@ public class Events {
     public static final String ADD_COUNTRY = "ADD_COUNTRY";
     public static final String CHANGE_UNITS = "CHANGE_UNITS";
     public static final String ASSIGN_UNITS = "ASSIGN_UNITS";
-    public static final String ADD_CARD = "ASSIGN_UNITS";
+    public static final String ADD_CARD = "ADD_CARD";
     public static final String AWARD_UNITS = "AWARD_UNITS";
     public static final String CHANGE_UNITS_TO_PLACE = "CHANGE_UNITS_TO_PLACE";
     public static final String USE_CARDS = "USE_CARDS";

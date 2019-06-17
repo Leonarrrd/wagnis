@@ -2,15 +2,16 @@ package server;
 
 import exceptions.GameNotFoundException;
 import helper.GameInit;
+import server.threads.ServerLobbyThread;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
 
-public class ServerManager {
+public class SocketGameManager {
 
-    private static ServerManager instance;
+    private static SocketGameManager instance;
     private List<GameInit> gameInitList = new ArrayList();
     private List<String> sockets = new ArrayList();
     private Map<UUID, List<Socket>> gameIdSocketMap = new HashMap<>();
@@ -18,12 +19,12 @@ public class ServerManager {
     private Map<Socket, ObjectInputStream> socketObjectInputStreamMap = new HashMap<>();
 
 
-    private ServerManager() {
+    private SocketGameManager() {
     }
 
-    public static ServerManager getInstance() {
+    public static SocketGameManager getInstance() {
         if (instance == null) {
-            instance = new ServerManager();
+            instance = new SocketGameManager();
         }
         return instance;
     }
@@ -72,4 +73,6 @@ public class ServerManager {
     public Map<Socket, ObjectInputStream> getSocketObjectInputStreamMap() {
         return socketObjectInputStreamMap;
     }
+
+
 }

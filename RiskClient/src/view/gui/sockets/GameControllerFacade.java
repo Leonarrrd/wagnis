@@ -86,10 +86,9 @@ public class GameControllerFacade implements IGameController {
     public Game getGameById(UUID id) throws IOException, ClassNotFoundException {
 
         oos.writeUTF(GET_GAME + "," + id.toString());
-
         oos.flush();
-        return (Game) ois.readObject();
 
+        return (Game) ois.readObject();
     }
 
     /**

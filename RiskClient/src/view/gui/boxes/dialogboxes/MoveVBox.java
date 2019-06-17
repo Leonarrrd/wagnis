@@ -90,7 +90,7 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
                     firstCountrySelected = !firstCountrySelected;
                 }
             } else {
-                if (!GameController.getInstance().isConnected(GUIControl.getInstance().getSelectedCountry(),
+                if (!GameController.getInstance().isConnected(GUIControl.getInstance().getGame().getId(), GUIControl.getInstance().getSelectedCountry(),
                         GUIControl.getInstance().getGame().getCountries().get(moveFromText.getText()))){
                     new Alert(Alert.AlertType.INFORMATION, "Countries are not connected").showAndWait();
                 } else {

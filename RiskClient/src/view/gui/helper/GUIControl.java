@@ -37,10 +37,10 @@ public class GUIControl {
     public Game getGame() {
         try {
             return GameControllerFacade.getInstance().getGameById(gameId);
-        } catch (GameNotFoundException e) {
-            new ErrorAlert(e);
-            return null;
+        } catch (GameNotFoundException | IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 
     private GUIControl() {

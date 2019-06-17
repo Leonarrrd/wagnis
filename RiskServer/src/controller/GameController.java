@@ -8,7 +8,7 @@ import exceptions.*;
 import persistence.FileReader;
 import persistence.FileWriter;
 import helper.GameInit;
-import server.ServerManager;
+import server.SocketGameManager;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -46,7 +46,7 @@ public class GameController implements IGameController {
 
     @Override
     public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) {
-        ServerManager.getInstance().createNewGame(gameId, hostPlayerName, socket);
+        SocketGameManager.getInstance().createNewGame(gameId, hostPlayerName, socket);
     }
 
     /**
@@ -82,7 +82,7 @@ public class GameController implements IGameController {
         cards = cdc.createCardDeck();
         cardDeck = (ArrayList) ((ArrayList) cards).clone();
 
-        GameInit gameInit = ServerManager.getInstance().getGameInitById(gameId);
+        GameInit gameInit = SocketGameManager.getInstance().getGameInitById(gameId);
 
         Game game = new Game(gameInit.getGameId(), countries, continents, missions, cards, cardDeck);
 

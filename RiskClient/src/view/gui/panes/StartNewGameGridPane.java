@@ -30,48 +30,67 @@ import java.util.UUID;
 public class StartNewGameGridPane extends GridPane implements RiskUIElement, Updatable {
 
     VBox playerList = new VBox();
-    private boolean isHost;
+    private String hostPlayerName;
 
 
-    public StartNewGameGridPane(boolean isHost) {
-        this.isHost = isHost;
+    /**
+     * Constructor for player joining the game
+     * also called in the initialization for the hostplayer
+     */
+    public StartNewGameGridPane() {
+
         applyStyling(this, "start-new-game-grid-pane", "start_new_game_grid_pane.css");
         addAsUpdateElement(getId(), this);
         this.add(playerList, 0, 0);
+        doStuff();
 
-        if (isHost) {
-            doStuff();
-        }
+
+    }
+
+    /**
+     * Constructor for initializing the game by the host player
+     *
+     * @param hostPlayerName Name for the host player provided by TextInputDialog beforehand
+     */
+    public StartNewGameGridPane(String hostPlayerName) {
+        this();
+        this.hostPlayerName = hostPlayerName;
+        doStuff();
     }
 
     @Override
     public void doStuff() {
 
+        if (this.hostPlayerName != null) {
+            UUID gameId = UUID.randomUUID();
 
-        UUID gameId = UUID.randomUUID();
-        String hostPlayerName = "Hannes";
-        GameControllerFacade.getInstance().createGameRoom(gameId, hostPlayerName, null);
-        GUIControl.getInstance().getPlayersInLobby().add(hostPlayerName);
-        Text text = new Text(hostPlayerName);
-        text.getStyleClass().add("player-name-text");
-
-        playerList.getChildren().add(text);
-
-
-        Button startGameButton = new Button("Start game");
-        startGameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    GameControllerFacade.getInstance().initNewGame(gameId);
-                } catch (IOException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | GameNotFoundException | CountriesAlreadyAssignedException | NoSuchPlayerException e) {
-                    e.printStackTrace();
-                }
+            try {
+                GameControllerFacade.getInstance().createGameRoom(gameId, hostPlayerName, null);
+            } catch (Exception e) {
+                new ErrorAlert(e);
             }
-        });
+            GUIControl.getInstance().getPlayersInLobby().add(hostPlayerName);
+            Text text = new Text(hostPlayerName);
+            text.getStyleClass().add("player-name-text");
 
-        this.add(startGameButton, 1, playerList.getChildren().size());
+            playerList.getChildren().add(text);
 
+
+            Button startGameButton = new Button("Start game");
+            startGameButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    try {
+                        GameControllerFacade.getInstance().initNewGame(gameId);
+                    } catch (IOException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | GameNotFoundException | CountriesAlreadyAssignedException | NoSuchPlayerException e) {
+                        new ErrorAlert(e);
+                    }
+                }
+            });
+
+            this.add(startGameButton, 1, playerList.getChildren().size());
+
+        }
     }
 
     @Override
