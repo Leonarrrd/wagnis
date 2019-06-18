@@ -201,7 +201,8 @@ public class GUIControl {
      */
     public void countryClicked(String countryString) {
         selectedCountry = countryString;
-        switch (getGame().getTurn().getPhase()) {
+        Game game = getGame();
+        switch (game.getTurn().getPhase()) {
             case ATTACK:
                 Updatable attackVBox = componentMap.get("attack-vbox");
                 attackVBox.update();

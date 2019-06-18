@@ -18,10 +18,12 @@ import static helper.Events.*;
 public class ServerIOThread extends Thread {
     private Socket socket;
     private ObjectInputStream ois;
+    private ObjectOutputStream oos;
 
-    public ServerIOThread(Socket socket, ObjectInputStream ois) {
+    public ServerIOThread(Socket socket, ObjectInputStream ois, ObjectOutputStream oos) {
         this.socket = socket;
         this.ois = ois;
+        this.oos = oos;
     }
 
     @Override
@@ -76,18 +78,18 @@ public class ServerIOThread extends Thread {
                         SocketGameManager.getInstance().getGameIdSocketMap().put(gameId, gameSockets);
 
                         for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
-                            getOosFromSocket(s).writeUTF(START_GAME + "," + gameId);
+                            ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
 
-                            getOosFromSocket(s).flush();
+                            sOos.writeUTF(START_GAME + "," + gameId);
+                            sOos.flush();
                         }
 
                         break;
                     case GET_GAME:
                         game = GameController.getInstance().getGameById(gameId);
-                        for(Socket s: SocketGameManager.getInstance().getGameIdSocketMap().get(gameId)) {
-                            getOosFromSocket(s).writeObject(game);
-                            getOosFromSocket(s).flush();
-                        }
+                        oos.writeObject(game);
+                        oos.flush();
+
                         break;
                     case PLACE_UNITS:
                         //split[2] should be country name
@@ -98,6 +100,9 @@ public class ServerIOThread extends Thread {
                         Country country = game.getCountries().get(countryString);
 
                         GameController.getInstance().changeUnits(gameId, country, units);
+                        break;
+                    default:
+                        oos.flush();
                         break;
                 }
 
@@ -116,7 +121,4 @@ public class ServerIOThread extends Thread {
 
     }
 
-    private ObjectOutputStream getOosFromSocket(Socket socket){
-        return SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(socket);
-    }
 }

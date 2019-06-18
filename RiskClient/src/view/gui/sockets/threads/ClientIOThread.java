@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static helper.Events.*;
 
@@ -54,15 +55,7 @@ public class ClientIOThread extends Thread {
                         });
                         break;
                     case START_GAME:
-                        writer.writeUTF(GET_GAME + "," + split[1]);
-                        Game game = (Game) reader.readObject();
-                        System.out.println(game);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                GUIControl.getInstance().switchToGameScene(game.getId());
-                            }
-                        });
+                        GUIControl.getInstance().switchToGameScene(UUID.fromString(split[1]));
                         break;
                     case PLACE_UNITS:
                         //split[1] countryName
@@ -72,7 +65,7 @@ public class ClientIOThread extends Thread {
                         break;
                 }
 
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (IOException  e) {
                 //e.printStackTrace();
             }
 

@@ -28,7 +28,7 @@ public class ServerThread extends Thread {
             SocketGameManager.getInstance().getSocketObjectOutputStreamMap().put(socket, oos);
             SocketGameManager.getInstance().getSocketObjectInputStreamMap().put(socket, ois);
 
-            ServerIOThread serverIOThread = new ServerIOThread(socket, ois);
+            ServerIOThread serverIOThread = new ServerIOThread(socket, ois, oos);
             serverIOThread.start();
 
         } catch (IOException e) {
