@@ -23,7 +23,7 @@ import static view.gui.util.UIConstants.SOCKET_PORT;
  * A connection is made by sockets
  */
 public class GameControllerFacade implements IGameController {
-
+    //QUESTION warum keine acccess modifier für die Streams? Was ist das für ein pattern?
     private static IGameController instance;
     public Socket clientSocket;
     OutputStream os;
@@ -73,8 +73,8 @@ public class GameControllerFacade implements IGameController {
         oos.flush();
 
 
-        Thread waitThread = new ClientIOThread(ois);
-        waitThread.start();
+        Thread clientIOThread = new ClientIOThread(ois, oos);
+        clientIOThread.start();
     }
 
     /**
@@ -122,8 +122,8 @@ public class GameControllerFacade implements IGameController {
         oos.writeUTF(PLAYER_JOIN + "," + gameId.toString() + "," + playerName);
         oos.flush();
 
-        Thread waitThread = new ClientIOThread(ois);
-        waitThread.start();
+        Thread clientIOThread = new ClientIOThread(ois, oos);
+        clientIOThread.start();
 
     }
 
@@ -145,6 +145,7 @@ public class GameControllerFacade implements IGameController {
     public void changeUnits(UUID gameId, Country country, int units) throws IOException {
         oos.writeUTF(CHANGE_UNITS + "," + gameId.toString() + "," + country.getName() + "," + units);
         oos.flush();
+
     }
 
     /**

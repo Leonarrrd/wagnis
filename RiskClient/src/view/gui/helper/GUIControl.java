@@ -1,10 +1,10 @@
 package view.gui.helper;
 
-import controller.GameController;
 import controller.GraphController;
 import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
+import interfaces.IGameController;
 import javafx.scene.layout.GridPane;
 import model.AttackResult;
 import model.Country;
@@ -13,7 +13,6 @@ import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.LogHBox;
 import view.gui.panes.DiceGridPane;
-import view.gui.panes.StartNewGameGridPane;
 import view.gui.roots.GameBorderPane;
 import view.gui.sockets.GameControllerFacade;
 import view.gui.viewhelper.CountryViewHelper;
@@ -26,17 +25,17 @@ import java.util.*;
 public class GUIControl {
 
     private static GUIControl instance;
-    public Map<String, Updatable> componentMap = new HashMap<>();
+    private Map<String, Updatable> componentMap = new HashMap<>();
     private UUID gameId;
     private Map<String, CountryViewHelper> countryViewMap = CountryRelationLoadHelper.buildCountryViewMap();
-    private GameController gc = GameController.getInstance();
+    private IGameController gc = GameControllerFacade.getInstance();
     private String selectedCountry;
     private LastFightCountries lastFightCountry;
     private List<String> playersInLobby = new ArrayList();
 
     public Game getGame() {
         try {
-            return GameControllerFacade.getInstance().getGameById(gameId);
+            return gc.getGameById(gameId);
         } catch (GameNotFoundException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -60,9 +59,10 @@ public class GUIControl {
     public void initLoadedGame(UUID gameId) {
         try {
             gc.loadGame(gameId);
-        } catch (GameNotFoundException | IOException | InvalidFormattedDataException e) {
+        } catch (GameNotFoundException| ClassNotFoundException | IOException | InvalidFormattedDataException e) {
             new ErrorAlert(e);
         }
+
         this.gameId = gameId;
         getGame().getPlayers().get(0).setColor(Color.BLUE);
         getGame().getPlayers().get(1).setColor(Color.RED);
@@ -83,8 +83,8 @@ public class GUIControl {
     // TODO: still oversimplified
     public void useCards(int infantryCards, int cavalryCards, int artilleryCards){
         try {
-            GameController.getInstance().useCards(gameId, getCurrentPlayer(), infantryCards, cavalryCards, artilleryCards);
-        } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException e) {
+            gc.useCards(gameId, getCurrentPlayer(), infantryCards, cavalryCards, artilleryCards);
+        } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -92,14 +92,14 @@ public class GUIControl {
     public void placeUnits(int units) {
         try {
             Country c = getGame().getCountries().get(selectedCountry);
-            GameController.getInstance().changeUnits(gameId, c, units);
-            GameController.getInstance().changeUnitsToPlace(gameId, getGame().getTurn().getPlayer(), -units);
+            gc.changeUnits(gameId, c, units);
+            gc.changeUnitsToPlace(gameId, getGame().getTurn().getPlayer(), -units);
             componentMap.get(selectedCountry + "info-hbox").update();
             getLog().update(c.getOwner() + " placed " + units + " units on " + c.getName());
-        } catch (GameNotFoundException | NoSuchCountryException | NoSuchPlayerException e) {
+        } catch (IOException | GameNotFoundException | NoSuchCountryException | NoSuchPlayerException e) {
             new ErrorAlert(e);
-        }
-        if (getGame().getTurn().getPlayer().getUnitsToPlace() == 0) {
+        } 
+        if (getGame().getTurn().getPlayer().getUnitsToPlace() <= 0) {
             forwardTurnPhase();
         } else {
             Updatable dialogVBox = componentMap.get("dialog-vbox");
@@ -115,8 +115,8 @@ public class GUIControl {
         Country defCountry = getGame().getCountries().get(defendingCountry);
         AttackResult ar = null;
         try {
-            ar = GameController.getInstance().fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
-        } catch (NotEnoughUnitsException | CountriesNotAdjacentException | GameNotFoundException | NoSuchCountryException e) {
+            ar = gc.fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
+        } catch (IOException | ClassNotFoundException | NotEnoughUnitsException | CountriesNotAdjacentException | GameNotFoundException | NoSuchCountryException e) {
             new ErrorAlert(e);
         }
         componentMap.get(attackingCountry + "info-hbox").update();
@@ -155,7 +155,7 @@ public class GUIControl {
             componentMap.get(lastFightCountry.getSrcCountry() + "info-hbox").update();
             componentMap.get(lastFightCountry.getDestCountry() + "info-hbox").update();
             setTurnManually(Phase.ATTACK);
-        } catch (CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | NoSuchCountryException | CountryNotOwnedException e) {
+        } catch (IOException | CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | NoSuchCountryException | CountryNotOwnedException e) {
             new ErrorAlert(e);
         }
     }
@@ -167,7 +167,7 @@ public class GUIControl {
             gc.moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount);
             getLog().update(srcCountryObj.getOwner().getName() + " moved " + amount + " from " + srcCountry + " to " + destCountry);
 
-        } catch (CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
+        } catch (IOException | CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
             new ErrorAlert(e);
         }
         componentMap.get(srcCountry + "info-hbox").update();
@@ -200,7 +200,6 @@ public class GUIControl {
      * @param
      */
     public void countryClicked(String countryString) {
-        // MARK: right now, selectedCountry will only be updated if a country is clicked
         selectedCountry = countryString;
         switch (getGame().getTurn().getPhase()) {
             case ATTACK:
@@ -243,8 +242,8 @@ public class GUIControl {
     public Country getCountryFromString(String countryString) {
         try {
             return gc.getGameById(gameId).getCountries().get(countryString);
-        } catch (GameNotFoundException e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException|  GameNotFoundException e) {
+            new ErrorAlert(e);
             return null;
         }
     }
@@ -263,7 +262,7 @@ public class GUIControl {
     }
 
     public boolean hasCountryToMoveTo(Country country){
-        //FIXME: GameController statt GraphController
+        //FIXME: gc statt GraphController
             List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
             return countriesInGraph.size() == 1;
     }
@@ -295,5 +294,9 @@ public class GUIControl {
 
     public List<String> getPlayersInLobby() {
         return playersInLobby;
+    }
+
+    public Map<String, Updatable> getComponentMap() {
+        return componentMap;
     }
 }

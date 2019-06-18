@@ -95,7 +95,6 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
 
     @Override
     public void update() {
-
         playerList.getChildren().clear();
         for (String playerName : GUIControl.getInstance().getPlayersInLobby()) {
             playerList.getChildren().add(playerNameText(playerName));

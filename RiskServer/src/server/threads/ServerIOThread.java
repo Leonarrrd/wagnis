@@ -2,6 +2,7 @@ package server.threads;
 
 import controller.GameController;
 import exceptions.*;
+import model.Country;
 import model.Game;
 import server.SocketGameManager;
 
@@ -33,11 +34,15 @@ public class ServerIOThread extends Thread {
             try {
                 clientInput = ois.readUTF();
                 String split[] = clientInput.split(",");
-
                 //split[0] should always be the event name
                 //split[1] should always be the game Id
                 String event = split[0];
+                System.out.println(event);
+
                 UUID gameId = UUID.fromString(split[1]);
+
+                Game game = null;
+
                 switch (event) {
                     case CREATE_GAME:
                         GameController.getInstance().createGameRoom(UUID.fromString(split[1]), split[2], socket);
@@ -65,35 +70,39 @@ public class ServerIOThread extends Thread {
                     case START_GAME:
                         System.out.println("Game Starts...");
 
-                        for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
-                            ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
-                            sOos.writeUTF(START_GAME);
-                            sOos.flush();
-                        }
+
                         GameController.getInstance().initNewGame(gameId);
                         List<Socket> gameSockets = SocketGameManager.getInstance().getGameInitById(gameId).getSockets();
                         SocketGameManager.getInstance().getGameIdSocketMap().put(gameId, gameSockets);
 
-                        for (Socket s : SocketGameManager.getInstance().getGameIdSocketMap().get(gameId)) {
-                            Game game = GameController.getInstance().getGameById(gameId);
-                            ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                        for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
+                            getOosFromSocket(s).writeUTF(START_GAME + "," + gameId);
 
-                            sOos.writeObject(game);
-                            sOos.flush();
-
+                            getOosFromSocket(s).flush();
                         }
+
                         break;
                     case GET_GAME:
-                        Game game = GameController.getInstance().getGameById(gameId);
-                        ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(socket);
-                        sOos.writeObject(game);
-                        sOos.flush();
+                        game = GameController.getInstance().getGameById(gameId);
+                        for(Socket s: SocketGameManager.getInstance().getGameIdSocketMap().get(gameId)) {
+                            getOosFromSocket(s).writeObject(game);
+                            getOosFromSocket(s).flush();
+                        }
                         break;
+                    case PLACE_UNITS:
+                        //split[2] should be country name
+                        //split[3] should be the units
+                        String countryString = split[2];
+                        int units = Integer.parseInt(split[3]);
+                        game = GameController.getInstance().getGameById(gameId);
+                        Country country = game.getCountries().get(countryString);
 
+                        GameController.getInstance().changeUnits(gameId, country, units);
+                        break;
                 }
 
 
-            } catch (GameNotFoundException | CountriesAlreadyAssignedException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | NoSuchPlayerException e) {
+            } catch (GameNotFoundException | CountriesAlreadyAssignedException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | NoSuchPlayerException | NoSuchCountryException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 try {
@@ -105,5 +114,9 @@ public class ServerIOThread extends Thread {
             }
         }
 
+    }
+
+    private ObjectOutputStream getOosFromSocket(Socket socket){
+        return SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(socket);
     }
 }

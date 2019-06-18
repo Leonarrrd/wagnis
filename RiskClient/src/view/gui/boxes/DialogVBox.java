@@ -26,11 +26,11 @@ public class DialogVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void update() {
-        Player winner = GUIControl.getInstance().checkForWinner();
-        if (winner != null){
-            new Alert(Alert.AlertType.INFORMATION, winner.getName()+ " has won the Game!").showAndWait();
-            getScene().setRoot(new StartBorderPane());
-        }
+//        Player winner = GUIControl.getInstance().checkForWinner();
+//        if (winner != null){
+//            new Alert(Alert.AlertType.INFORMATION, winner.getName()+ " has won the Game!").showAndWait();
+//            getScene().setRoot(new StartBorderPane());
+//        }
 
         switch(GUIControl.getInstance().getGame().getTurn().getPhase()) {
             case USE_CARDS:

@@ -4,23 +4,25 @@ import controller.GameController;
 import javafx.application.Platform;
 import model.Game;
 import view.gui.helper.GUIControl;
+import view.gui.sockets.GameControllerFacade;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static helper.Events.PLAYER_JOIN;
-import static helper.Events.START_GAME;
+import static helper.Events.*;
 
 public class ClientIOThread extends Thread {
 
     private ObjectInputStream reader;
+    private ObjectOutputStream writer;
 
 
-    public ClientIOThread(ObjectInputStream reader) {
+    public ClientIOThread(ObjectInputStream reader, ObjectOutputStream writer) {
         this.reader = reader;
-
+        this.writer = writer;
     }
 
     @Override
@@ -33,8 +35,10 @@ public class ClientIOThread extends Thread {
                 //TODO: Might add create game to make a list of open games?
                 // No need to check for response != null
                 String[] split = response.split(",");
-                if (split[0] != null) {
-                    if (split[0].equals(PLAYER_JOIN)) {
+                String event = split[0];
+                System.out.println(event);
+                switch(event) {
+                    case PLAYER_JOIN:
                         List<String> playerList = new ArrayList<>();
                         for (int i = 1; i <= split.length - 1; i++) {
                             playerList.add(split[i]);
@@ -48,22 +52,28 @@ public class ClientIOThread extends Thread {
 
                             }
                         });
-
-                    } else if (split[0].equals(START_GAME)) {
+                        break;
+                    case START_GAME:
+                        writer.writeUTF(GET_GAME + "," + split[1]);
                         Game game = (Game) reader.readObject();
+                        System.out.println(game);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                GUIControl.getInstance().switchToGameScene(game.getId());
+                            }
+                        });
+                        break;
+                    case PLACE_UNITS:
+                        //split[1] countryName
+                        String countryName = split[1];
 
-                        //FIXME: NOOOOOW!!!
-                        GameController.getInstance().activeGames.put(game.getId(), game);
-                        GUIControl.getInstance().switchToGameScene(game.getId());
-
-                    }
-
-
+                        GUIControl.getInstance().getComponentMap().get(countryName + "info-hbox").update();
+                        break;
                 }
 
-
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
 

@@ -13,6 +13,7 @@ public class Events {
     public static final String ADD_CARD = "ADD_CARD";
     public static final String AWARD_UNITS = "AWARD_UNITS";
     public static final String CHANGE_UNITS_TO_PLACE = "CHANGE_UNITS_TO_PLACE";
+    public static final String PLACE_UNITS = "PLACE_UNITS";
     public static final String USE_CARDS = "USE_CARDS";
     public static final String GET_COUNTRIES_ATTACK_CAN_BE_LAUNCHED_FROM = "GET_COUNTRIES_ATTACK_CAN_BE_LAUNCHED_FROM";
     public static final String GET_COUNTRIES_WITH_MORE_THAN_ONE_UNIT = "GET_COUNTRIES_WITH_MORE_THAN_ONE_UNIT";

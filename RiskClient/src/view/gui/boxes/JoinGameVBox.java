@@ -35,6 +35,7 @@ public class JoinGameVBox extends VBox implements RiskUIElement {
 
         Button joinGame = new Button("Join Game");
 
+        //QUESTION: Verstehe das nicht ganz
         joinGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {

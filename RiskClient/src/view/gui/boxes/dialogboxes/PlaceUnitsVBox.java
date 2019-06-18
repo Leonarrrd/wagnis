@@ -79,6 +79,5 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
             placeUnitsButton.setDisable(true);
             selectedCountryText.setText("<no country selected>");
         }
-
     }
 }

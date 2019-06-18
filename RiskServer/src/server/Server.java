@@ -6,7 +6,8 @@ import java.net.Socket;
 
 public class Server {
 
-    private final int PORT = 33478;
+    private final int PORT = 33478; //QUESTION: Warum dieser port?
+
 
     public void run() {
         ServerSocket serverSocket = null;
