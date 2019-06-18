@@ -1,27 +1,24 @@
 package view.gui.sockets.threads;
 
 import controller.GameController;
-import exceptions.*;
 import javafx.application.Platform;
 import model.Game;
 import view.gui.helper.GUIControl;
-import view.gui.sockets.GameControllerFacade;
 
-import java.io.*;
-import java.nio.Buffer;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static helper.Events.PLAYER_JOIN;
 import static helper.Events.START_GAME;
 
-public class LobbyWaitThread extends Thread {
+public class ClientIOThread extends Thread {
 
     private ObjectInputStream reader;
 
 
-    public LobbyWaitThread(ObjectInputStream reader) {
+    public ClientIOThread(ObjectInputStream reader) {
         this.reader = reader;
 
     }
@@ -48,6 +45,7 @@ public class LobbyWaitThread extends Thread {
                             @Override
                             public void run() {
                                 GUIControl.getInstance().playerJoined();
+
                             }
                         });
 

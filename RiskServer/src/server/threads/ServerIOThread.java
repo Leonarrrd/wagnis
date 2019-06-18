@@ -14,11 +14,11 @@ import java.util.UUID;
 
 import static helper.Events.*;
 
-public class ServerLobbyThread extends Thread {
+public class ServerIOThread extends Thread {
     private Socket socket;
     private ObjectInputStream ois;
 
-    public ServerLobbyThread(Socket socket, ObjectInputStream ois) {
+    public ServerIOThread(Socket socket, ObjectInputStream ois) {
         this.socket = socket;
         this.ois = ois;
     }

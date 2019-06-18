@@ -5,8 +5,7 @@ import datastructures.Color;
 import exceptions.*;
 import interfaces.IGameController;
 import model.*;
-import view.gui.helper.GUIControl;
-import view.gui.sockets.threads.LobbyWaitThread;
+import view.gui.sockets.threads.ClientIOThread;
 
 import java.io.*;
 import java.net.Socket;
@@ -74,7 +73,7 @@ public class GameControllerFacade implements IGameController {
         oos.flush();
 
 
-        Thread waitThread = new LobbyWaitThread(ois);
+        Thread waitThread = new ClientIOThread(ois);
         waitThread.start();
     }
 
@@ -123,7 +122,7 @@ public class GameControllerFacade implements IGameController {
         oos.writeUTF(PLAYER_JOIN + "," + gameId.toString() + "," + playerName);
         oos.flush();
 
-        Thread waitThread = new LobbyWaitThread(ois);
+        Thread waitThread = new ClientIOThread(ois);
         waitThread.start();
 
     }

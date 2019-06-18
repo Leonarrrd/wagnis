@@ -2,7 +2,6 @@ package server;
 
 import exceptions.GameNotFoundException;
 import helper.GameInit;
-import server.threads.ServerLobbyThread;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;

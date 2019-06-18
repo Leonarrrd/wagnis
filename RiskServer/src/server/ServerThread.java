@@ -1,9 +1,6 @@
 package server;
 
-import com.sun.corba.se.spi.activation.ServerManager;
-import model.Game;
-import server.threads.GameLoopThread;
-import server.threads.ServerLobbyThread;
+import server.threads.ServerIOThread;
 
 import java.io.*;
 import java.net.Socket;
@@ -31,11 +28,9 @@ public class ServerThread extends Thread {
             SocketGameManager.getInstance().getSocketObjectOutputStreamMap().put(socket, oos);
             SocketGameManager.getInstance().getSocketObjectInputStreamMap().put(socket, ois);
 
-            ServerLobbyThread serverLobbyThread = new ServerLobbyThread(socket, ois);
-            serverLobbyThread.start();
+            ServerIOThread serverIOThread = new ServerIOThread(socket, ois);
+            serverIOThread.start();
 
-
-            //new GameLoopThread(socket, ois).start();
         } catch (IOException e) {
             e.printStackTrace();
             return;
