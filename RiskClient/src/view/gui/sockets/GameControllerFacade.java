@@ -5,6 +5,7 @@ import datastructures.Color;
 import exceptions.*;
 import interfaces.IGameController;
 import model.*;
+import view.gui.helper.GUIControl;
 import view.gui.sockets.threads.ClientIOThread;
 
 import java.io.*;
@@ -52,6 +53,9 @@ public class GameControllerFacade implements IGameController {
             oos = new ObjectOutputStream(clientSocket.getOutputStream());
             ois = new ObjectInputStream(clientSocket.getInputStream());
 
+            Thread clientIOThread = new ClientIOThread(ois, oos);
+            clientIOThread.start();
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -71,8 +75,8 @@ public class GameControllerFacade implements IGameController {
         oos.flush();
 
 
-        Thread clientIOThread = new ClientIOThread(ois, oos);
-        clientIOThread.start();
+//        Thread clientIOThread = new ClientIOThread(ois, oos);
+//       clientIOThread.start();
     }
 
     /**
@@ -123,8 +127,8 @@ public class GameControllerFacade implements IGameController {
         oos.writeUTF(PLAYER_JOIN + "," + gameId.toString() + "," + playerName);
         oos.flush();
 
-        Thread clientIOThread = new ClientIOThread(ois, oos);
-        clientIOThread.start();
+//        Thread clientIOThread = new ClientIOThread(ois, oos);
+//        clientIOThread.start();
 
     }
 
@@ -144,8 +148,9 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void changeUnits(UUID gameId, Country country, int units) throws IOException {
-        //oos.writeUTF(CHANGE_UNITS + "," + gameId.toString() + "," + country.getName() + "," + units);
-        //oos.flush();
+        oos.writeUTF(CHANGE_UNITS + "," + gameId.toString() + "," + country.getName() + "," + 18);
+        oos.flush();
+
 
     }
 

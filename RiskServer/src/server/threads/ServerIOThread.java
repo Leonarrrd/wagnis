@@ -86,23 +86,22 @@ public class ServerIOThread extends Thread {
 
                         break;
                     case GET_GAME:
-                        game = GameController.getInstance().getGameById(gameId);
-                        oos.writeObject(game);
+                        oos.writeObject(GameController.getInstance().getGameById(gameId));
                         oos.flush();
-
                         break;
-                    case PLACE_UNITS:
+                    case CHANGE_UNITS:
                         //split[2] should be country name
                         //split[3] should be the units
                         String countryString = split[2];
                         int units = Integer.parseInt(split[3]);
                         game = GameController.getInstance().getGameById(gameId);
                         Country country = game.getCountries().get(countryString);
-
                         GameController.getInstance().changeUnits(gameId, country, units);
+
+                        oos.writeUTF(event + "," +  gameId.toString() + "," + countryString);
+                        oos.flush();
                         break;
                     default:
-                        oos.flush();
                         break;
                 }
 

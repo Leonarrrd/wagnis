@@ -24,7 +24,8 @@ public class Server {
         while(true) {
             try {
                 socket = serverSocket.accept();
-                SocketGameManager.getInstance().getSockets().add(socket.getInetAddress().toString());
+               //TODO: kann raus)=
+                // SocketGameManager.getInstance().getSockets().add(socket.getInetAddress().toString());
             } catch (IOException e) {
                 try {
                     socket.close();

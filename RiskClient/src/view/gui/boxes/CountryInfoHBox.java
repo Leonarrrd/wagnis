@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import model.Game;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
@@ -94,6 +95,7 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
     public void update(){
         this.flag.setImage(new Image(getFlagImageUrl()));
         // maybe also put this in own function?
+        Game game = GUIControl.getInstance().getGame();
         this.units.setText( "" + GUIControl.getInstance().getGame().getCountries().get(countryString).getUnits());
     }
 }
