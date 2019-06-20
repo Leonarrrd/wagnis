@@ -22,13 +22,10 @@ import static view.gui.util.UIConstants.SOCKET_PORT;
  * A connection is made by sockets
  */
 public class GameControllerFacade implements IGameController {
-    //QUESTION warum keine acccess modifier für die Streams? Was ist das für ein pattern?
     private static IGameController instance;
-    public Socket clientSocket;
-    OutputStream os;
-    InputStream is;
-    ObjectInputStream ois;
-    ObjectOutputStream oos;
+    private Socket clientSocket;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
 
     private GameControllerFacade() {
         initSocket();
@@ -48,8 +45,6 @@ public class GameControllerFacade implements IGameController {
     private void initSocket() {
         try {
             clientSocket = new Socket("localhost", SOCKET_PORT);
-            os = clientSocket.getOutputStream();
-            is = clientSocket.getInputStream();
             oos = new ObjectOutputStream(clientSocket.getOutputStream());
             ois = new ObjectInputStream(clientSocket.getInputStream());
 
@@ -70,13 +65,8 @@ public class GameControllerFacade implements IGameController {
     @Override
     public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) throws IOException {
 
-
         oos.writeUTF(CREATE_GAME + "," + gameId.toString() + "," + hostPlayerName + "," + clientSocket.getInetAddress().toString());
         oos.flush();
-
-
-//        Thread clientIOThread = new ClientIOThread(ois, oos);
-//       clientIOThread.start();
     }
 
     /**
@@ -89,8 +79,8 @@ public class GameControllerFacade implements IGameController {
         oos.flush();
 
         synchronized (ois) {
-            Game game = (Game) ois.readObject();
-            return game;
+            return (Game) ois.readObject();
+
         }
 
     }
@@ -126,9 +116,6 @@ public class GameControllerFacade implements IGameController {
 
         oos.writeUTF(PLAYER_JOIN + "," + gameId.toString() + "," + playerName);
         oos.flush();
-
-//        Thread clientIOThread = new ClientIOThread(ois, oos);
-//        clientIOThread.start();
 
     }
 

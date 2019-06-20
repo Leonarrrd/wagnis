@@ -1,8 +1,10 @@
 package view.gui.sockets.threads;
 
 import javafx.application.Platform;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -70,6 +72,7 @@ public class ClientIOThread extends Thread {
                     case CHANGE_UNITS:
                         //split[2] countryName
                         String countryName = split[2];
+
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -78,10 +81,20 @@ public class ClientIOThread extends Thread {
                         });
 
 
+
                         break;
                 }
-            } catch (IOException e) {
+            } catch(EOFException e) {
+                //This is fine
+            }
+            catch (IOException e) {
                 e.printStackTrace();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new ErrorAlert(e);
+                    }
+                });
             }
 
         }

@@ -12,7 +12,6 @@ public class SocketGameManager {
 
     private static SocketGameManager instance;
     private List<GameInit> gameInitList = new ArrayList();
-    private List<String> sockets = new ArrayList();
     private Map<UUID, List<Socket>> gameIdSocketMap = new HashMap<>();
     private Map<Socket, ObjectOutputStream> socketObjectOutputStreamMap = new HashMap<>();
     private Map<Socket, ObjectInputStream> socketObjectInputStreamMap = new HashMap<>();
@@ -53,13 +52,6 @@ public class SocketGameManager {
         throw new GameNotFoundException(gameId);
     }
 
-    public List<GameInit> getGameInitList() {
-        return gameInitList;
-    }
-
-    public List<String> getSockets() {
-        return sockets;
-    }
 
     public Map<UUID, List<Socket>> getGameIdSocketMap() {
         return gameIdSocketMap;

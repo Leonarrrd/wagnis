@@ -21,10 +21,7 @@ import java.util.*;
  */
 public class GameController implements IGameController {
 
-    //FIXME: Temporary workaround to test server client game initialization
-    //FIXME: make 'public' 'private' again if it's done.
-    public Map<UUID, Game> activeGames = new HashMap<>();
-
+    private Map<UUID, Game> activeGames = new HashMap<>();
     private static GameController instance;
     private LogicController lc = LogicController.getInstance();
     private PlayerController pc = PlayerController.getInstance();

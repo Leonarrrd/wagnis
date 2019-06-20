@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class Server {
 
-    private final int PORT = 33478; //QUESTION: Warum dieser port?
+    private final int PORT = 33478;
 
 
     public void run() {
@@ -24,8 +24,6 @@ public class Server {
         while(true) {
             try {
                 socket = serverSocket.accept();
-               //TODO: kann raus)=
-                // SocketGameManager.getInstance().getSockets().add(socket.getInetAddress().toString());
             } catch (IOException e) {
                 try {
                     socket.close();
@@ -35,7 +33,7 @@ public class Server {
                 e.printStackTrace();
             }
 
-            new ServerThread(socket).start();
+            new ClientRequestProcessor(socket).start();
         }
     }
 }
