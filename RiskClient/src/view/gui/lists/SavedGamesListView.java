@@ -1,20 +1,13 @@
 package view.gui.lists;
 
-import controller.GameController;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
-import model.Game;
-import persistence.FileReader;
 import view.gui.alerts.ErrorAlert;
 import view.gui.eventhandler.SavedGamesListViewItemClickHandler;
 import view.gui.helper.RiskUIElement;
-import view.gui.roots.GameBorderPane;
-
-import javax.swing.text.Element;
+import view.gui.sockets.GameControllerFacade;
 import java.io.IOException;
 
 public class SavedGamesListView extends ListView implements RiskUIElement {
@@ -28,10 +21,10 @@ public class SavedGamesListView extends ListView implements RiskUIElement {
     public void doStuff() {
 
         try {
-            ObservableList<String> gameIds = FXCollections.observableArrayList(FileReader.getInstance().loadAvailableGameIds());
+            ObservableList<String> gameIds = FXCollections.observableArrayList(GameControllerFacade.getInstance().loadAvailableGameIds());
             this.setItems(gameIds);
             this.setOnMouseClicked(new SavedGamesListViewItemClickHandler(this));
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             new ErrorAlert(e);
         }
 

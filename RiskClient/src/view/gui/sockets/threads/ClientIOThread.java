@@ -1,8 +1,12 @@
 package view.gui.sockets.threads;
 
+
 import javafx.application.Platform;
+import javafx.concurrent.Task;
+import model.Game;
 import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
+import view.gui.sockets.GameControllerFacade;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -38,8 +42,7 @@ public class ClientIOThread extends Thread {
                 synchronized (reader) {
                     response = reader.readUTF();
                 }
-                //TODO: Might add create game to make a list of open games?
-                // No need to check for response != null
+
                 String[] split = response.split(",");
                 String event = split[0];
                 System.out.println(event);
@@ -71,23 +74,26 @@ public class ClientIOThread extends Thread {
                         break;
                     case CHANGE_UNITS:
                         //split[2] countryName
+
+                        writer.writeUTF(GET_GAME + "," + split[1]);
+                        writer.flush();
+
+                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
                         String countryName = split[2];
 
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                GUIControl.getInstance().getComponentMap().get(countryName + "info-hbox").update();
-                            }
-                        });
-
-
+                        GUIControl.getInstance().getComponentMap().get(countryName + "info-hbox").update();
 
                         break;
+
+
+                    case GET_GAME:
+                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+                        break;
+
                 }
-            } catch(EOFException e) {
+            } catch (EOFException e) {
                 //This is fine
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 Platform.runLater(new Runnable() {
                     @Override
@@ -95,8 +101,9 @@ public class ClientIOThread extends Thread {
                         new ErrorAlert(e);
                     }
                 });
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
-
         }
 
     }

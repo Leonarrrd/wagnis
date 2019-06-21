@@ -1,6 +1,5 @@
 package view.gui.boxes.dialogboxes;
 
-import controller.GameController;
 import datastructures.Phase;
 import exceptions.GameNotFoundException;
 import exceptions.NoSuchCountryException;
@@ -20,7 +19,9 @@ import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
+import view.gui.sockets.GameControllerFacade;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,8 +99,12 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         List<Country> countriesToAttackFrom = new ArrayList<>();
         try {
             //TODO: Methodenaufruf zu lang
-            countriesToAttackFrom = new ArrayList(GameController.getInstance().getCountriesAttackCanBeLaunchedFrom(game.getId(), activePlayer).values());
+            countriesToAttackFrom = new ArrayList(GameControllerFacade.getInstance().getCountriesAttackCanBeLaunchedFrom(game.getId(), activePlayer).values());
         } catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         if (!firstCountrySelected) {
@@ -118,7 +123,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             Country firstCountry = game.getCountries().get(attackingCountryText.getText());
             try {
                 if(firstCountry.getNeighbors().contains(game.getCountries().get(GUIControl.getInstance().getSelectedCountry().getName()))
-                    && GameController.getInstance().getHostileNeighbors(game.getId(), firstCountry).containsKey(GUIControl.getInstance().getSelectedCountry().getName())) {
+                    && GameControllerFacade.getInstance().getHostileNeighbors(game.getId(), firstCountry).containsKey(GUIControl.getInstance().getSelectedCountry().getName())) {
                 defendingCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
                     firstCountrySelected = !firstCountrySelected;
                     attackButton.setDisable(false);
@@ -126,7 +131,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
                 } else {
                     new Alert(Alert.AlertType.INFORMATION, "Countries not adjacent or not hostile.").showAndWait();
                 }
-            } catch (GameNotFoundException | NoSuchCountryException e) {
+            } catch (GameNotFoundException | NoSuchCountryException | IOException | ClassNotFoundException e) {
                 new ErrorAlert(e);
             }
         }

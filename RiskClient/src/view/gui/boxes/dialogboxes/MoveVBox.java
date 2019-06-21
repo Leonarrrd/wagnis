@@ -1,6 +1,5 @@
 package view.gui.boxes.dialogboxes;
 
-import controller.GameController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -9,9 +8,13 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
+import view.gui.sockets.GameControllerFacade;
+
+import java.io.IOException;
 
 public class MoveVBox extends VBox implements RiskUIElement, Updatable {
 
@@ -90,13 +93,17 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
                     firstCountrySelected = !firstCountrySelected;
                 }
             } else {
-                if (!GameController.getInstance().isConnected(GUIControl.getInstance().getGame().getId(), GUIControl.getInstance().getSelectedCountry(),
-                        GUIControl.getInstance().getGame().getCountries().get(moveFromText.getText()))){
-                    new Alert(Alert.AlertType.INFORMATION, "Countries are not connected").showAndWait();
-                } else {
-                    moveToText.setText(GUIControl.getInstance().getSelectedCountry().getName());
-                    firstCountrySelected = !firstCountrySelected;
-                    moveButton.setDisable(false);
+                try {
+                    if (!GameControllerFacade.getInstance().isConnected(GUIControl.getInstance().getGame().getId(), GUIControl.getInstance().getSelectedCountry(),
+                            GUIControl.getInstance().getGame().getCountries().get(moveFromText.getText()))){
+                        new Alert(Alert.AlertType.INFORMATION, "Countries are not connected").showAndWait();
+                    } else {
+                        moveToText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+                        firstCountrySelected = !firstCountrySelected;
+                        moveButton.setDisable(false);
+                    }
+                } catch (IOException e) {
+                    new ErrorAlert(e);
                 }
 
             }

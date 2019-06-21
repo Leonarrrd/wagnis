@@ -1,6 +1,5 @@
 package view.gui.boxes.dialogboxes;
 
-import controller.GameController;
 import datastructures.CardSymbol;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -18,6 +17,7 @@ import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
+import view.gui.sockets.GameControllerFacade;
 
 public class UseCardsVBox extends VBox implements RiskUIElement {
 //    private Spinner oneStarCardSpinner = new Spinner<>();
@@ -68,7 +68,7 @@ public class UseCardsVBox extends VBox implements RiskUIElement {
         confirmButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (GameController.getInstance().getTradeBonusType(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue()) == null){
+                if (GameControllerFacade.getInstance().getTradeBonusType(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue()) == null){
                     new Alert(Alert.AlertType.INFORMATION, "Neither 3 of a kind nor multi.").showAndWait();
                 } else {
                     GUIControl.getInstance().useCards(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue());

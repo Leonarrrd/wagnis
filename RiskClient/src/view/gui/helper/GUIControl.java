@@ -1,6 +1,5 @@
 package view.gui.helper;
 
-import controller.GraphController;
 import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
@@ -264,8 +263,9 @@ public class GUIControl {
 
     public boolean hasCountryToMoveTo(Country country){
         //FIXME: gc statt GraphController
-            List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
-            return countriesInGraph.size() == 1;
+         //   List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
+         //   return countriesInGraph.size() == 1;
+        return true;
     }
 
     public Country getSelectedCountry() {

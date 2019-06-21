@@ -82,7 +82,8 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
                 public void handle(ActionEvent event) {
                     try {
                         GameControllerFacade.getInstance().initNewGame(gameId);
-                    } catch (IOException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException | GameNotFoundException | CountriesAlreadyAssignedException | NoSuchPlayerException e) {
+
+                    } catch (IOException | InvalidPlayerNameException | NoSuchPlayerException | GameNotFoundException | CountriesAlreadyAssignedException | InvalidFormattedDataException | MaximumNumberOfPlayersReachedException e) {
                         new ErrorAlert(e);
                     }
                 }

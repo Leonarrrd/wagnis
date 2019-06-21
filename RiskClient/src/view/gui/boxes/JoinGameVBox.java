@@ -35,14 +35,13 @@ public class JoinGameVBox extends VBox implements RiskUIElement {
 
         Button joinGame = new Button("Join Game");
 
-        //QUESTION: Verstehe das nicht ganz
         joinGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 try {
                     ((StartBorderPane) getParent()).setCenter(new StartNewGameGridPane());
                     GameControllerFacade.getInstance().addPlayer(UUID.fromString(textFieldId.getText()), playerName.getText(), null);
-                } catch (IOException | GameNotFoundException | MaximumNumberOfPlayersReachedException | InvalidPlayerNameException e) {
+                } catch (IOException | GameNotFoundException | InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
                     new ErrorAlert(e);
                 }
             }
