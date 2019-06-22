@@ -1,5 +1,6 @@
 package view.gui.boxes.dialogboxes;
 
+import exceptions.GameNotFoundException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -82,15 +83,21 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
                 if(GUIControl.getInstance().getSelectedCountry().getUnits() == 1) {
                     new Alert(Alert.AlertType.INFORMATION, "Only one unit on this country.").showAndWait();
                     // FIXME: Need to complete these methods first
-                } else if (GUIControl.getInstance().hasCountryToMoveTo(GUIControl.getInstance().getSelectedCountry())){
-                    new Alert(Alert.AlertType.INFORMATION, "Country is not connected to any of your other countries.").showAndWait();
                 } else {
-                    // the Spinner does only get updated when the src country gets updated
-                    moveFromText.setText(GUIControl.getInstance().getSelectedCountry().getName());
-                    int maxUnitsToMove = GUIControl.getInstance().getSelectedCountry().getUnits() - 1;
-                    SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
-                    unitsToMoveWithSpinner.setValueFactory(valueFactory);
-                    firstCountrySelected = !firstCountrySelected;
+                    try {
+                        if (!GUIControl.getInstance().hasCountryToMoveTo(GUIControl.getInstance().getSelectedCountry())){
+                            new Alert(Alert.AlertType.INFORMATION, "Country is not connected to any of your other countries.").showAndWait();
+                        } else {
+                            // the Spinner does only get updated when the src country gets updated
+                            moveFromText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+                            int maxUnitsToMove = GUIControl.getInstance().getSelectedCountry().getUnits() - 1;
+                            SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
+                            unitsToMoveWithSpinner.setValueFactory(valueFactory);
+                            firstCountrySelected = !firstCountrySelected;
+                        }
+                    } catch (IOException | GameNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 try {

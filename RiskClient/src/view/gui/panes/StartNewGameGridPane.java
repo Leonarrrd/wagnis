@@ -1,6 +1,5 @@
 package view.gui.panes;
 
-import datastructures.Color;
 import exceptions.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +11,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import model.Player;
 import view.gui.alerts.ErrorAlert;
@@ -73,6 +73,8 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
             Text text = new Text(hostPlayerName);
             text.getStyleClass().add("player-name-text");
 
+
+
             playerList.getChildren().add(text);
 
 
@@ -90,6 +92,9 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
             });
 
             this.add(startGameButton, 1, playerList.getChildren().size());
+
+            TextField t = new TextField(gameId.toString());
+            this.add(t, 0, playerList.getChildren().size() + 1);
 
         }
     }

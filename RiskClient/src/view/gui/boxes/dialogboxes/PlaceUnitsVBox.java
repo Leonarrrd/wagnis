@@ -59,7 +59,6 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void update() {
-
         //TODO: oooooofff funktionsaufrufe
 
         int maxValue = GUIControl.getInstance().getGame().getTurn().getPlayer().getUnitsToPlace();

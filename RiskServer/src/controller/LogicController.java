@@ -265,6 +265,10 @@ public class LogicController {
         return hasCountryToMoveFrom;
     }
 
+    public boolean hasCountryToMoveTo(Game game, Country country) throws GameNotFoundException {
+        List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
+        return countriesInGraph.size() == 1;
+    }
 
     /**
      * Also responsible for sorting the list

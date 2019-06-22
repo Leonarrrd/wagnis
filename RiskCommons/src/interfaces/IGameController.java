@@ -2,6 +2,7 @@ package interfaces;
 
 import datastructures.CardBonus;
 import datastructures.Color;
+import datastructures.Phase;
 import exceptions.*;
 import model.*;
 
@@ -10,6 +11,8 @@ import java.net.Socket;
 import java.util.*;
 
 public interface IGameController {
+
+    String getPlayerName();
 
     /**
      * TODO: add commentary
@@ -217,9 +220,10 @@ public interface IGameController {
 
     boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
-    void setTurn(UUID gameId) throws GameNotFoundException, NoSuchPlayerException;
+    void setTurn(UUID gameId, Phase phase) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
     void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException;
+
 
     void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
@@ -234,4 +238,5 @@ public interface IGameController {
     List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException;
 
 
+    boolean hasCountryToMoveTo(UUID gameId, Country country) throws IOException, GameNotFoundException;
 }

@@ -22,6 +22,7 @@ public class ClientIOThread extends Thread {
 
     private ObjectInputStream reader;
     private ObjectOutputStream writer;
+    private String name;
 
 
     public ClientIOThread(ObjectInputStream reader, ObjectOutputStream writer) {
@@ -69,8 +70,19 @@ public class ClientIOThread extends Thread {
                                 GUIControl.getInstance().switchToGameScene(UUID.fromString(split[1]));
                             }
                         });
+                        break;
+                    case SWITCH_TURNS:
+                        writer.writeUTF(GET_GAME + "," + split[1]);
+                        writer.flush();
+                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
 
-
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
+                                GUIControl.getInstance().getComponentMap().get("player-list-vbox").update();
+                            }
+                        });
                         break;
                     case CHANGE_UNITS:
                         //split[2] countryName
@@ -84,8 +96,6 @@ public class ClientIOThread extends Thread {
                         GUIControl.getInstance().getComponentMap().get(countryName + "info-hbox").update();
 
                         break;
-
-
                     case GET_GAME:
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
                         break;

@@ -64,8 +64,12 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         attackButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().fight(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue(), unitsToDefendWithSpinner.getValue());
-
+                try {
+                    GUIControl.getInstance().fight(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue(), unitsToDefendWithSpinner.getValue());
+                } catch (GameNotFoundException | NoSuchPlayerException | IOException e) {
+                    e.printStackTrace();
+                }
+                // MARK: i think this will cause a problem that can be fixed with sleep
                 updateSpinners();
             }
         });
@@ -74,7 +78,11 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         skipButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
+                try {
+                    GUIControl.getInstance().setTurnManually(Phase.MOVE);
+                } catch (NoSuchPlayerException | GameNotFoundException | IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

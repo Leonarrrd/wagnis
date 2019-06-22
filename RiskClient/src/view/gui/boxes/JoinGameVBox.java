@@ -41,6 +41,7 @@ public class JoinGameVBox extends VBox implements RiskUIElement {
                 try {
                     ((StartBorderPane) getParent()).setCenter(new StartNewGameGridPane());
                     GameControllerFacade.getInstance().addPlayer(UUID.fromString(textFieldId.getText()), playerName.getText(), null);
+
                 } catch (IOException | GameNotFoundException | InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
                     new ErrorAlert(e);
                 }

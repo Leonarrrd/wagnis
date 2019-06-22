@@ -1,6 +1,7 @@
 package controller;
 
 import datastructures.Color;
+import datastructures.Phase;
 import interfaces.IGameController;
 import datastructures.CardBonus;
 import model.*;
@@ -40,6 +41,11 @@ public class GameController implements IGameController {
         return instance;
     }
 
+    //FIXME: i did not quite understand the igamecontroller purpose, we will talk about this
+    @Override
+    public String getPlayerName(){
+        return "something went wrong";
+    }
 
     @Override
     public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) {
@@ -283,6 +289,16 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
+    public boolean hasCountryToMoveTo(UUID gameId, Country country) throws GameNotFoundException {
+        Game game = getGameById(gameId);
+        return lc.hasCountryToMoveTo(game, country);
+    }
+
+    /**
+     * Server-side implementation
+     * {@inheritDoc }
+     */
+    @Override
     public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return lc.hasCountryToAttackFrom(game, player);
@@ -334,9 +350,9 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void setTurn(UUID gameId) throws GameNotFoundException, NoSuchPlayerException {
+    public void setTurn(UUID gameId, Phase phase) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
-        tc.setTurn(game);
+        game.getTurn().setPhase(phase);
     }
 
     /**

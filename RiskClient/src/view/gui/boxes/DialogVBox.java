@@ -32,28 +32,32 @@ public class DialogVBox extends VBox implements RiskUIElement, Updatable {
 //            getScene().setRoot(new StartBorderPane());
 //        }
 
-        switch(GUIControl.getInstance().getGame().getTurn().getPhase()) {
-            case USE_CARDS:
-                this.getChildren().set(0, new UseCardsVBox());
-                break;
-            case PLACE_UNITS:
-                this.getChildren().set(0, new PlaceUnitsVBox());
-                break;
-            case ATTACK:
-                this.getChildren().set(0, new AttackVBox());
-                break;
-            case TRAIL_UNITS:
-                this.getChildren().set(0, new TrailUnitsVBox());
-                break;
-            case PERFORM_ANOTHER_ATTACK:
-                this.getChildren().set(0, new LaunchAnotherAttackVBox());
-                break;
-            case MOVE:
-                this.getChildren().set(0, new MoveVBox());
-                break;
-            case PERFORM_ANOTHER_MOVE:
-                this.getChildren().set(0, new PerformAnotherMoveVBox());
-                break;
+        if(GUIControl.getInstance().myTurn()) {
+            switch (GUIControl.getInstance().getGame().getTurn().getPhase()) {
+                case USE_CARDS:
+                    this.getChildren().set(0, new UseCardsVBox());
+                    break;
+                case PLACE_UNITS:
+                    this.getChildren().set(0, new PlaceUnitsVBox());
+                    break;
+                case ATTACK:
+                    this.getChildren().set(0, new AttackVBox());
+                    break;
+                case TRAIL_UNITS:
+                    this.getChildren().set(0, new TrailUnitsVBox());
+                    break;
+                case PERFORM_ANOTHER_ATTACK:
+                    this.getChildren().set(0, new LaunchAnotherAttackVBox());
+                    break;
+                case MOVE:
+                    this.getChildren().set(0, new MoveVBox());
+                    break;
+                case PERFORM_ANOTHER_MOVE:
+                    this.getChildren().set(0, new PerformAnotherMoveVBox());
+                    break;
+            }
+        } else {
+            this.getChildren().set(0, new WaitVBox());
         }
     }
 }

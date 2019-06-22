@@ -1,6 +1,9 @@
 package server;
 
 import controller.GameController;
+import controller.GraphController;
+import datastructures.Color;
+import datastructures.Phase;
 import exceptions.*;
 import model.Country;
 import model.Game;
@@ -15,6 +18,7 @@ import static helper.Events.CHANGE_UNITS;
 
 public class ClientRequestProcessor extends Thread {
     private Socket socket;
+    private GameController gc = GameController.getInstance();
 
     public ClientRequestProcessor(Socket socket) {
         this.socket = socket;
@@ -44,6 +48,7 @@ public class ClientRequestProcessor extends Thread {
                 UUID gameId = UUID.fromString(split[1]);
 
                 Game game = null;
+                Country country = null;
 
                 switch (event) {
                     case CREATE_GAME:
@@ -72,7 +77,6 @@ public class ClientRequestProcessor extends Thread {
                     case START_GAME:
                         System.out.println("Game Starts...");
 
-
                         GameController.getInstance().initNewGame(gameId);
                         List<Socket> gameSockets = SocketGameManager.getInstance().getGameInitById(gameId).getSockets();
                         SocketGameManager.getInstance().getGameIdSocketMap().put(gameId, gameSockets);
@@ -93,27 +97,61 @@ public class ClientRequestProcessor extends Thread {
                         }
                         break;
                     case GET_GAME:
-                        Game gameaa = GameController.getInstance().getGameById(gameId);
+                        game = GameController.getInstance().getGameById(gameId);
                         oos.reset();
-                        oos.writeUnshared(gameaa);
+                        oos.writeUnshared(game);
                         oos.flush();
                         oos.reset();
 
+                        break;
+                    case SWITCH_TURNS:
+                        gc.switchTurns(gameId);
+                        for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
+                            ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                            sOos.writeUTF(SWITCH_TURNS + "," + gameId.toString());
+                            sOos.flush();
+                        }
+                        break;
+                    case SET_TURN:
+                        gc.setTurn(gameId, Phase.valueOf(split[2]));
+                        for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
+                            ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                            sOos.writeUTF(SWITCH_TURNS + "," + gameId.toString());
+                            sOos.flush();
+                        }
                         break;
                     case CHANGE_UNITS:
                         //split[2] should be country name
                         //split[3] should be the units
                         String countryString = split[2];
                         int units = Integer.parseInt(split[3]);
-                        System.out.println(units);
                         game = GameController.getInstance().getGameById(gameId);
-                        Country country = game.getCountries().get(countryString);
+                        country = game.getCountries().get(countryString);
                         GameController.getInstance().changeUnits(gameId, country, units);
+                        GameController.getInstance().changeUnitsToPlace(gameId, country.getOwner(), -units);
                         for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
                             ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
                             sOos.writeUTF(CHANGE_UNITS+ "," + gameId.toString() + "," + countryString);
                             sOos.flush();
                         }
+                        break;
+                    case MOVE:
+
+                        break;
+//                    case HAS_COUNTRY_TO_ATTACK_FROM:
+//                        gc.hasCountryToAttackFrom(gameId, gc.getGameById(gameId).getTurn().getPlayer());
+//                        break;
+//                    case HAS_COUNTRY_TO_MOVE_FROM:
+//                        gc.hasCountryToMoveFrom(gameId, gc.getGameById(gameId).getTurn().getPlayer());
+//                        break;
+                    case HAS_COUNTRY_TO_MOVE_TO:
+                        game = gc.getGameById(gameId);
+                        country = game.getCountries().get(split[2]);
+                        GraphController.getInstance().updatePlayerGraphMap(game, country.getOwner());
+                        boolean b = gc.hasCountryToMoveTo(gameId, country);
+//                        oos.reset();
+                        oos.writeBoolean(b);
+                        oos.flush();
                         break;
                     default:
                         break;
@@ -130,7 +168,7 @@ public class ClientRequestProcessor extends Thread {
             }
 
             e.printStackTrace();
-        } catch (InvalidPlayerNameException | NoSuchPlayerException | GameNotFoundException | CountriesAlreadyAssignedException | NoSuchCountryException | MaximumNumberOfPlayersReachedException | InvalidFormattedDataException e) {
+        } catch (InvalidPlayerNameException | NoSuchPlayerException | GameNotFoundException | CountriesAlreadyAssignedException | NoSuchCountryException | MaximumNumberOfPlayersReachedException | InvalidFormattedDataException | NoSuchCardException | CardAlreadyOwnedException e) {
             e.printStackTrace();
         }
 

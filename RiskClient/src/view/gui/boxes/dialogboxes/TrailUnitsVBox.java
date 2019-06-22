@@ -1,6 +1,8 @@
 package view.gui.boxes.dialogboxes;
 
 import datastructures.Phase;
+import exceptions.GameNotFoundException;
+import exceptions.NoSuchPlayerException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -13,6 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
+
+import java.io.IOException;
 
 public class TrailUnitsVBox extends VBox implements RiskUIElement {
 
@@ -42,8 +46,12 @@ public class TrailUnitsVBox extends VBox implements RiskUIElement {
         trailUnitsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().trailUnits(trailUnitsSpinner.getValue());
-                GUIControl.getInstance().setTurnManually(Phase.ATTACK);
+                try {
+                    GUIControl.getInstance().trailUnits(trailUnitsSpinner.getValue());
+                    GUIControl.getInstance().setTurnManually(Phase.ATTACK);
+                } catch (NoSuchPlayerException | GameNotFoundException | IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

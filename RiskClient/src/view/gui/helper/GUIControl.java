@@ -32,6 +32,7 @@ public class GUIControl {
     private LastFightCountries lastFightCountry;
     private List<String> playersInLobby = new ArrayList();
 
+
     public Game getGame() {
         try {
             return gc.getGameById(gameId);
@@ -93,23 +94,28 @@ public class GUIControl {
             Country c = getGame().getCountries().get(selectedCountry);
             gc.changeUnits(gameId, c, units);
             gc.changeUnitsToPlace(gameId, getGame().getTurn().getPlayer(), -units);
-            componentMap.get(selectedCountry + "info-hbox").update();
             getLog().update(c.getOwner() + " placed " + units + " units on " + c.getName());
         } catch (IOException | GameNotFoundException | NoSuchCountryException | NoSuchPlayerException e) {
             new ErrorAlert(e);
-        } 
+        }
+        // MARK: Need to wait client/server interaction
+        //  this only occurs here, because at all other instances, we call forwardTurnPhase manually
+        //  we could avoid this by also forwarding the turn in place units manually
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         if (getGame().getTurn().getPlayer().getUnitsToPlace() <= 0) {
             forwardTurnPhase();
         } else {
             Updatable dialogVBox = componentMap.get("dialog-vbox");
             dialogVBox.update();
         }
-
-
-
     }
 
-    public void fight(String attackingCountry, String defendingCountry, int attackingUnits, int defendingUnits) {
+    public void fight(String attackingCountry, String defendingCountry, int attackingUnits, int defendingUnits) throws GameNotFoundException, NoSuchPlayerException, IOException {
         Country attCountry = getGame().getCountries().get(attackingCountry);
         Country defCountry = getGame().getCountries().get(defendingCountry);
         AttackResult ar = null;
@@ -148,7 +154,7 @@ public class GUIControl {
 
     }
 
-    public void trailUnits(int value) {
+    public void trailUnits(int value) throws NoSuchPlayerException {
         try {
             gc.moveUnits(gameId, lastFightCountry.getSrcCountry(), lastFightCountry.getDestCountry(), value);
             componentMap.get(lastFightCountry.getSrcCountry() + "info-hbox").update();
@@ -177,20 +183,22 @@ public class GUIControl {
     public void forwardTurnPhase() {
         try {
             gc.switchTurns(gameId);
-            componentMap.get("dialog-vbox").update();
-            componentMap.get("player-list-vbox").update();
-            componentMap.get("mission-hbox").update();
+//            componentMap.get("dialog-vbox").update();
+//            componentMap.get("player-list-vbox").update();
+//            componentMap.get("mission-hbox").update();
             componentMap.get("cards-hbox").update();
         } catch (GameNotFoundException | IOException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
             new ErrorAlert(e);
         }
     }
 
-    public void setTurnManually(Phase phase) {
-        getGame().getTurn().setPhase(phase);
-        Updatable dialogVBox = componentMap.get("dialog-vbox");
-        dialogVBox.update();
-        componentMap.get("player-list-vbox").update();
+    public void setTurnManually(Phase phase) throws NoSuchPlayerException, GameNotFoundException, IOException {
+        gc.setTurn(gameId, phase);
+
+//        getGame().getTurn().setPhase(phase);
+//        Updatable dialogVBox = componentMap.get("dialog-vbox");
+//        dialogVBox.update();
+//        componentMap.get("player-list-vbox").update();
     }
 
     /**
@@ -199,21 +207,23 @@ public class GUIControl {
      * @param
      */
     public void countryClicked(String countryString) {
-        selectedCountry = countryString;
-        Game game = getGame();
-        switch (game.getTurn().getPhase()) {
-            case ATTACK:
-                Updatable attackVBox = componentMap.get("attack-vbox");
-                attackVBox.update();
-                break;
-            case MOVE:
-                Updatable moveVBox = componentMap.get("move-vbox");
-                moveVBox.update();
-                break;
-            case PLACE_UNITS:
-                Updatable placeUnitsVBox = componentMap.get("place-units-vbox");
-                placeUnitsVBox.update();
-                break;
+        if(myTurn()) {
+            selectedCountry = countryString;
+            Game game = getGame();
+            switch (game.getTurn().getPhase()) {
+                case ATTACK:
+                    Updatable attackVBox = componentMap.get("attack-vbox");
+                    attackVBox.update();
+                    break;
+                case MOVE:
+                    Updatable moveVBox = componentMap.get("move-vbox");
+                    moveVBox.update();
+                    break;
+                case PLACE_UNITS:
+                    Updatable placeUnitsVBox = componentMap.get("place-units-vbox");
+                    placeUnitsVBox.update();
+                    break;
+            }
         }
     }
 
@@ -248,6 +258,10 @@ public class GUIControl {
         }
     }
 
+    public boolean myTurn(){
+        return (gc.getPlayerName().equals(getGame().getTurn().getPlayer().getName()));
+    }
+
     public Player checkForWinner() {
         for (Player player : getGame().getPlayers()){
             try {
@@ -261,11 +275,8 @@ public class GUIControl {
         return null;
     }
 
-    public boolean hasCountryToMoveTo(Country country){
-        //FIXME: gc statt GraphController
-         //   List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
-         //   return countriesInGraph.size() == 1;
-        return true;
+    public boolean hasCountryToMoveTo(Country country) throws IOException, GameNotFoundException {
+        return gc.hasCountryToMoveTo(gameId, country);
     }
 
     public Country getSelectedCountry() {

@@ -18,12 +18,14 @@ public class Events {
     public static final String GET_COUNTRIES_ATTACK_CAN_BE_LAUNCHED_FROM = "GET_COUNTRIES_ATTACK_CAN_BE_LAUNCHED_FROM";
     public static final String GET_COUNTRIES_WITH_MORE_THAN_ONE_UNIT = "GET_COUNTRIES_WITH_MORE_THAN_ONE_UNIT";
     public static final String HAS_COUNTRY_TO_MOVE_FROM = "HAS_COUNTRY_TO_MOVE_FROM";
+    public static final String HAS_COUNTRY_TO_MOVE_TO = "HAS_COUNTRY_TO_MOVE_TO";
     public static final String HAS_COUNTRY_TO_ATTACK_FROM = "HAS_COUNTRY_TO_ATTACK_FROM";
     public static final String GET_HOSTILE_NEIGHBORS = "GET_HOSTILE_NEIGHBORS";
     public static final String FIGHT = "FIGHT";
     public static final String MOVE = "MOVE";
     public static final String CHECK_WIN_CONDITION = "CHECK_WIN_CONDITION";
     public static final String SWITCH_TURNS = "SWITCH_TURNS";
+    public static final String SET_TURN = "SET_TURN";
     public static final String UPDATE_PLAYER_GRAPH_MAP = "UPDATE_PLAYER_GRAPH_MAP";
     public static final String POST_PHASE_CHECK = "POST_PHASE_CHECK";
     public static final String IS_CONNECTED = "IS_CONNECTED";
