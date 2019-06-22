@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RiskClient.iml" filepath="$PROJECT_DIR$/RiskClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/../RiskCommons/RiskCommons.iml" filepath="$PROJECT_DIR$/../RiskCommons/RiskCommons.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../RiskServer/RiskServer.iml" filepath="$PROJECT_DIR$/../RiskServer/RiskServer.iml" />
     </modules>
   </component>
 </project>
