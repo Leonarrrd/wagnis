@@ -52,7 +52,10 @@ public class TurnController {
                 turn.setPhase(Phase.ATTACK);
                 break;
             case ATTACK:
-                turn.setPhase(Phase.TRAIL_UNITS);
+                turn.setPhase(Phase.DEFENSE);
+                break;
+            case DEFENSE:
+                turn.setPhase(Phase.DEFENSE);
                 break;
             case TRAIL_UNITS:
                 turn.setPhase(Phase.PERFORM_ANOTHER_ATTACK);

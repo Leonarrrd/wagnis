@@ -6,7 +6,6 @@ import datastructures.Phase;
 import exceptions.*;
 import interfaces.IGameController;
 import model.*;
-import view.gui.helper.GUIControl;
 import view.gui.sockets.threads.ClientIOThread;
 
 import java.io.*;
@@ -113,7 +112,6 @@ public class GameControllerFacade implements IGameController {
     @Override
     public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
         oos.writeUTF(LOAD_GAME + "," + gameId.toString());
-
         oos.flush();
         return (Game) ois.readObject();
     }
@@ -279,11 +277,12 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException {
-        oos.writeUTF(HAS_COUNTRY_TO_MOVE_FROM + "," + gameId.toString() + "," + player.getName());
-        oos.flush();
-        synchronized (ois) {
-            return ois.readBoolean();
-        }
+//        oos.writeUTF(HAS_COUNTRY_TO_MOVE_FROM + "," + gameId.toString() + "," + player.getName());
+//        oos.flush();
+//        synchronized (ois) {
+//            return ois.readBoolean();
+//        }
+        return true;
     }
 
     /**
@@ -317,13 +316,22 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
+    public void initAttack(UUID gameId, String attackingCountry, String defendingCountry, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
+        oos.writeUTF(INIT_ATTACK + "," +  gameId.toString() + "," + attackingCountry + "," + defendingCountry + "," + units );
+        oos.flush();
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
     public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException {
-        //oos.writeUTF(FIGHT +  "," + gameId.toString() + "," +attackingCountry.getName() + "," + defendingCountry.getName() + "," + attackingUnits + ","+ defendingUnits);
-        //oos.flush();
+        oos.writeUTF(FIGHT +  "," + gameId.toString() + "," +attackingCountry.getName() + "," + defendingCountry.getName() + "," + attackingUnits + ","+ defendingUnits);
+        oos.flush();
 
         // return (AttackResult) ois.readObject();
         return new AttackResult(null, null, null);
-
     }
 
     /**
@@ -432,18 +440,5 @@ public class GameControllerFacade implements IGameController {
         // oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
         // oos.flush();
         return new ArrayList<>();
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean hasCountryToMoveTo(UUID gameId, Country country) throws IOException {
-        oos.writeUTF(HAS_COUNTRY_TO_MOVE_TO + "," + gameId.toString() + "," + country.getName());
-        oos.flush();
-        synchronized (ois) {
-            return ois.readBoolean();
-        }
     }
 }

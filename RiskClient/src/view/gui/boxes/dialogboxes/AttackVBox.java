@@ -30,9 +30,10 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
     Text attackingCountryText;
     Text defendingCountryText;
     Spinner<Integer> unitsToAttackWithSpinner;
-    Spinner<Integer> unitsToDefendWithSpinner;
+//    Spinner<Integer> unitsToDefendWithSpinner;
     Button attackButton;
     boolean firstCountrySelected = false;
+    GUIControl guic = GUIControl.getInstance();
 
     public AttackVBox() {
         applyStyling(this, "attack-vbox", "attack_vbox.css");
@@ -48,15 +49,15 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         defendingCountryText = new Text("<click on second country>");
         Text unitsToAttackWithInfoText = new Text("Choose amount of units to attack with");
         unitsToAttackWithSpinner = new Spinner<>();
-        Text unitsToDefendWithInfoText = new Text("Choose amount of units to defend with");
-        unitsToDefendWithSpinner = new Spinner<>();
+//        Text unitsToDefendWithInfoText = new Text("Choose amount of units to defend with");
+//        unitsToDefendWithSpinner = new Spinner<>();
 
         final int initialValue = 1;
         SpinnerValueFactory<Integer> valueFactoryAtk = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1, initialValue);
         SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1, initialValue);
 
         unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
-        unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
+//        unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
 
         attackButton = new Button("Launch Attack!");
         attackButton.setDisable(true);
@@ -64,13 +65,18 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         attackButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+//                try {
+//                    guic.fight(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue(), unitsToDefendWithSpinner.getValue());
+//                } catch (GameNotFoundException | NoSuchPlayerException | IOException e) {
+//                    e.printStackTrace();
+//                }
+//                updateSpinners();
+
                 try {
-                    GUIControl.getInstance().fight(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue(), unitsToDefendWithSpinner.getValue());
-                } catch (GameNotFoundException | NoSuchPlayerException | IOException e) {
+                    guic.initAttack(attackingCountryText.getText(), defendingCountryText.getText(), unitsToAttackWithSpinner.getValue());
+                } catch (GameNotFoundException | NoSuchCountryException | IOException e) {
                     e.printStackTrace();
                 }
-                // MARK: i think this will cause a problem that can be fixed with sleep
-                updateSpinners();
             }
         });
 
@@ -79,7 +85,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             @Override
             public void handle(ActionEvent event) {
                 try {
-                    GUIControl.getInstance().setTurnManually(Phase.MOVE);
+                    guic.setTurnManually(Phase.MOVE);
                 } catch (NoSuchPlayerException | GameNotFoundException | IOException e) {
                     e.printStackTrace();
                 }
@@ -92,63 +98,62 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
         this.getChildren().add(defendingCountryText);
         this.getChildren().add(unitsToAttackWithInfoText);
         this.getChildren().add(unitsToAttackWithSpinner);
-        this.getChildren().add(unitsToDefendWithInfoText);
-        this.getChildren().add(unitsToDefendWithSpinner);
+//        this.getChildren().add(unitsToDefendWithInfoText);
+//        this.getChildren().add(unitsToDefendWithSpinner);
         this.getChildren().add(attackButton);
         this.getChildren().add(skipButton);
 
     }
 
     @Override
+    // MARK: refactored to perform all input verifications locally
+    //  I left the legacy code in here and commented it out, in case we want to revert for some reason
     public void update() {
-
-        Game game = GUIControl.getInstance().getGame();
+        Game game = guic.getGame();
         Player activePlayer = game.getTurn().getPlayer();
-        List<Country> countriesToAttackFrom = new ArrayList<>();
-        try {
-            //TODO: Methodenaufruf zu lang
-            countriesToAttackFrom = new ArrayList(GameControllerFacade.getInstance().getCountriesAttackCanBeLaunchedFrom(game.getId(), activePlayer).values());
-        } catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+//        List<Country> countriesToAttackFrom = new ArrayList<>();
+//        try {
+//            //TODO: Methodenaufruf zu lang
+//            countriesToAttackFrom = new ArrayList(GameControllerFacade.getInstance().getCountriesAttackCanBeLaunchedFrom(game.getId(), activePlayer).values());
+//        } catch (GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | IOException | ClassNotFoundException e) {
+//            e.printStackTrace();
+//        }
         if (!firstCountrySelected) {
-            if (!activePlayer.getCountries().values().contains(GUIControl.getInstance().getSelectedCountry())) {
-                new Alert(Alert.AlertType.INFORMATION, "You do not own " + GUIControl.getInstance().getSelectedCountry().getName()).showAndWait();
+            if (!activePlayer.getCountries().values().contains(guic.getSelectedCountry())) {
+                new Alert(Alert.AlertType.INFORMATION, "You do not own " + guic.getSelectedCountry().getName()).showAndWait();
 
-            } else if (GUIControl.getInstance().getSelectedCountry().getUnits() <= 1) {
-                new Alert(Alert.AlertType.INFORMATION, "Only one unit on " + GUIControl.getInstance().getSelectedCountry().getName()).showAndWait();
-            } else if (!countriesToAttackFrom.contains(GUIControl.getInstance().getSelectedCountry())) {
-                new Alert(Alert.AlertType.INFORMATION,  GUIControl.getInstance().getSelectedCountry().getName()+ " has no hostile neighbours").showAndWait();
+            } else if (guic.getSelectedCountry().getUnits() <= 1) {
+                new Alert(Alert.AlertType.INFORMATION, "Only one unit on " + guic.getSelectedCountry().getName()).showAndWait();
+//            } else if (!countriesToAttackFrom.contains(guic.getSelectedCountry())) {
+            } else if (!guic.hasHostileNeighbors(guic.getSelectedCountry())) {
+                new Alert(Alert.AlertType.INFORMATION,  guic.getSelectedCountry().getName()+ " has no hostile neighbours").showAndWait();
             } else {
-                attackingCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+                attackingCountryText.setText(guic.getSelectedCountry().getName());
                 firstCountrySelected = !firstCountrySelected;
             }
         } else {
             Country firstCountry = game.getCountries().get(attackingCountryText.getText());
-            try {
-                if(firstCountry.getNeighbors().contains(game.getCountries().get(GUIControl.getInstance().getSelectedCountry().getName()))
-                    && GameControllerFacade.getInstance().getHostileNeighbors(game.getId(), firstCountry).containsKey(GUIControl.getInstance().getSelectedCountry().getName())) {
-                defendingCountryText.setText(GUIControl.getInstance().getSelectedCountry().getName());
+//            try {
+//                if(firstCountry.getNeighbors().contains(game.getCountries().get(guic.getSelectedCountry().getName()))
+//                    && GameControllerFacade.getInstance().getHostileNeighbors(game.getId(), firstCountry).containsKey(guic.getSelectedCountry().getName())) {
+                if (firstCountry.getNeighbors().contains(guic.getSelectedCountry()) && !firstCountry.getOwner().equals(guic.getSelectedCountry().getOwner())){
+                defendingCountryText.setText(guic.getSelectedCountry().getName());
                     firstCountrySelected = !firstCountrySelected;
                     attackButton.setDisable(false);
 
                 } else {
                     new Alert(Alert.AlertType.INFORMATION, "Countries not adjacent or not hostile.").showAndWait();
                 }
-            } catch (GameNotFoundException | NoSuchCountryException | IOException | ClassNotFoundException e) {
-                new ErrorAlert(e);
-            }
+//            } catch (GameNotFoundException | NoSuchCountryException | IOException | ClassNotFoundException e) {
+//                new ErrorAlert(e);
+//            }
         }
 
         updateSpinners();
     }
 
     void updateSpinners(){
-        Game game = GUIControl.getInstance().getGame();
+        Game game = guic.getGame();
         if (game.getTurn().getPhase().equals(Phase.ATTACK)) {
             if (game.getCountries().get(attackingCountryText.getText()) != null) {
                 int maxAttackers;
@@ -161,17 +166,17 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
                 unitsToAttackWithSpinner.setValueFactory(valueFactoryAtk);
             }
 
-            if (game.getCountries().get(defendingCountryText.getText()) != null) {
-                int maxDefenders;
-                if (game.getCountries().get(defendingCountryText.getText()).getUnits() > 2) {
-                    maxDefenders = 2;
-                } else {
-                    maxDefenders = game.getCountries().get(defendingCountryText.getText()).getUnits();
-                }
-
-                SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxDefenders, maxDefenders);
-                unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
-            }
+//            if (game.getCountries().get(defendingCountryText.getText()) != null) {
+//                int maxDefenders;
+//                if (game.getCountries().get(defendingCountryText.getText()).getUnits() > 2) {
+//                    maxDefenders = 2;
+//                } else {
+//                    maxDefenders = game.getCountries().get(defendingCountryText.getText()).getUnits();
+//                }
+//
+//                SpinnerValueFactory<Integer> valueFactoryDef = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxDefenders, maxDefenders);
+//                unitsToDefendWithSpinner.setValueFactory(valueFactoryDef);
+//            }
         }
     }
 }

@@ -196,6 +196,8 @@ public interface IGameController {
 
     Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException;
 
+    void initAttack(UUID gameId, String attackingCountry, String defendingCountry, int units) throws  GameNotFoundException, NoSuchCountryException, IOException;
+
     /**
      * Carries out one round of an attack
      * Rolls the dices and deducts units from the countries depending on the roll's outcome
@@ -207,11 +209,11 @@ public interface IGameController {
      * @param defendingCountry the country that is defending the attack
      * @param attackingUnits the amount of units the attacking country attacks with
      * @param defendingUnits the amount of units the defending country defends with
-     * @return null if both sides still have enough units to fight, the winner of the war otherwise
      * @throws NotEnoughUnitsException if the country does not have enough units to attack or defend with
      * @throws CountriesNotAdjacentException if the countries that should be fighting are not adjacent to each other
      * @throws GameNotFoundException if the game with the provided game Id could not be found
      * @throws NoSuchCountryException if the given countries do not exist
+     * @return
      */
     AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException;
 
@@ -236,7 +238,4 @@ public interface IGameController {
     void removeGame(UUID gameId) throws GameNotFoundException, IOException;
 
     List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException;
-
-
-    boolean hasCountryToMoveTo(UUID gameId, Country country) throws IOException, GameNotFoundException;
 }

@@ -232,7 +232,7 @@ public class LogicController {
     boolean hasCountryToAttackFrom(Game game, Player player) throws NoSuchPlayerException, NoSuchCountryException {
 
         for (Player p : game.getPlayers()) {
-            GraphController.getInstance().updatePlayerGraphMap(game, p);
+            GraphController.getInstance().updateGraph(game, p);
         }
         boolean hasCountryToAttackFrom = false;
         for (Country country : WorldController.getInstance().getCountriesWithMoreThanOneUnit(game, player).values()) {
@@ -251,7 +251,7 @@ public class LogicController {
      */
     boolean hasCountryToMoveFrom(Game game, Player player) throws NoSuchPlayerException, NoSuchCountryException {
         for (Player p : game.getPlayers()) {
-            GraphController.getInstance().updatePlayerGraphMap(game, p);
+            GraphController.getInstance().updateGraph(game, p);
         }
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
@@ -266,7 +266,7 @@ public class LogicController {
     }
 
     public boolean hasCountryToMoveTo(Game game, Country country) throws GameNotFoundException {
-        List<String> countriesInGraph = GraphController.getInstance().getPlayerGraphMap().get(country.getOwner()).evaluateCountriesAllowedToMoveTo(country.getName());
+        List<String> countriesInGraph = country.getOwner().getCountryGraph().evaluateCountriesAllowedToMoveTo(country.getName());
         return countriesInGraph.size() == 1;
     }
 
@@ -334,7 +334,7 @@ public class LogicController {
         if (phase.equals(Phase.TRAIL_UNITS)) {
             Player toBeRemoved = null; // avoid ConcurrentModificationException
             for (Player p : game.getPlayers()) {
-                GraphController.getInstance().updatePlayerGraphMap(game, p);
+                GraphController.getInstance().updateGraph(game, p);
                 if (p.getCountries().values().isEmpty()){
                     toBeRemoved = p;
                     break;

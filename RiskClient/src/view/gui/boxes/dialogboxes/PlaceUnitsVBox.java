@@ -1,5 +1,7 @@
 package view.gui.boxes.dialogboxes;
 
+import exceptions.GameNotFoundException;
+import exceptions.NoSuchCountryException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -13,6 +15,7 @@ import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +50,11 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
         placeUnitsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().placeUnits(unitsToPlaceSpinner.getValue());
+                try {
+                    GUIControl.getInstance().placeUnits(unitsToPlaceSpinner.getValue());
+                } catch (GameNotFoundException | NoSuchCountryException | IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 

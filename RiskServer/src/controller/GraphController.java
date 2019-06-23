@@ -1,6 +1,7 @@
 package controller;
 
 import datastructures.Graph;
+import exceptions.NoSuchCardException;
 import exceptions.NoSuchPlayerException;
 import model.Country;
 import model.Game;
@@ -15,12 +16,6 @@ public class GraphController {
 
     private static GraphController instance;
 
-    private Map<Player, Graph> playerGraphMap;
-
-    private GraphController() {
-        playerGraphMap = new HashMap<>();
-    }
-
     public static GraphController getInstance() {
         if (instance == null) {
             instance = new GraphController();
@@ -28,26 +23,20 @@ public class GraphController {
         return instance;
     }
 
-    public void updatePlayerGraphMap(Game game, Player player) throws NoSuchPlayerException {
+    public void createGraphs(Game game) throws NoSuchPlayerException {
+        for (Player player : game.getPlayers()){
+            updateGraph(game, player);
+        }
+    }
+
+    public void updateGraph(Game game, Player player) throws NoSuchPlayerException {
         if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
         }
-        Graph graph = createGraph(player);
-        playerGraphMap.put(player, graph);
-    }
-
-    private Graph createGraph(Player player) {
-
 
         Graph graph = new Graph();
         List<Country> countryList = new ArrayList<>(player.getCountries().values());
         graph = graph.createGraph(countryList);
-
-        return graph;
-    }
-
-
-    public Map<Player, Graph> getPlayerGraphMap() {
-        return playerGraphMap;
+        player.setCountryGraph(graph);
     }
 }

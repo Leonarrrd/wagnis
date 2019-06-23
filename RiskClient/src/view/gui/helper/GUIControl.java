@@ -30,6 +30,7 @@ public class GUIControl {
     private IGameController gc = GameControllerFacade.getInstance();
     private String selectedCountry;
     private LastFightCountries lastFightCountry;
+
     private List<String> playersInLobby = new ArrayList();
 
 
@@ -89,20 +90,16 @@ public class GUIControl {
         }
     }
 
-    public void placeUnits(int units) {
-        try {
-            Country c = getGame().getCountries().get(selectedCountry);
-            gc.changeUnits(gameId, c, units);
-            gc.changeUnitsToPlace(gameId, getGame().getTurn().getPlayer(), -units);
-            getLog().update(c.getOwner() + " placed " + units + " units on " + c.getName());
-        } catch (IOException | GameNotFoundException | NoSuchCountryException | NoSuchPlayerException e) {
-            new ErrorAlert(e);
-        }
+    public void placeUnits(int units) throws GameNotFoundException, NoSuchCountryException, IOException {
+        Country c = getGame().getCountries().get(selectedCountry);
+        gc.changeUnits(gameId, c, units);
+        getLog().update(c.getOwner() + " placed " + units + " units on " + c.getName());
+
         // MARK: Need to wait client/server interaction
         //  this only occurs here, because at all other instances, we call forwardTurnPhase manually
         //  we could avoid this by also forwarding the turn in place units manually
         try {
-            Thread.sleep(1000);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -110,47 +107,67 @@ public class GUIControl {
         if (getGame().getTurn().getPlayer().getUnitsToPlace() <= 0) {
             forwardTurnPhase();
         } else {
-            Updatable dialogVBox = componentMap.get("dialog-vbox");
-            dialogVBox.update();
+            // only this players GUI needs to be updated
+            componentMap.get("dialog-vbox").update();
         }
     }
 
-    public void fight(String attackingCountry, String defendingCountry, int attackingUnits, int defendingUnits) throws GameNotFoundException, NoSuchPlayerException, IOException {
-        Country attCountry = getGame().getCountries().get(attackingCountry);
-        Country defCountry = getGame().getCountries().get(defendingCountry);
-        AttackResult ar = null;
+    /**
+     * Tell the server to start an attack with given parameters
+     * @param attackingCountry
+     * @param defendingCountry
+     * @param units
+     * @throws GameNotFoundException
+     * @throws NoSuchCountryException
+     * @throws IOException
+     */
+    public void initAttack(String attackingCountry, String defendingCountry, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
+        forwardTurnPhase();
         try {
-            ar = gc.fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        gc.initAttack(gameId, attackingCountry, defendingCountry, units);
+    }
+
+    public void fight(Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws GameNotFoundException, NoSuchPlayerException, IOException {
+//        AttackResult ar = null;
+        try {
+//            ar = gc.fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
+            gc.fight(getGame().getId(), attackingCountry, defendingCountry, attackingUnits, defendingUnits);
         } catch (IOException | ClassNotFoundException | NotEnoughUnitsException | CountriesNotAdjacentException | GameNotFoundException | NoSuchCountryException e) {
             new ErrorAlert(e);
         }
-        componentMap.get(attackingCountry + "info-hbox").update();
-        componentMap.get(defendingCountry + "info-hbox").update();
 
 
-        getLog().update("Attacking Player: " + attCountry.getOwner() + " with country: " + attackingCountry + " rolled: ");
-        for (int attDices : ar.getAttackerDices()) {
-            getLog().update(attDices + "");
-        }
-        getLog().update("Defending Player: " + defCountry.getOwner() + " with country: " + defendingCountry + " rolled: ");
-        for (int defDices : ar.getDefenderDices()) {
-            getLog().update(defDices + "");
-        }
-
-        ((DiceGridPane) componentMap.get("dice-grid")).update(attCountry.getOwner().getColor().toString(), defCountry.getOwner().getColor().toString(), ar.getAttackerDices(), ar.getDefenderDices());
-
-        if (ar.getWinner() != null) {
-            if (ar.getWinner().equals(defCountry)) {
-                getLog().update(defendingCountry + " successfully defended. It is owned by: " + defCountry.getOwner());
-                setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
-            } else {
-                lastFightCountry = new LastFightCountries(attCountry, defCountry);
-                getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defCountry.getOwner());
-                forwardTurnPhase();
-            }
-        } else {
-            return;
-        }
+//        componentMap.get(attackingCountry + "info-hbox").update();
+//        componentMap.get(defendingCountry + "info-hbox").update();
+//
+//
+//        getLog().update("Attacking Player: " + attCountry.getOwner() + " with country: " + attackingCountry + " rolled: ");
+//        for (int attDices : ar.getAttackerDices()) {
+//            getLog().update(attDices + "");
+//        }
+//        getLog().update("Defending Player: " + defCountry.getOwner() + " with country: " + defendingCountry + " rolled: ");
+//        for (int defDices : ar.getDefenderDices()) {
+//            getLog().update(defDices + "");
+//        }
+//
+//        ((DiceGridPane) componentMap.get("dice-grid")).update(attCountry.getOwner().getColor().toString(), defCountry.getOwner().getColor().toString(), ar.getAttackerDices(), ar.getDefenderDices());
+//
+//        if (ar.getWinner() != null) {
+//            if (ar.getWinner().equals(defCountry)) {
+//                getLog().update(defendingCountry + " successfully defended. It is owned by: " + defCountry.getOwner());
+//                setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
+//            } else {
+//                lastFightCountry = new LastFightCountries(attCountry, defCountry);
+//                getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defCountry.getOwner());
+//                forwardTurnPhase();
+//            }
+//        } else {
+//            return;
+//        }
 
     }
 
@@ -175,9 +192,6 @@ public class GUIControl {
         } catch (IOException | CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
             new ErrorAlert(e);
         }
-        componentMap.get(srcCountry + "info-hbox").update();
-        componentMap.get(destCountry + "info-hbox").update();
-
     }
 
     public void forwardTurnPhase() {
@@ -258,7 +272,28 @@ public class GUIControl {
         }
     }
 
+    // Mark: method to verify input locally, rather than requesting verification from the server
+    //  since the server itself later verifies if the operation is legal,
+    //  doing the input verification locally should be fine
+    // FIXME: refactor to GameControllerFacade?
+    // FIXME: Exceptions?
+    public boolean hasHostileNeighbors(Country country){
+        for (Country neighbor : country.getNeighbors()){
+            if (!country.getOwner().equals(neighbor.getOwner()))
+                return true;
+        }
+        return false;
+    }
+
     public boolean myTurn(){
+        // MARK:
+        // FIXME: Game couldnt start at one point (nullPointerException), this fixes it
+        //  i think it's because the game isn't initialized yet by the time we call this function
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return (gc.getPlayerName().equals(getGame().getTurn().getPlayer().getName()));
     }
 
@@ -273,10 +308,6 @@ public class GUIControl {
             }
         }
         return null;
-    }
-
-    public boolean hasCountryToMoveTo(Country country) throws IOException, GameNotFoundException {
-        return gc.hasCountryToMoveTo(gameId, country);
     }
 
     public Country getSelectedCountry() {

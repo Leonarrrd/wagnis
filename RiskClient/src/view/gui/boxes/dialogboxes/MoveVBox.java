@@ -50,7 +50,6 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
         moveButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                System.out.println(valueFactory.getValue());
                 GUIControl.getInstance().move(moveFromText.getText(), moveToText.getText(), unitsToMoveWithSpinner.getValue());
                 GUIControl.getInstance().forwardTurnPhase();
             }
@@ -76,43 +75,34 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void update() {
-        if (!GUIControl.getInstance().getCurrentPlayer().getCountries().containsValue(GUIControl.getInstance().getSelectedCountry())) {
+        GUIControl guic = GUIControl.getInstance();
+        if (!guic.getCurrentPlayer().getCountries().containsValue(guic.getSelectedCountry())) {
             new Alert(Alert.AlertType.INFORMATION, "You don't own this country.").showAndWait();
         } else {
             if (!firstCountrySelected) {
-                if(GUIControl.getInstance().getSelectedCountry().getUnits() == 1) {
+                if(guic.getSelectedCountry().getUnits() == 1) {
                     new Alert(Alert.AlertType.INFORMATION, "Only one unit on this country.").showAndWait();
                     // FIXME: Need to complete these methods first
                 } else {
-                    try {
-                        if (!GUIControl.getInstance().hasCountryToMoveTo(GUIControl.getInstance().getSelectedCountry())){
-                            new Alert(Alert.AlertType.INFORMATION, "Country is not connected to any of your other countries.").showAndWait();
-                        } else {
-                            // the Spinner does only get updated when the src country gets updated
-                            moveFromText.setText(GUIControl.getInstance().getSelectedCountry().getName());
-                            int maxUnitsToMove = GUIControl.getInstance().getSelectedCountry().getUnits() - 1;
-                            SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
-                            unitsToMoveWithSpinner.setValueFactory(valueFactory);
-                            firstCountrySelected = !firstCountrySelected;
-                        }
-                    } catch (IOException | GameNotFoundException e) {
-                        e.printStackTrace();
+                    if (guic.getCurrentPlayer().getCountryGraph().evaluateCountriesAllowedToMoveTo(guic.getSelectedCountry().getName()).size() == 1){
+                        new Alert(Alert.AlertType.INFORMATION, "Country is not connected to any of your other countries.").showAndWait();
+                    } else {
+                        // the Spinner does only get updated when the src country gets updated
+                        moveFromText.setText(guic.getSelectedCountry().getName());
+                        int maxUnitsToMove = guic.getSelectedCountry().getUnits() - 1;
+                        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);
+                        unitsToMoveWithSpinner.setValueFactory(valueFactory);
+                        firstCountrySelected = !firstCountrySelected;
                     }
                 }
             } else {
-                try {
-                    if (!GameControllerFacade.getInstance().isConnected(GUIControl.getInstance().getGame().getId(), GUIControl.getInstance().getSelectedCountry(),
-                            GUIControl.getInstance().getGame().getCountries().get(moveFromText.getText()))){
-                        new Alert(Alert.AlertType.INFORMATION, "Countries are not connected").showAndWait();
-                    } else {
-                        moveToText.setText(GUIControl.getInstance().getSelectedCountry().getName());
-                        firstCountrySelected = !firstCountrySelected;
-                        moveButton.setDisable(false);
-                    }
-                } catch (IOException e) {
-                    new ErrorAlert(e);
+                if(!guic.getCurrentPlayer().getCountryGraph().isConnected(guic.getSelectedCountry(), guic.getGame().getCountries().get(moveFromText.getText()))){
+                    new Alert(Alert.AlertType.INFORMATION, "Countries are not connected").showAndWait();
+                } else {
+                    moveToText.setText(guic.getSelectedCountry().getName());
+                    firstCountrySelected = !firstCountrySelected;
+                    moveButton.setDisable(false);
                 }
-
             }
 
         }

@@ -50,7 +50,6 @@ public class Graph implements Serializable {
         return adjVertices.get(new Country(name));
     }
 
-    //FIXME: remove source country from List
     public List<String> evaluateCountriesAllowedToMoveTo(String root) {
         List<String> visited = new ArrayList<>();
         Stack<String> stack = new Stack<>();
@@ -65,6 +64,10 @@ public class Graph implements Serializable {
             }
         }
         return visited;
+    }
+
+    public boolean isConnected(Country country1, Country country2){
+        return (evaluateCountriesAllowedToMoveTo(country1.getName()).contains(country2.getName()));
     }
 
 }

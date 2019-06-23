@@ -2,75 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="832bc341-8701-422b-95cc-d514037ff01b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/WaitVBox.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/DefenseVBox.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/css/defense_vbox.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/DialogVBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/DialogVBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/JoinGameVBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/JoinGameVBox.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/AttackVBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/AttackVBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/LaunchAnotherAttackVBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/LaunchAnotherAttackVBox.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/MoveVBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/MoveVBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/PerformAnotherMoveVBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/PerformAnotherMoveVBox.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/PlaceUnitsVBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/PlaceUnitsVBox.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/TrailUnitsVBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/boxes/dialogboxes/TrailUnitsVBox.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/helper/GUIControl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/helper/GUIControl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/panes/StartNewGameGridPane.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/panes/StartNewGameGridPane.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/sockets/GameControllerFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/sockets/GameControllerFacade.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskClient/src/view/gui/sockets/threads/ClientIOThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskClient/src/view/gui/sockets/threads/ClientIOThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RiskCommons/src/datastructures/Graph.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskCommons/src/datastructures/Graph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RiskCommons/src/datastructures/Phase.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskCommons/src/datastructures/Phase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskCommons/src/helper/Events.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskCommons/src/helper/Events.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../RiskCommons/src/interfaces/IGameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskCommons/src/interfaces/IGameController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RiskCommons/src/model/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RiskCommons/src/model/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/controller/CardDeckController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/controller/CardDeckController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/controller/GameController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/controller/GameController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/controller/GraphController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/controller/GraphController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/controller/LogicController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/controller/LogicController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/controller/PlayerController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/controller/PlayerController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/controller/TurnController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/controller/TurnController$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/controller/TurnController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/controller/TurnController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/controller/WorldController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/controller/WorldController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/persistence/FileReader.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/persistence/FileReader.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/persistence/FileWriter.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/persistence/FileWriter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/persistence/helper/GameLoadUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/risikoDraft/persistence/helper/GameLoadUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/AbstractCUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/AttackCUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/ConsoleUserInterface.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/MoveCUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/PlaceUnitsCUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/PreGameCUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/TurnCUI$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/cui/TurnCUI.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/Main.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/alerts/ErrorAlert.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/boxes/RiskTitleHBox.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/boxes/StartMenuLeftVBox$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/boxes/StartMenuLeftVBox$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/boxes/StartMenuLeftVBox$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/boxes/StartMenuLeftVBox$StartActionListener.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/boxes/StartMenuLeftVBox.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/boxes/TextOnlyHBox.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/css/game_vbox.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/css/risk_title_hbox.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/css/saved_games_list_view.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/css/start_border_pane.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/css/start_menu_left_vbox.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/css/start_new_game_grid_pane.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/css/text_only_hbox.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/eventhandler/SavedGamesListViewItemClickHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/helper/CSSLoader.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/helper/RiskUIElement.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/lists/SavedGamesListView.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/panes/StartNewGameGridPane$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/panes/StartNewGameGridPane$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/panes/StartNewGameGridPane$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/panes/StartNewGameGridPane.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/roots/GameBorderPane.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/roots/StartBorderPane.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/scenes/MainScene.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/util/UIConstants.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/risikoDraft/view/gui/viewhelper/PlayerColorItem.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/controller/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/GraphController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/GraphController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/controller/LogicController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/LogicController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/server/SocketGameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/server/SocketGameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/TurnController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/TurnController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/controller/WorldController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/controller/WorldController.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -103,53 +59,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/Server.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/server/SocketGameManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1160">
-              <caret line="70" column="20" selection-start-line="70" selection-start-column="20" selection-end-line="70" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/server/ClientRequestProcessor.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="275">
-              <caret line="140" column="54" lean-forward="true" selection-start-line="140" selection-start-column="54" selection-end-line="140" selection-end-column="54" />
+            <state relative-caret-position="215">
+              <caret line="188" column="113" selection-start-line="188" selection-start-column="113" selection-end-line="188" selection-end-column="113" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../RiskCommons/src/model/Game.java">
+        <entry file="file://$PROJECT_DIR$/../RiskCommons/src/helper/Events.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="656">
-              <caret line="41" selection-start-line="41" selection-end-line="41" />
-              <folding>
-                <element signature="e#1231#1232#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/controller/GraphController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="780">
-              <caret line="50" selection-start-line="50" selection-end-line="50" />
-              <folding>
-                <element signature="e#1267#1268#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="300">
+              <caret line="15" column="54" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -157,31 +80,48 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5560">
-              <caret line="293" selection-start-line="293" selection-end-line="293" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/controller/LogicController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4940">
-              <caret line="268" column="80" selection-start-line="268" selection-start-column="80" selection-end-line="268" selection-end-column="80" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../RiskCommons/src/model/Country.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="620">
-              <caret line="36" selection-start-line="36" selection-end-line="36" />
+            <state relative-caret-position="180">
+              <caret line="22" column="44" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
               <folding>
-                <element signature="e#700#701#0" expanded="true" />
-                <element signature="e#732#733#0" expanded="true" />
-                <element signature="e#760#761#0" expanded="true" />
+                <element signature="e#10221#10222#0" expanded="true" />
+                <element signature="e#10266#10267#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../RiskCommons/src/interfaces/IGameController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="223">
+              <caret line="212" column="35" lean-forward="true" selection-start-line="212" selection-start-column="35" selection-end-line="212" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/controller/WorldController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="140" lean-forward="true" selection-start-line="140" selection-end-line="140" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../RiskCommons/src/model/Turn.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="11" column="26" lean-forward="true" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../RiskCommons/src/datastructures/Phase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -189,8 +129,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/controller/TurnController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="36" selection-start-line="36" selection-end-line="36" />
+            <state relative-caret-position="283">
+              <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -209,10 +149,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>aler</find>
-      <find>postTu</find>
-      <find>another</find>
-      <find>ward</find>
       <find>choose</find>
       <find>selected</find>
       <find>update</find>
@@ -232,13 +168,17 @@
       <find>bull</find>
       <find>hasCoun</find>
       <find>hasCountr</find>
-      <find>fight</find>
       <find>GameCont</find>
       <find>postTurnC</find>
       <find>mission</find>
       <find>changeu</find>
       <find>setTu</find>
       <find>setTur</find>
+      <find>class turn</find>
+      <find>getcountr</find>
+      <find>unders</find>
+      <find>fight</find>
+      <find>reset</find>
     </findStrings>
     <replaceStrings>
       <replace>text0</replace>
@@ -258,11 +198,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/view/gui/boxes/dialogboxes/TrailUnitsVBox.java" />
-        <option value="$PROJECT_DIR$/src/view/gui/boxes/PlayerListHBox.java" />
-        <option value="$PROJECT_DIR$/src/view/gui/lists/SavedGamesListView.java" />
-        <option value="$PROJECT_DIR$/src/view/gui/panes/StartNewGameGridPane.java" />
-        <option value="$PROJECT_DIR$/src/view/gui/alerts/ErrorAlert.java" />
         <option value="$PROJECT_DIR$/src/view/gui/boxes/BottomBarNodeHBox.java" />
         <option value="$PROJECT_DIR$/src/view/gui/boxes/PlayerListVBox.java" />
         <option value="$PROJECT_DIR$/src/view/gui/boxes/dialogboxes/LaunchAnotherAttackVBox.java" />
@@ -287,11 +222,9 @@
         <option value="$PROJECT_DIR$/src/view/cui/AttackCUI.java" />
         <option value="$PROJECT_DIR$/src/view/gui/boxes/dialogboxes/UseCardsVBox.java" />
         <option value="$PROJECT_DIR$/src/view/gui/boxes/DialogVBox.java" />
-        <option value="$PROJECT_DIR$/src/controller/TurnController.java" />
         <option value="$PROJECT_DIR$/data/countries.dat" />
         <option value="$PROJECT_DIR$/data/savedgames.dat" />
         <option value="$PROJECT_DIR$/src/datastructures/Phase.java" />
-        <option value="$PROJECT_DIR$/src/controller/WorldController.java" />
         <option value="$PROJECT_DIR$/src/view/gui/helper/GUIControl.java" />
         <option value="$PROJECT_DIR$/src/view/gui/boxes/dialogboxes/MoveVBox.java" />
         <option value="$PROJECT_DIR$/src/view/gui/boxes/dialogboxes/AttackVBox.java" />
@@ -306,14 +239,22 @@
         <option value="$PROJECT_DIR$/data/missions.dat" />
         <option value="$PROJECT_DIR$/src/model/EliminationMission.java" />
         <option value="$PROJECT_DIR$/src/server/SocketGameManager.java" />
+        <option value="$PROJECT_DIR$/../RiskCommons/src/model/Player.java" />
+        <option value="$PROJECT_DIR$/src/controller/GraphController.java" />
+        <option value="$PROJECT_DIR$/src/controller/WorldController.java" />
         <option value="$PROJECT_DIR$/src/controller/LogicController.java" />
+        <option value="$PROJECT_DIR$/../RiskCommons/src/datastructures/Graph.java" />
+        <option value="$PROJECT_DIR$/../RiskCommons/src/datastructures/Phase.java" />
+        <option value="$PROJECT_DIR$/src/controller/TurnController.java" />
         <option value="$PROJECT_DIR$/src/controller/GameController.java" />
+        <option value="$PROJECT_DIR$/../RiskCommons/src/helper/Events.java" />
         <option value="$PROJECT_DIR$/src/server/ClientRequestProcessor.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="980" />
+    <option name="x" value="1232" />
+    <option name="y" value="82" />
     <option name="width" value="745" />
     <option name="height" value="875" />
   </component>
@@ -323,9 +264,25 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
+            <path>
+              <item name="RiskServer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RiskCommons" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RiskServer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RiskCommons" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="RiskServer" type="b2602c69:ProjectViewProjectNode" />
+              <item name="RiskCommons" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="datastructures" type="462c0819:PsiDirectoryNode" />
+            </path>
             <path>
               <item name="RiskServer" type="b2602c69:ProjectViewProjectNode" />
               <item name="RiskServer" type="462c0819:PsiDirectoryNode" />
@@ -345,20 +302,19 @@
               <item name="RiskServer" type="b2602c69:ProjectViewProjectNode" />
               <item name="RiskServer" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="persistence" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="RiskServer" type="b2602c69:ProjectViewProjectNode" />
               <item name="RiskServer" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="utils" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -512,7 +468,8 @@
       <workItem from="1559826528315" duration="5079000" />
       <workItem from="1561192120696" duration="15820000" />
       <workItem from="1561208834947" duration="1278000" />
-      <workItem from="1561217317436" duration="156000" />
+      <workItem from="1561217317436" duration="4174000" />
+      <workItem from="1561271107414" duration="18567000" />
     </task>
     <task id="LOCAL-00001" summary="big ass console refactoring&#10;+ fixed bug with printing the wrong player name">
       <created>1556991756434</created>
@@ -665,13 +622,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="243702000" />
+    <option name="totallyTimeSpent" value="266287000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="68" y="-7" width="1475" height="878" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.55572754" side_tool="true" visible="true" weight="0.16231474" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.55572754" side_tool="true" visible="true" weight="0.1644319" />
       <window_info x="747" y="58" width="363" height="963" id="Structure" order="1" sideWeight="0.20012707" side_tool="true" weight="0.16200763" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -680,8 +637,8 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.79987293" weight="0.2699896" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49805662" weight="0.57563585" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.4983462" weight="0.39759037" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49805662" weight="0.38955823" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.4983462" visible="true" weight="0.39759037" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -775,9 +732,9 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/server/ClientRequestProcessor.java</url>
-          <line>147</line>
+          <line>191</line>
           <properties />
-          <option name="timeStamp" value="44" />
+          <option name="timeStamp" value="50" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -842,11 +799,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/view/cui/AttackCUI.java" />
-    <entry file="file://$PROJECT_DIR$/src/exceptions/CardAlreadyOwnedException.java" />
-    <entry file="file://$PROJECT_DIR$/src/exceptions/NotEnoughUnitsException.java" />
-    <entry file="file://$PROJECT_DIR$/src/view/gui/helper/Updatable.java" />
-    <entry file="file://$PROJECT_DIR$/src/view/gui/boxes/DialogVBox.java" />
     <entry file="file://$PROJECT_DIR$/data/countries.dat">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
@@ -872,13 +824,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/view/gui/boxes/dialogboxes/LaunchAnotherAttackVBox.java" />
     <entry file="file://$PROJECT_DIR$/src/view/cui/MoveCUI.java" />
-    <entry file="file://$PROJECT_DIR$/src/controller/WorldController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="246" column="98" selection-start-line="246" selection-start-column="98" selection-end-line="246" selection-end-column="98" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/datastructures/Graph.java" />
     <entry file="file://$PROJECT_DIR$/src/view/gui/boxes/dialogboxes/MoveVBox.java" />
     <entry file="file://$PROJECT_DIR$/src/view/gui/boxes/dialogboxes/AttackVBox.java" />
@@ -959,13 +904,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../RiskCommons/src/helper/Events.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-51">
-          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_211/src.zip!/java/lang/Override.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="392">
@@ -980,34 +918,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/server/SocketGameManager.java">
+    <entry file="file://$PROJECT_DIR$/../RiskCommons/src/model/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1160">
-          <caret line="70" column="20" selection-start-line="70" selection-start-column="20" selection-end-line="70" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/GraphController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="780">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
+        <state relative-caret-position="800">
+          <caret line="51" selection-start-line="51" selection-end-line="51" />
           <folding>
-            <element signature="e#1267#1268#0" expanded="true" />
+            <element signature="e#1199#1200#0" expanded="true" />
+            <element signature="e#1231#1232#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5560">
-          <caret line="293" selection-start-line="293" selection-end-line="293" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/LogicController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4940">
-          <caret line="268" column="80" selection-start-line="268" selection-start-column="80" selection-end-line="268" selection-end-column="80" />
         </state>
       </provider>
     </entry>
@@ -1023,17 +941,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/controller/TurnController.java">
+    <entry file="file://$PROJECT_DIR$/src/controller/LogicController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" selection-start-line="36" selection-end-line="36" />
+        <state relative-caret-position="183">
+          <caret line="234" column="54" selection-start-line="234" selection-start-column="54" selection-end-line="234" selection-end-column="54" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../RiskCommons/src/model/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="25" column="28" lean-forward="true" selection-start-line="25" selection-start-column="28" selection-end-line="25" selection-end-column="28" />
+        <state relative-caret-position="168">
+          <caret line="53" column="20" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
           <folding>
             <element signature="e#911#912#0" expanded="true" />
             <element signature="e#938#939#0" expanded="true" />
@@ -1041,20 +959,91 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../RiskCommons/src/model/Game.java">
+    <entry file="file://$PROJECT_DIR$/src/controller/GraphController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="656">
-          <caret line="41" selection-start-line="41" selection-end-line="41" />
+        <state relative-caret-position="145">
+          <caret line="35" selection-start-line="35" selection-end-line="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../RiskCommons/src/datastructures/Graph.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="60" column="64" selection-start-line="60" selection-start-column="64" selection-end-line="60" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/PlayerController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-458">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/WorldController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="140" lean-forward="true" selection-start-line="140" selection-end-line="140" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../RiskCommons/src/model/Turn.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="11" column="26" lean-forward="true" selection-start-line="11" selection-start-column="26" selection-end-line="11" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../RiskCommons/src/datastructures/Phase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/server/SocketGameManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="679">
+          <caret line="70" column="20" selection-start-line="70" selection-start-column="20" selection-end-line="70" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/TurnController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="59" column="29" lean-forward="true" selection-start-line="59" selection-start-column="29" selection-end-line="59" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/controller/GameController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="22" column="44" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
           <folding>
-            <element signature="e#1231#1232#0" expanded="true" />
+            <element signature="e#10221#10222#0" expanded="true" />
+            <element signature="e#10266#10267#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../RiskCommons/src/interfaces/IGameController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="223">
+          <caret line="212" column="35" lean-forward="true" selection-start-line="212" selection-start-column="35" selection-end-line="212" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../RiskCommons/src/helper/Events.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" column="54" selection-start-line="15" selection-start-column="54" selection-end-line="15" selection-end-column="54" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/server/ClientRequestProcessor.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="140" column="54" lean-forward="true" selection-start-line="140" selection-start-column="54" selection-end-line="140" selection-end-column="54" />
+        <state relative-caret-position="215">
+          <caret line="188" column="113" selection-start-line="188" selection-start-column="113" selection-end-line="188" selection-end-column="113" />
         </state>
       </provider>
     </entry>

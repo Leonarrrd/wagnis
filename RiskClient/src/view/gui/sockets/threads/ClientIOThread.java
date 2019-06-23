@@ -5,6 +5,10 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import model.Game;
 import view.gui.alerts.ErrorAlert;
+import view.gui.boxes.DialogVBox;
+import view.gui.boxes.dialogboxes.DefenseVBox;
+import view.gui.boxes.dialogboxes.TrailUnitsVBox;
+import view.gui.boxes.dialogboxes.UseCardsVBox;
 import view.gui.helper.GUIControl;
 import view.gui.sockets.GameControllerFacade;
 
@@ -22,8 +26,6 @@ public class ClientIOThread extends Thread {
 
     private ObjectInputStream reader;
     private ObjectOutputStream writer;
-    private String name;
-
 
     public ClientIOThread(ObjectInputStream reader, ObjectOutputStream writer) {
         this.reader = reader;
@@ -47,6 +49,9 @@ public class ClientIOThread extends Thread {
                 String[] split = response.split(",");
                 String event = split[0];
                 System.out.println(event);
+
+                String country1Name = null;
+                String country2Name = null;
                 switch (event) {
                     case PLAYER_JOIN:
                         List<String> playerList = new ArrayList<>();
@@ -91,10 +96,54 @@ public class ClientIOThread extends Thread {
                         writer.flush();
 
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
-                        String countryName = split[2];
 
-                        GUIControl.getInstance().getComponentMap().get(countryName + "info-hbox").update();
+                        country1Name = split[2];
+                        GUIControl.getInstance().getComponentMap().get(country1Name + "info-hbox").update();
+                        break;
+                    case DEFENSE:
+                        // MARK: Maybe not good to do this here?
+                        String defendingPlayerName = GameControllerFacade.getInstance().game.getCountries().get(split[3]).getOwner().getName();
+                        if (GameControllerFacade.getInstance().getPlayerName().equals(defendingPlayerName)){
+                            DialogVBox dialogVBox = (DialogVBox) GUIControl.getInstance().getComponentMap().get("dialog-vbox");
+                            Platform.runLater(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialogVBox.getChildren().set(0, new DefenseVBox(split[2], split[3], split[4]));
+                                }
+                            });
+                        }
+                        break;
+                    case FIGHT_FINISHED:
+                        // split [2] winner
+                        // split [3] attacker
+                        // split [4] defender
+                        // split [5] attackerdices
+                        // split [6] defenderdices
+                        //TODO: display dices
+                        //TODO: update countryInfoBoxes
+                        //TODO: update playerGraphs
+                        //TODO: evaluate split[2]
+                        //TODO: determine if next phase is NACHRUECK_UNITS or LAUNCH_ANOTHER_ATTACK
+                        //      ACTUALLY
+                        //      this way, we have to go through all the procedure again just to continue attacking
+                        //      which take ages if both countries have like 10+ units
+                        //      the proper way to handle this would be extend the GUI to have
+                        //      some kind of "Do you want to continue attacking" - VBox,
+                        //      which would be a pain in the ass to implement int the backend
 
+                        break;
+                    case MOVE:
+                        //split[2] country1Name
+                        //split[3] country2Name
+                        writer.writeUTF(GET_GAME + "," + split[1]);
+                        writer.flush();
+                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+
+                        country1Name = split[2];
+                        country2Name = split[3];
+
+                        GUIControl.getInstance().getComponentMap().get(country1Name + "info-hbox").update();
+                        GUIControl.getInstance().getComponentMap().get(country2Name + "info-hbox").update();
                         break;
                     case GET_GAME:
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();

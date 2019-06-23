@@ -2,6 +2,7 @@ package model;
 import datastructures.CardBonus;
 import datastructures.CardSymbol;
 import datastructures.Color;
+import datastructures.Graph;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class Player implements Serializable {
     private String name;
     private Color color;
     private Map<String, Country> countries = new HashMap<>(); // maybe better as Map<String, Country>?
+    private Graph countryGraph;
 
     private List<Card> cards = new ArrayList<>();
 
@@ -67,6 +69,14 @@ public class Player implements Serializable {
 
     public List<Card> getCards(){
         return cards;
+    }
+
+    public Graph getCountryGraph() {
+        return countryGraph;
+    }
+
+    public void setCountryGraph(Graph countryGraph) {
+        this.countryGraph = countryGraph;
     }
 
     public void setCards(List<Card> cards) {

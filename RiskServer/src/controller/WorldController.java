@@ -243,7 +243,7 @@ public class WorldController {
      */
     // TODO: GAME UEBERGEBEN UND EXCEPTIONS
     boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) {
-        return GraphController.getInstance().getPlayerGraphMap().get(srcCountry.getOwner()).evaluateCountriesAllowedToMoveTo(srcCountry.getName()).contains(destCountry.getName());
+        return srcCountry.getOwner().getCountryGraph().evaluateCountriesAllowedToMoveTo(srcCountry.getName()).contains(destCountry.getName());
     }
 
 

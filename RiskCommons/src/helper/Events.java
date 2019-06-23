@@ -21,7 +21,10 @@ public class Events {
     public static final String HAS_COUNTRY_TO_MOVE_TO = "HAS_COUNTRY_TO_MOVE_TO";
     public static final String HAS_COUNTRY_TO_ATTACK_FROM = "HAS_COUNTRY_TO_ATTACK_FROM";
     public static final String GET_HOSTILE_NEIGHBORS = "GET_HOSTILE_NEIGHBORS";
+    public static final String INIT_ATTACK = "INIT_ATTACK";
+    public static final String DEFENSE = "DEFENSE";
     public static final String FIGHT = "FIGHT";
+    public static final String FIGHT_FINISHED = "FIGHT_FINISHED";
     public static final String MOVE = "MOVE";
     public static final String CHECK_WIN_CONDITION = "CHECK_WIN_CONDITION";
     public static final String SWITCH_TURNS = "SWITCH_TURNS";
