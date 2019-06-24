@@ -1,9 +1,7 @@
 package view.gui.boxes.dialogboxes;
 
 import datastructures.Phase;
-import exceptions.GameNotFoundException;
-import exceptions.NoSuchCountryException;
-import exceptions.NoSuchPlayerException;
+import exceptions.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -28,15 +26,15 @@ public class DefenseVBox extends VBox implements RiskUIElement {
 
     public DefenseVBox(String attackingCountryString, String defendingCountryString, String unitsString) {
         applyStyling(this, "defense-vbox", "defense_vbox.css");
-        // MARK: exceptions?
         this.attackingCountry = guic.getGame().getCountries().get(attackingCountryString);
         this.defendingCountry = guic.getGame().getCountries().get(defendingCountryString);
         this.attackingUnits = Integer.parseInt(unitsString);
         doStuff();
     }
 
+    @Override
     public void doStuff() {
-        Text infoText = new Text(attackingCountry.getOwner().getName() + " is attacking yo in "
+        Text infoText = new Text(attackingCountry.getOwner().getName() + " is attacking you in "
                 + defendingCountry.getName() + " from " + attackingCountry.getName() + "!"
                 + "\nHow many units do you want to defend with?");
 
@@ -54,7 +52,7 @@ public class DefenseVBox extends VBox implements RiskUIElement {
                 int defendingUnits = defendingUnitsSpinner.getValue();
                 try {
                     GUIControl.getInstance().fight(attackingCountry, defendingCountry, attackingUnits, defendingUnits);
-                } catch (GameNotFoundException | NoSuchPlayerException | IOException e) {
+                } catch (GameNotFoundException | NoSuchPlayerException | IOException | ClassNotFoundException | NoSuchCountryException | NotEnoughUnitsException | CountriesNotAdjacentException e) {
                     e.printStackTrace();
                 }
             }
@@ -64,6 +62,5 @@ public class DefenseVBox extends VBox implements RiskUIElement {
         this.getChildren().add(infoText);
         this.getChildren().add(defendingUnitsSpinner);
         this.getChildren().add(defendButton);
-
     }
 }

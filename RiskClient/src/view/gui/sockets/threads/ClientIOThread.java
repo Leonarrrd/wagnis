@@ -101,7 +101,6 @@ public class ClientIOThread extends Thread {
                         GUIControl.getInstance().getComponentMap().get(country1Name + "info-hbox").update();
                         break;
                     case DEFENSE:
-                        // MARK: Maybe not good to do this here?
                         String defendingPlayerName = GameControllerFacade.getInstance().game.getCountries().get(split[3]).getOwner().getName();
                         if (GameControllerFacade.getInstance().getPlayerName().equals(defendingPlayerName)){
                             DialogVBox dialogVBox = (DialogVBox) GUIControl.getInstance().getComponentMap().get("dialog-vbox");
@@ -123,14 +122,6 @@ public class ClientIOThread extends Thread {
                         //TODO: update countryInfoBoxes
                         //TODO: update playerGraphs
                         //TODO: evaluate split[2]
-                        //TODO: determine if next phase is NACHRUECK_UNITS or LAUNCH_ANOTHER_ATTACK
-                        //      ACTUALLY
-                        //      this way, we have to go through all the procedure again just to continue attacking
-                        //      which take ages if both countries have like 10+ units
-                        //      the proper way to handle this would be extend the GUI to have
-                        //      some kind of "Do you want to continue attacking" - VBox,
-                        //      which would be a pain in the ass to implement int the backend
-
                         break;
                     case MOVE:
                         //split[2] country1Name

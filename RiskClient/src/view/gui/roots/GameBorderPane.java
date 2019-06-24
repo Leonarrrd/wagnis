@@ -12,6 +12,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.BottomBarHBox;
 import view.gui.boxes.DialogVBox;
 import view.gui.buttons.SaveButton;
@@ -43,7 +44,11 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
                 String rawColorCode = mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString();
                 String colorCode = Util.trimColorCode(rawColorCode);
                 if (GUIControl.getInstance().getCountryStringFromColorCode(colorCode) != null) {
-                    GUIControl.getInstance().countryClicked(GUIControl.getInstance().getCountryStringFromColorCode(colorCode));
+                    try {
+                        GUIControl.getInstance().countryClicked(GUIControl.getInstance().getCountryStringFromColorCode(colorCode));
+                    } catch (GameNotFoundException | IOException | ClassNotFoundException e) {
+                        new ErrorAlert(e);
+                    }
                 }
             }
         });

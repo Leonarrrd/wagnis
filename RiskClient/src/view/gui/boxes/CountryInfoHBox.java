@@ -1,5 +1,6 @@
 package view.gui.boxes;
 
+import exceptions.GameNotFoundException;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Tooltip;
@@ -10,9 +11,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import model.Game;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
+
+import java.io.IOException;
 
 /**
  * FIXME: Currently not hooked up to any game
@@ -67,7 +71,11 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                GUIControl.getInstance().countryClicked(countryString);
+                try {
+                    GUIControl.getInstance().countryClicked(countryString);
+                } catch (GameNotFoundException | IOException | ClassNotFoundException e) {
+                    new ErrorAlert(e);
+                }
             }
         });
 

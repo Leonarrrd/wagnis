@@ -131,15 +131,10 @@ public class GUIControl {
         gc.initAttack(gameId, attackingCountry, defendingCountry, units);
     }
 
-    public void fight(Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws GameNotFoundException, NoSuchPlayerException, IOException {
+    public void fight(Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws GameNotFoundException, NoSuchPlayerException, IOException, ClassNotFoundException, NoSuchCountryException, NotEnoughUnitsException, CountriesNotAdjacentException {
 //        AttackResult ar = null;
-        try {
 //            ar = gc.fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
             gc.fight(getGame().getId(), attackingCountry, defendingCountry, attackingUnits, defendingUnits);
-        } catch (IOException | ClassNotFoundException | NotEnoughUnitsException | CountriesNotAdjacentException | GameNotFoundException | NoSuchCountryException e) {
-            new ErrorAlert(e);
-        }
-
 
 //        componentMap.get(attackingCountry + "info-hbox").update();
 //        componentMap.get(defendingCountry + "info-hbox").update();
@@ -197,10 +192,7 @@ public class GUIControl {
     public void forwardTurnPhase() {
         try {
             gc.switchTurns(gameId);
-//            componentMap.get("dialog-vbox").update();
-//            componentMap.get("player-list-vbox").update();
-//            componentMap.get("mission-hbox").update();
-            componentMap.get("cards-hbox").update();
+//            componentMap.get("cards-hbox").update();
         } catch (GameNotFoundException | IOException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
             new ErrorAlert(e);
         }
@@ -220,7 +212,7 @@ public class GUIControl {
      *
      * @param
      */
-    public void countryClicked(String countryString) {
+    public void countryClicked(String countryString) throws GameNotFoundException, IOException, ClassNotFoundException {
         if(myTurn()) {
             selectedCountry = countryString;
             Game game = getGame();
@@ -285,16 +277,15 @@ public class GUIControl {
         return false;
     }
 
-    public boolean myTurn(){
+    public boolean myTurn() throws GameNotFoundException, IOException, ClassNotFoundException {
         // MARK:
         // FIXME: Game couldnt start at one point (nullPointerException), this fixes it
         //  i think it's because the game isn't initialized yet by the time we call this function
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(gc.getGameById(gameId) != null) {
+            return gc.getPlayerName().equals(getGame().getTurn().getPlayer().getName());
+        } else {
+            return false;
         }
-        return (gc.getPlayerName().equals(getGame().getTurn().getPlayer().getName()));
     }
 
     public Player checkForWinner() {

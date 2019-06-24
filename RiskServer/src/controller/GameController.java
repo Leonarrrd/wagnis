@@ -41,11 +41,7 @@ public class GameController implements IGameController {
         return instance;
     }
 
-    //FIXME: i did not quite understand the igamecontroller purpose, we will talk about this
-    @Override
-    public String getPlayerName(){
-        return "something went wrong";
-    }
+
 
     @Override
     public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) {
@@ -101,6 +97,7 @@ public class GameController implements IGameController {
 
         pc.assignMissions(game);
         wc.assignCountries(game);
+        grc.createGraphs(game);
         tc.setTurn(game);
 
 
@@ -289,16 +286,6 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public boolean hasCountryToMoveTo(UUID gameId, Country country) throws GameNotFoundException {
-        Game game = getGameById(gameId);
-        return lc.hasCountryToMoveTo(game, country);
-    }
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
     public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
         Game game = getGameById(gameId);
         return lc.hasCountryToAttackFrom(game, player);
@@ -314,9 +301,22 @@ public class GameController implements IGameController {
         return wc.getHostileNeighbors(game, country);
     }
 
+    @Override
+    // MARK: ???
+    // FIXME
+    public void initAttack(UUID gameId, String attackingCountry, String defendingCountry, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
+    }
+
+    @Override
+    //FIXME: i did not quite understand the igamecontroller purpose, we will talk about this
+    public String getPlayerName(){
+        return "something went wrong";
+    }
+
     /**
      * Server-side implementation
      * {@inheritDoc }
+     * @return
      */
     @Override
     public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException {
@@ -350,7 +350,7 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void setTurn(UUID gameId, Phase phase) throws GameNotFoundException, NoSuchPlayerException {
+    public void setTurn(UUID gameId, Phase phase) throws GameNotFoundException {
         Game game = getGameById(gameId);
         game.getTurn().setPhase(phase);
     }
@@ -365,14 +365,11 @@ public class GameController implements IGameController {
         tc.switchTurns(game);
     }
 
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
+
     @Override
     public void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException {
         Game game = getGameById(gameId);
-        grc.updatePlayerGraphMap(game, p);
+        grc.updateGraph(game, p);
     }
 
     /**

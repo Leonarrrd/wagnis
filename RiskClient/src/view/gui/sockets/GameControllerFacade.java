@@ -331,7 +331,7 @@ public class GameControllerFacade implements IGameController {
         oos.flush();
 
         // return (AttackResult) ois.readObject();
-        return new AttackResult(null, null, null);
+        return null;
     }
 
     /**

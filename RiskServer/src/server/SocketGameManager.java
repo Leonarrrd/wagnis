@@ -15,7 +15,7 @@ public class SocketGameManager {
     private Map<UUID, List<Socket>> gameIdSocketMap = new HashMap<>();
     private Map<Socket, ObjectOutputStream> socketObjectOutputStreamMap = new HashMap<>();
     private Map<Socket, ObjectInputStream> socketObjectInputStreamMap = new HashMap<>();
-    private Map<Socket, String> socketPlayerNameMap= new HashMap<>();
+    private Map<String, Socket> socketPlayerNameMap= new HashMap<>();
 
 
     private SocketGameManager() {
@@ -33,14 +33,14 @@ public class SocketGameManager {
         System.out.println(gameId);
         gameInit.getPlayerList().add(hostPlayerName);
         gameInit.getSockets().add(socket);
-        socketPlayerNameMap.put(socket, hostPlayerName);
+        socketPlayerNameMap.put(hostPlayerName, socket);
         gameInitList.add(gameInit);
     }
 
     public void addPlayer(UUID gameId, String playerName, Socket socket) throws GameNotFoundException {
         getGameInitById(gameId).getPlayerList().add(playerName);
         getGameInitById(gameId).getSockets().add(socket);
-        socketPlayerNameMap.put(socket, playerName);
+        socketPlayerNameMap.put(playerName, socket);
     }
 
 
@@ -68,7 +68,7 @@ public class SocketGameManager {
         return socketObjectInputStreamMap;
     }
 
-    public Map<Socket, String> getSocketPlayerNameMap() {
+    public Map<String, Socket> getSocketPlayerNameMap() {
         return socketPlayerNameMap;
     }
 }
