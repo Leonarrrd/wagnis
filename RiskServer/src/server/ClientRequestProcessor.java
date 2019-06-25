@@ -8,6 +8,7 @@ import exceptions.*;
 import model.AttackResult;
 import model.Country;
 import model.Game;
+import model.Player;
 
 import java.io.*;
 import java.net.Socket;
@@ -121,12 +122,30 @@ public class ClientRequestProcessor extends Thread {
                             sOos.flush();
                         }
                         break;
+                    case USE_CARDS:
+                        //split[2] playerName
+                        //split[3] infantryCards
+                        //split[4] cavalryCards
+                        //split[5] artilleryCards
+                        game = gc.getGameById(gameId);
+                        Player player = null;
+                        for (Player p : game.getPlayers()){
+                            if (p.getName().equals(split[2])) {
+                                player = p;
+                            }
+                        }
+                        int infantryCards = Integer.parseInt(split[3]);
+                        int cavalryCards = Integer.parseInt(split[4]);
+                        int artilleryCards = Integer.parseInt(split[5]);
+                        gc.useCards(gameId, player, infantryCards, cavalryCards, artilleryCards);
+                        break;
                     case CHANGE_UNITS:
                         //split[2] should be country name
                         //split[3] should be the units
+                        game = GameController.getInstance().getGameById(gameId);
+
                         String countryString = split[2];
                         int units = Integer.parseInt(split[3]);
-                        game = GameController.getInstance().getGameById(gameId);
                         country = game.getCountries().get(countryString);
                         GameController.getInstance().changeUnits(gameId, country, units);
                         GameController.getInstance().changeUnitsToPlace(gameId, country.getOwner(), -units);
