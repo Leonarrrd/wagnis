@@ -36,7 +36,7 @@ public class UseCardsVBox extends VBox implements RiskUIElement {
         Text cavalryText = new Text("Cavalry cards:");
         Text artilleryText = new Text("Artillery cards:");
 
-        Player player = GUIControl.getInstance().getGame().getTurn().getPlayer();
+        Player player =GUIControl.getInstance().getPlayer();
         int playerTotalInfantryCards = player.getNumberOfCardsWithSymbol(CardSymbol.INFANTRY);
         int playerTotalCavalryCards = player.getNumberOfCardsWithSymbol(CardSymbol.CAVALRY);
         int playerTotalArtilleryCards = player.getNumberOfCardsWithSymbol(CardSymbol.ARTILLERY);
@@ -68,11 +68,11 @@ public class UseCardsVBox extends VBox implements RiskUIElement {
         confirmButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (GameControllerFacade.getInstance().getTradeBonusType(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue()) == null){
+//                if (GameControllerFacade.getInstance().getTradeBonusType(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue()) == null){
+                if (!GUIControl.getInstance().isLegalCardUse(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue())) {
                     new Alert(Alert.AlertType.INFORMATION, "Neither 3 of a kind nor multi.").showAndWait();
                 } else {
                     GUIControl.getInstance().useCards(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue());
-                    GUIControl.getInstance().forwardTurnPhase();
                 }
             }
         });

@@ -86,6 +86,7 @@ public class ClientIOThread extends Thread {
                             public void run() {
                                 GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
                                 GUIControl.getInstance().getComponentMap().get("player-list-vbox").update();
+                                GUIControl.getInstance().getComponentMap().get("cards-hbox").update();
                             }
                         });
                         break;

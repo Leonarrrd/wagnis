@@ -81,10 +81,17 @@ public class GUIControl {
         ((GridPane)componentMap.get("start-new-game-grid-pane")).getScene().setRoot(new GameBorderPane());
     }
 
-    // TODO: still oversimplified
     public void useCards(int infantryCards, int cavalryCards, int artilleryCards){
         try {
             gc.useCards(gameId, getCurrentPlayer(), infantryCards, cavalryCards, artilleryCards);
+            // FIXME: SAME AS BELOW
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            forwardTurnPhase();
+
         } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException | IOException e) {
             e.printStackTrace();
         }
@@ -264,11 +271,9 @@ public class GUIControl {
         }
     }
 
-    // Mark: method to verify input locally, rather than requesting verification from the server
+    // Mark: methods to verify input locally, rather than requesting verification from the server
     //  since the server itself later verifies if the operation is legal,
     //  doing the input verification locally should be fine
-    // FIXME: refactor to GameControllerFacade?
-    // FIXME: Exceptions?
     public boolean hasHostileNeighbors(Country country){
         for (Country neighbor : country.getNeighbors()){
             if (!country.getOwner().equals(neighbor.getOwner()))
@@ -277,10 +282,30 @@ public class GUIControl {
         return false;
     }
 
+    public boolean isLegalCardUse(int iCards, int cCards, int aCards){
+        if (iCards + cCards + aCards != 3){
+            return false;
+        }
+        if (iCards == 3 || cCards == 3 || aCards == 3){
+            return true;
+        }
+        if (iCards == 1 & cCards == 1 & aCards == 1){
+            return true;
+        }
+        return false;
+    }
+
+    public Player getPlayer(){
+        for (Player player : getGame().getPlayers()){
+            if (player.getName().equals(getPlayerName()))
+                return player;
+        }
+        return null;
+    }
+
     public boolean myTurn() throws GameNotFoundException, IOException, ClassNotFoundException {
-        // MARK:
-        // FIXME: Game couldnt start at one point (nullPointerException), this fixes it
-        //  i think it's because the game isn't initialized yet by the time we call this function
+        // FIXME: this point crashes often, it did not crash when we had Thread.sleep
+        //  The code below was supposed to fix this problem, I have not investigated yet why it still crashes
         if(gc.getGameById(gameId) != null) {
             return gc.getPlayerName().equals(getGame().getTurn().getPlayer().getName());
         } else {
@@ -301,12 +326,17 @@ public class GUIControl {
         return null;
     }
 
+
     public Country getSelectedCountry() {
         return getGame().getCountries().get(selectedCountry);
     }
 
     public Player getCurrentPlayer() {
         return getGame().getTurn().getPlayer();
+    }
+
+    public String getPlayerName(){
+        return gc.getPlayerName();
     }
 
     private LogHBox getLog() {

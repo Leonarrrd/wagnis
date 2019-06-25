@@ -23,7 +23,7 @@ public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updat
     public void doStuff() {
 //        this.getStyleClass().add("cards-hbox");
 
-        Player player = GUIControl.getInstance().getGame().getTurn().getPlayer();
+        Player player = GUIControl.getInstance().getPlayer();
         this.infantryCards = new Text("Infantry: " + player.getNumberOfCardsWithSymbol(CardSymbol.INFANTRY));
         this.cavalryCards = new Text("Cavalry: " + player.getNumberOfCardsWithSymbol(CardSymbol.CAVALRY));
         this.artilleryCards = new Text("Artillery: " + player.getNumberOfCardsWithSymbol(CardSymbol.ARTILLERY));
@@ -38,10 +38,9 @@ public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updat
 
     @Override
     public void update() {
-        Player player = GUIControl.getInstance().getGame().getTurn().getPlayer();
+        Player player = GUIControl.getInstance().getPlayer();
         this.infantryCards.setText("Infantry: " + player.getNumberOfCardsWithSymbol(CardSymbol.INFANTRY));
         this.cavalryCards.setText("Cavalry: " + player.getNumberOfCardsWithSymbol(CardSymbol.CAVALRY));
         this.artilleryCards.setText("Artillery: " + player.getNumberOfCardsWithSymbol(CardSymbol.ARTILLERY));
     }
-
 }

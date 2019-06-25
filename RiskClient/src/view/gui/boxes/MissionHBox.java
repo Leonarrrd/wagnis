@@ -3,24 +3,25 @@ package view.gui.boxes;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.Player;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 
-public class MissionHBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
+public class MissionHBox extends BottomBarNodeHBox implements RiskUIElement {
     private Text missionText;
 
     public MissionHBox() {
         super();
-        addAsUpdateElement("mission-hbox", this);
     }
 
     @Override
     public void doStuff() {
-        this.setMaxWidth(300); // ????
-
-
-        this.missionText= new Text(GUIControl.getInstance().getGame().getTurn().getPlayer().getMission().getMessage());
+//        this.setMaxWidth(300); // ????
+        for (Player player : GUIControl.getInstance().getGame().getPlayers()){
+            if (player.getName().equals(GUIControl.getInstance().getPlayerName()))
+                this.missionText = new Text(player.getMission().getMessage());
+        }
         missionText.setWrappingWidth(200);
 
         VBox vBox = new VBox();
@@ -29,10 +30,5 @@ public class MissionHBox extends BottomBarNodeHBox implements RiskUIElement, Upd
         vBox.getChildren().add(missionText);
 
         this.getChildren().add(vBox);
-    }
-
-    @Override
-    public void update(){
-        missionText.setText(GUIControl.getInstance().getGame().getTurn().getPlayer().getMission().getMessage());
     }
 }
