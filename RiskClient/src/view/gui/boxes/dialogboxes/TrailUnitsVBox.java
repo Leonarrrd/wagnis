@@ -48,8 +48,7 @@ public class TrailUnitsVBox extends VBox implements RiskUIElement {
             public void handle(ActionEvent event) {
                 try {
                     GUIControl.getInstance().trailUnits(trailUnitsSpinner.getValue());
-                    GUIControl.getInstance().setTurnManually(Phase.ATTACK);
-                } catch (NoSuchPlayerException | GameNotFoundException | IOException e) {
+                } catch (NoSuchPlayerException  e) {
                     e.printStackTrace();
                 }
             }

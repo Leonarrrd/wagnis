@@ -51,7 +51,6 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
             @Override
             public void handle(ActionEvent event) {
                 GUIControl.getInstance().move(moveFromText.getText(), moveToText.getText(), unitsToMoveWithSpinner.getValue());
-                GUIControl.getInstance().forwardTurnPhase();
             }
         });
 
@@ -59,7 +58,7 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
         skipButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GUIControl.getInstance().forwardTurnPhase();
+                GUIControl.getInstance().nextPlayerTurn();
             }
         });
 

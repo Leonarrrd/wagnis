@@ -317,7 +317,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void initAttack(UUID gameId, String attackingCountry, String defendingCountry, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
-        oos.writeUTF(INIT_ATTACK + "," +  gameId.toString() + "," + attackingCountry + "," + defendingCountry + "," + units );
+        oos.writeUTF(INIT_ATTACK + "," + gameId.toString() + "," + attackingCountry + "," + defendingCountry + "," + units);
         oos.flush();
 
 
@@ -330,7 +330,7 @@ public class GameControllerFacade implements IGameController {
     @Override
     public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException {
         gameId = this.game.getId();
-        oos.writeUTF(FIGHT +  "," + gameId.toString() + "," +attackingCountry.getName() + "," + defendingCountry.getName() + "," + attackingUnits + ","+ defendingUnits);
+        oos.writeUTF(FIGHT + "," + gameId.toString() + "," + attackingCountry.getName() + "," + defendingCountry.getName() + "," + attackingUnits + "," + defendingUnits);
         oos.flush();
 
         synchronized (ois) {
@@ -347,9 +347,15 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException, IOException {
-         oos.writeUTF(MOVE + "," + gameId.toString() + "," + srcCountry.getName() + "," + destCountry.getName() + "," + amount);
-         oos.flush();
+    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException, IOException {
+
+        if (trail) {
+            oos.writeUTF(MOVE + "," + gameId.toString() + "," + srcCountry.getName() + "," + destCountry.getName() + "," + amount + ",trail");
+        } else {
+            oos.writeUTF(MOVE + "," + gameId.toString() + "," + srcCountry.getName() + "," + destCountry.getName() + "," + amount + ",notrail");
+        }
+        oos.flush();
+
     }
 
     /**
@@ -382,6 +388,11 @@ public class GameControllerFacade implements IGameController {
     @Override
     public void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
         oos.writeUTF(SWITCH_TURNS + "," + gameId.toString());
+        oos.flush();
+    }
+
+    public void switchTurns(UUID gameId, boolean notifyAll) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
+        oos.writeUTF(SWITCH_TURNS + "," + gameId.toString() + "," + "notifyall");
         oos.flush();
     }
 

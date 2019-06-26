@@ -15,10 +15,7 @@ import view.gui.boxes.dialogboxes.UseCardsVBox;
 import view.gui.helper.GUIControl;
 import view.gui.sockets.GameControllerFacade;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -82,7 +79,9 @@ public class ClientIOThread extends Thread {
                     case SWITCH_TURNS:
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
+
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -129,20 +128,27 @@ public class ClientIOThread extends Thread {
                         AttackResult ar = (AttackResult) reader.readUnshared();
 
 
-
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 try {
-                                GUIControl.getInstance().fight(game.getCountries().get(attacker), game.getCountries().get(defender), ar);
-                                GUIControl.getInstance().getComponentMap().get(attacker + "info-hbox").update();
-                                GUIControl.getInstance().getComponentMap().get(defender + "info-hbox").update();
-
-
+                                    GUIControl.getInstance().fight(game.getCountries().get(attacker), game.getCountries().get(defender), ar);
                                 } catch (IOException e) {
                                 } catch (GameNotFoundException | CountriesNotAdjacentException | NotEnoughUnitsException | NoSuchCountryException | ClassNotFoundException | NoSuchPlayerException e) {
                                     e.printStackTrace();
-                               }
+                                }
+                            }
+                        });
+
+                        writer.writeUTF(GET_GAME + "," + split[1]);
+                        writer.flush();
+                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                GUIControl.getInstance().getComponentMap().get(attacker + "info-hbox").update();
+                                GUIControl.getInstance().getComponentMap().get(defender + "info-hbox").update();
                             }
                         });
 
@@ -153,6 +159,7 @@ public class ClientIOThread extends Thread {
                     case MOVE:
                         //split[2] country1Name
                         //split[3] country2Name
+                        //split[4] trail
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
@@ -162,11 +169,23 @@ public class ClientIOThread extends Thread {
 
                         GUIControl.getInstance().getComponentMap().get(country1Name + "info-hbox").update();
                         GUIControl.getInstance().getComponentMap().get(country2Name + "info-hbox").update();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
+                            }
+                        });
+
+
+
+
                         break;
                     case GET_GAME:
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+
                         break;
 
                 }

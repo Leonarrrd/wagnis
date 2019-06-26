@@ -55,12 +55,12 @@ public class DefenseVBox extends VBox implements RiskUIElement {
                 int defendingUnits = defendingUnitsSpinner.getValue();
                 try {
                     AttackResult ar = GameControllerFacade.getInstance().fight(null, attackingCountry, defendingCountry, attackingUnits, defendingUnits);
-                    GUIControl.getInstance().fight(attackingCountry, defendingCountry, ar);
-                    GUIControl.getInstance().forwardTurnPhase();
+                    //GUIControl.getInstance().fight(attackingCountry, defendingCountry, ar);
+                   // GUIControl.getInstance().forwardTurnPhase();
                 } catch (IOException e) {
                     //this is fine
 
-                } catch (GameNotFoundException | NoSuchPlayerException | ClassNotFoundException | NoSuchCountryException | NotEnoughUnitsException | CountriesNotAdjacentException e) {
+                } catch (GameNotFoundException | ClassNotFoundException | NoSuchCountryException | NotEnoughUnitsException | CountriesNotAdjacentException e) {
                     new ErrorAlert(e);
                 }
             }

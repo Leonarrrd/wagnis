@@ -60,7 +60,7 @@ public class GUIControl {
     public void initLoadedGame(UUID gameId) {
         try {
             gc.loadGame(gameId);
-        } catch (GameNotFoundException| ClassNotFoundException | IOException | InvalidFormattedDataException e) {
+        } catch (GameNotFoundException | ClassNotFoundException | IOException | InvalidFormattedDataException e) {
             new ErrorAlert(e);
         }
 
@@ -78,10 +78,10 @@ public class GUIControl {
         this.gameId = gameId;
 
         //FIXME:!!!! workaround to access the scene
-        ((GridPane)componentMap.get("start-new-game-grid-pane")).getScene().setRoot(new GameBorderPane());
+        ((GridPane) componentMap.get("start-new-game-grid-pane")).getScene().setRoot(new GameBorderPane());
     }
 
-    public void useCards(int infantryCards, int cavalryCards, int artilleryCards){
+    public void useCards(int infantryCards, int cavalryCards, int artilleryCards) {
         try {
             gc.useCards(gameId, getCurrentPlayer(), infantryCards, cavalryCards, artilleryCards);
             // FIXME: SAME AS BELOW
@@ -121,6 +121,7 @@ public class GUIControl {
 
     /**
      * Tell the server to start an attack with given parameters
+     *
      * @param attackingCountry
      * @param defendingCountry
      * @param units
@@ -140,8 +141,6 @@ public class GUIControl {
 
     public void fight(Country attackingCountry, Country defendingCountry, AttackResult ar) throws GameNotFoundException, NoSuchPlayerException, IOException, ClassNotFoundException, NoSuchCountryException, NotEnoughUnitsException, CountriesNotAdjacentException {
 
-         //   gc.fight(getGame().getId(), attackingCountry, defendingCountry, attackingUnits, defendingUnits);
-
         componentMap.get(attackingCountry + "info-hbox").update();
         componentMap.get(defendingCountry + "info-hbox").update();
 
@@ -160,11 +159,10 @@ public class GUIControl {
         if (ar.getWinner() != null) {
             if (ar.getWinner().equals(defendingCountry)) {
                 getLog().update(defendingCountry + " successfully defended. It is owned by: " + defendingCountry.getOwner());
-                setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
             } else {
                 lastFightCountry = new LastFightCountries(attackingCountry, defendingCountry);
                 getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defendingCountry.getOwner());
-                forwardTurnPhase();
+                setTurnManually(Phase.TRAIL_UNITS);
             }
         } else {
             return;
@@ -175,10 +173,11 @@ public class GUIControl {
 
     public void trailUnits(int value) throws NoSuchPlayerException {
         try {
-            gc.moveUnits(gameId, lastFightCountry.getSrcCountry(), lastFightCountry.getDestCountry(), value);
+
+            gc.moveUnits(gameId, lastFightCountry.getSrcCountry(), lastFightCountry.getDestCountry(), value, true);
             componentMap.get(lastFightCountry.getSrcCountry() + "info-hbox").update();
             componentMap.get(lastFightCountry.getDestCountry() + "info-hbox").update();
-            setTurnManually(Phase.ATTACK);
+
         } catch (IOException | CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | NoSuchCountryException | CountryNotOwnedException e) {
             new ErrorAlert(e);
         }
@@ -188,7 +187,7 @@ public class GUIControl {
         Country srcCountryObj = getCountryFromString(srcCountry);
         Country destCountryObj = getCountryFromString(destCountry);
         try {
-            gc.moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount);
+            gc.moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount, false);
             getLog().update(srcCountryObj.getOwner().getName() + " moved " + amount + " from " + srcCountry + " to " + destCountry);
 
         } catch (IOException | CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
@@ -204,13 +203,18 @@ public class GUIControl {
         }
     }
 
+    public void nextPlayerTurn() {
+        try {
+            GameControllerFacade.getInstance().switchTurns(gameId, true);
+        } catch (GameNotFoundException | NoSuchPlayerException | NoSuchCardException | CardAlreadyOwnedException | IOException e) {
+            new ErrorAlert(e);
+        }
+
+    }
+
     public void setTurnManually(Phase phase) throws NoSuchPlayerException, GameNotFoundException, IOException {
         gc.setTurn(gameId, phase);
 
-//        getGame().getTurn().setPhase(phase);
-//        Updatable dialogVBox = componentMap.get("dialog-vbox");
-//        dialogVBox.update();
-//        componentMap.get("player-list-vbox").update();
     }
 
     /**
@@ -219,7 +223,7 @@ public class GUIControl {
      * @param
      */
     public void countryClicked(String countryString) throws GameNotFoundException, IOException, ClassNotFoundException {
-        if(myTurn()) {
+        if (myTurn()) {
             selectedCountry = countryString;
             Game game = getGame();
             switch (game.getTurn().getPhase()) {
@@ -264,7 +268,7 @@ public class GUIControl {
     public Country getCountryFromString(String countryString) {
         try {
             return gc.getGameById(gameId).getCountries().get(countryString);
-        } catch (IOException | ClassNotFoundException|  GameNotFoundException e) {
+        } catch (IOException | ClassNotFoundException | GameNotFoundException e) {
             new ErrorAlert(e);
             return null;
         }
@@ -273,29 +277,29 @@ public class GUIControl {
     // Mark: methods to verify input locally, rather than requesting verification from the server
     //  since the server itself later verifies if the operation is legal,
     //  doing the input verification locally should be fine
-    public boolean hasHostileNeighbors(Country country){
-        for (Country neighbor : country.getNeighbors()){
+    public boolean hasHostileNeighbors(Country country) {
+        for (Country neighbor : country.getNeighbors()) {
             if (!country.getOwner().equals(neighbor.getOwner()))
                 return true;
         }
         return false;
     }
 
-    public boolean isLegalCardUse(int iCards, int cCards, int aCards){
-        if (iCards + cCards + aCards != 3){
+    public boolean isLegalCardUse(int iCards, int cCards, int aCards) {
+        if (iCards + cCards + aCards != 3) {
             return false;
         }
-        if (iCards == 3 || cCards == 3 || aCards == 3){
+        if (iCards == 3 || cCards == 3 || aCards == 3) {
             return true;
         }
-        if (iCards == 1 & cCards == 1 & aCards == 1){
+        if (iCards == 1 & cCards == 1 & aCards == 1) {
             return true;
         }
         return false;
     }
 
-    public Player getPlayer(){
-        for (Player player : getGame().getPlayers()){
+    public Player getPlayer() {
+        for (Player player : getGame().getPlayers()) {
             if (player.getName().equals(getPlayerName()))
                 return player;
         }
@@ -306,7 +310,7 @@ public class GUIControl {
         // FIXME: this point crashes often, it did not crash when we had Thread.sleep
         //  The code below was supposed to fix this problem, I have not investigated yet why it still crashes
 
-        if(gc.getGameById(gameId) != null) {
+        if (gc.getGameById(gameId) != null) {
             return gc.getPlayerName().equals(getGame().getTurn().getPlayer().getName());
         } else {
             return false;
@@ -314,12 +318,12 @@ public class GUIControl {
     }
 
     public Player checkForWinner() {
-        for (Player player : getGame().getPlayers()){
+        for (Player player : getGame().getPlayers()) {
             try {
-                if (gc.checkWinCondidtion(gameId, player)){
+                if (gc.checkWinCondidtion(gameId, player)) {
                     return player;
                 }
-            } catch (GameNotFoundException | NoSuchPlayerException | IOException e){
+            } catch (GameNotFoundException | NoSuchPlayerException | IOException e) {
                 e.printStackTrace();
             }
         }
@@ -335,7 +339,7 @@ public class GUIControl {
         return getGame().getTurn().getPlayer();
     }
 
-    public String getPlayerName(){
+    public String getPlayerName() {
         return gc.getPlayerName();
     }
 

@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
+import view.gui.sockets.GameControllerFacade;
 
 import java.io.IOException;
 
@@ -51,7 +52,7 @@ public class PerformAnotherMoveVBox extends VBox implements RiskUIElement {
             @Override
             public void handle(ActionEvent event) {
 
-                GUIControl.getInstance().forwardTurnPhase();
+                GUIControl.getInstance().nextPlayerTurn();
             }
         });
 

@@ -28,6 +28,8 @@ public class Events {
     public static final String MOVE = "MOVE";
     public static final String CHECK_WIN_CONDITION = "CHECK_WIN_CONDITION";
     public static final String SWITCH_TURNS = "SWITCH_TURNS";
+
+    public static final String SWITCH_PLAYER_TURNS = "SWITCH_PLAYER_TURNS";
     public static final String SET_TURN = "SET_TURN";
     public static final String UPDATE_PLAYER_GRAPH_MAP = "UPDATE_PLAYER_GRAPH_MAP";
     public static final String POST_PHASE_CHECK = "POST_PHASE_CHECK";
