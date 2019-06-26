@@ -138,38 +138,38 @@ public class GUIControl {
         gc.initAttack(gameId, attackingCountry, defendingCountry, units);
     }
 
-    public void fight(Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws GameNotFoundException, NoSuchPlayerException, IOException, ClassNotFoundException, NoSuchCountryException, NotEnoughUnitsException, CountriesNotAdjacentException {
-//        AttackResult ar = null;
-//            ar = gc.fight(getGame().getId(), attCountry, defCountry, attackingUnits, defendingUnits);
-            gc.fight(getGame().getId(), attackingCountry, defendingCountry, attackingUnits, defendingUnits);
+    public void fight(Country attackingCountry, Country defendingCountry, AttackResult ar) throws GameNotFoundException, NoSuchPlayerException, IOException, ClassNotFoundException, NoSuchCountryException, NotEnoughUnitsException, CountriesNotAdjacentException {
 
-//        componentMap.get(attackingCountry + "info-hbox").update();
-//        componentMap.get(defendingCountry + "info-hbox").update();
-//
-//
-//        getLog().update("Attacking Player: " + attCountry.getOwner() + " with country: " + attackingCountry + " rolled: ");
-//        for (int attDices : ar.getAttackerDices()) {
-//            getLog().update(attDices + "");
-//        }
-//        getLog().update("Defending Player: " + defCountry.getOwner() + " with country: " + defendingCountry + " rolled: ");
-//        for (int defDices : ar.getDefenderDices()) {
-//            getLog().update(defDices + "");
-//        }
-//
-//        ((DiceGridPane) componentMap.get("dice-grid")).update(attCountry.getOwner().getColor().toString(), defCountry.getOwner().getColor().toString(), ar.getAttackerDices(), ar.getDefenderDices());
-//
-//        if (ar.getWinner() != null) {
-//            if (ar.getWinner().equals(defCountry)) {
-//                getLog().update(defendingCountry + " successfully defended. It is owned by: " + defCountry.getOwner());
-//                setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
-//            } else {
-//                lastFightCountry = new LastFightCountries(attCountry, defCountry);
-//                getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defCountry.getOwner());
-//                forwardTurnPhase();
-//            }
-//        } else {
-//            return;
-//        }
+         //   gc.fight(getGame().getId(), attackingCountry, defendingCountry, attackingUnits, defendingUnits);
+
+        componentMap.get(attackingCountry + "info-hbox").update();
+        componentMap.get(defendingCountry + "info-hbox").update();
+
+
+        getLog().update("Attacking Player: " + attackingCountry.getOwner() + " with country: " + attackingCountry + " rolled: ");
+        for (int attDices : ar.getAttackerDices()) {
+            getLog().update(attDices + "");
+        }
+        getLog().update("Defending Player: " + defendingCountry.getOwner() + " with country: " + defendingCountry + " rolled: ");
+        for (int defDices : ar.getDefenderDices()) {
+            getLog().update(defDices + "");
+        }
+
+        ((DiceGridPane) componentMap.get("dice-grid")).update(attackingCountry.getOwner().getColor().toString(), defendingCountry.getOwner().getColor().toString(), ar.getAttackerDices(), ar.getDefenderDices());
+
+        if (ar.getWinner() != null) {
+            if (ar.getWinner().equals(defendingCountry)) {
+                getLog().update(defendingCountry + " successfully defended. It is owned by: " + defendingCountry.getOwner());
+                setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
+            } else {
+                lastFightCountry = new LastFightCountries(attackingCountry, defendingCountry);
+                getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defendingCountry.getOwner());
+                forwardTurnPhase();
+            }
+        } else {
+            return;
+        }
+
 
     }
 
@@ -199,7 +199,6 @@ public class GUIControl {
     public void forwardTurnPhase() {
         try {
             gc.switchTurns(gameId);
-//            componentMap.get("cards-hbox").update();
         } catch (GameNotFoundException | IOException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
             new ErrorAlert(e);
         }
@@ -306,6 +305,7 @@ public class GUIControl {
     public boolean myTurn() throws GameNotFoundException, IOException, ClassNotFoundException {
         // FIXME: this point crashes often, it did not crash when we had Thread.sleep
         //  The code below was supposed to fix this problem, I have not investigated yet why it still crashes
+
         if(gc.getGameById(gameId) != null) {
             return gc.getPlayerName().equals(getGame().getTurn().getPlayer().getName());
         } else {

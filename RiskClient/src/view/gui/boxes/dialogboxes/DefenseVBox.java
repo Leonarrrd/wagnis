@@ -12,9 +12,12 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import model.AttackResult;
 import model.Country;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
+import view.gui.sockets.GameControllerFacade;
 
 import java.io.IOException;
 
@@ -51,9 +54,14 @@ public class DefenseVBox extends VBox implements RiskUIElement {
             public void handle(ActionEvent event) {
                 int defendingUnits = defendingUnitsSpinner.getValue();
                 try {
-                    GUIControl.getInstance().fight(attackingCountry, defendingCountry, attackingUnits, defendingUnits);
-                } catch (GameNotFoundException | NoSuchPlayerException | IOException | ClassNotFoundException | NoSuchCountryException | NotEnoughUnitsException | CountriesNotAdjacentException e) {
-                    e.printStackTrace();
+                    AttackResult ar = GameControllerFacade.getInstance().fight(null, attackingCountry, defendingCountry, attackingUnits, defendingUnits);
+                    GUIControl.getInstance().fight(attackingCountry, defendingCountry, ar);
+                    GUIControl.getInstance().forwardTurnPhase();
+                } catch (IOException e) {
+                    //this is fine
+
+                } catch (GameNotFoundException | NoSuchPlayerException | ClassNotFoundException | NoSuchCountryException | NotEnoughUnitsException | CountriesNotAdjacentException e) {
+                    new ErrorAlert(e);
                 }
             }
         });

@@ -12,6 +12,7 @@ import model.Player;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,22 +91,18 @@ public class ClientRequestProcessor extends Thread {
                         }
                         for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
                             ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
-                            sOos.writeUTF(GET_GAME+ "," + gameId);
+                            sOos.writeUTF(GET_GAME + "," + gameId);
                             sOos.flush();
-                            sOos.reset();
-                            sOos.writeUnshared(GameController.getInstance().getGameById(gameId));
-                            sOos.flush();
-                            sOos.reset();
+
                         }
                         break;
                     case GET_GAME:
                         game = GameController.getInstance().getGameById(gameId);
-                        oos.reset();
                         oos.writeUnshared(game);
                         oos.flush();
                         oos.reset();
-
                         break;
+
                     case SWITCH_TURNS:
                         gc.switchTurns(gameId);
                         for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
@@ -116,11 +113,13 @@ public class ClientRequestProcessor extends Thread {
                         break;
                     case SET_TURN:
                         gc.setTurn(gameId, Phase.valueOf(split[2]));
-                        for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
+                        oos.writeUTF(SWITCH_TURNS + "," + gameId.toString());
+                        oos.flush();
+                        /*for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
                             ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
                             sOos.writeUTF(SWITCH_TURNS + "," + gameId.toString());
                             sOos.flush();
-                        }
+                        }*/
                         break;
                     case USE_CARDS:
                         //split[2] playerName
@@ -129,7 +128,7 @@ public class ClientRequestProcessor extends Thread {
                         //split[5] artilleryCards
                         game = gc.getGameById(gameId);
                         Player player = null;
-                        for (Player p : game.getPlayers()){
+                        for (Player p : game.getPlayers()) {
                             if (p.getName().equals(split[2])) {
                                 player = p;
                             }
@@ -151,7 +150,7 @@ public class ClientRequestProcessor extends Thread {
                         GameController.getInstance().changeUnitsToPlace(gameId, country.getOwner(), -units);
                         for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
                             ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
-                            sOos.writeUTF(CHANGE_UNITS+ "," + gameId.toString() + "," + countryString);
+                            sOos.writeUTF(CHANGE_UNITS + "," + gameId.toString() + "," + countryString);
                             sOos.flush();
                         }
                         break;
@@ -160,31 +159,10 @@ public class ClientRequestProcessor extends Thread {
                         //split[2]: attacking country name
                         //split[3]: defending country name
                         //split[4]:units
-                        // MARK: no need to check if countries + players exist, correct?
-                        if (!(game.getCountries().keySet().contains(split[2]) && game.getCountries().keySet().contains(split[3]))){
-                            // noSuchCountryException
-                        }
-
                         Country attackingCountry = game.getCountries().get(split[2]);
                         Country defendingCountry = game.getCountries().get(split[3]);
                         units = Integer.parseInt(split[4]);
 
-
-                        if (!attackingCountry.getOwner().equals(game.getTurn().getPlayer())){
-                            // player doesn't own country
-                        }
-                        if (attackingCountry.getUnits() == 1){
-                            // only one unit on country
-                        }
-                        if (units > attackingCountry.getUnits() - 1){
-                            // not enough units on country
-                        }
-                        if (!attackingCountry.getNeighbors().contains(defendingCountry)){
-                            // not neighbors
-                        }
-                        if (attackingCountry.getOwner().equals(defendingCountry.getOwner())){
-                            // not hostile
-                        }
 
                         for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
                             ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
@@ -198,26 +176,26 @@ public class ClientRequestProcessor extends Thread {
                         //split[3]: defending country name
                         //split[4]:attackingUnits
                         //split[5]:defendingUnits
-                        // MARK: Actually, we need to do all the checks again here, right? + checking if defendingUnits are valid
-                        Country fightAttackingCountry =  game.getCountries().get(split[2]);
-                        Country fightDefendingCountry =  game.getCountries().get(split[3]);
-                        int fightAttackingUnits =  Integer.parseInt(split[4]);
-                        int fightDefendingUnits =  Integer.parseInt(split[5]);
+                        Country fightAttackingCountry = game.getCountries().get(split[2]);
+                        Country fightDefendingCountry = game.getCountries().get(split[3]);
+                        int fightAttackingUnits = Integer.parseInt(split[4]);
+                        int fightDefendingUnits = Integer.parseInt(split[5]);
                         AttackResult ar = gc.fight(gameId, fightAttackingCountry, fightDefendingCountry, fightAttackingUnits, fightDefendingUnits);
-                        // FIXME!!!!: oof ouch owie, please ask me about this if i forget to
-                        //  I think the easiest solution would be to just not have the winner in the attackresult
-                        String winner = ar.getWinner() == null? "no_winner" : ar.getWinner().getName();
+                        updatePlayerGraph(game);
+
                         for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
                             ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
                             sOos.writeUTF(FIGHT_FINISHED + "," + gameId.toString() + ","
-                                    + winner + "," + fightAttackingCountry.getName() + "," + fightDefendingCountry.getName() + ","
-                                    + ar.getAttackerDices() + "," + ar.getDefenderDices());
+                                    + fightAttackingCountry.getName() + "," + fightDefendingCountry.getName() + ",");
                             sOos.flush();
+                            sOos.writeUnshared(ar);
+                            sOos.flush();
+
                         }
                         break;
                     case MOVE:
                         game = gc.getGameById(gameId);
-                        if (!game.getCountries().keySet().contains(split[2])){
+                        if (!game.getCountries().keySet().contains(split[2])) {
 //                            throw new NoSuchCountryException(split[2]);
                         } else if (!game.getCountries().keySet().contains(split[3])) {
 //                            throw new NoSuchCountryException(split[3]);
@@ -227,7 +205,7 @@ public class ClientRequestProcessor extends Thread {
                         Country c2 = game.getCountries().get(split[3]); // E noSuchCountry
                         units = Integer.parseInt(split[4]); // E?
 
-                        if (!c1.getOwner().getCountryGraph().isConnected(c1, c2)){
+                        if (!c1.getOwner().getCountryGraph().isConnected(c1, c2)) {
                             throw new CountriesNotConnectedException(c1, c2);
                         }
                         gc.moveUnits(gameId, c1, c2, units); // E
@@ -237,21 +215,7 @@ public class ClientRequestProcessor extends Thread {
                             sOos.flush();
                         }
                         break;
-//                    case HAS_COUNTRY_TO_ATTACK_FROM:
-//                        gc.hasCountryToAttackFrom(gameId, gc.getGameById(gameId).getTurn().getPlayer());
-//                        break;
-//                    case HAS_COUNTRY_TO_MOVE_FROM:
-//                        gc.hasCountryToMoveFrom(gameId, gc.getGameById(gameId).getTurn().getPlayer());
-//                        break;
-//                    case HAS_COUNTRY_TO_MOVE_TO:
-//                        game = gc.getGameById(gameId);
-//                        country = game.getCountries().get(split[2]);
-//                        GraphController.getInstance().updatePlayerGraphMap(game, country.getOwner());
-//                        boolean b = gc.hasCountryToMoveTo(gameId, country);
-////                        oos.reset();
-//                        oos.writeBoolean(b);
-//                        oos.flush();
-//                        break;
+
                     default:
                         break;
                 }
@@ -273,4 +237,11 @@ public class ClientRequestProcessor extends Thread {
 
 
     }
+
+    private void updatePlayerGraph(Game game) throws NoSuchPlayerException, GameNotFoundException {
+        for (Player p : game.getPlayers()) {
+            GameController.getInstance().updatePlayerGraphMap(game.getId(), p);
+        }
+    }
+
 }

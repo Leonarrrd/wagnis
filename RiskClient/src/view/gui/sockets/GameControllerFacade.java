@@ -319,6 +319,8 @@ public class GameControllerFacade implements IGameController {
     public void initAttack(UUID gameId, String attackingCountry, String defendingCountry, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
         oos.writeUTF(INIT_ATTACK + "," +  gameId.toString() + "," + attackingCountry + "," + defendingCountry + "," + units );
         oos.flush();
+
+
     }
 
     /**
@@ -327,11 +329,17 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException {
+        gameId = this.game.getId();
         oos.writeUTF(FIGHT +  "," + gameId.toString() + "," +attackingCountry.getName() + "," + defendingCountry.getName() + "," + attackingUnits + ","+ defendingUnits);
         oos.flush();
 
+        synchronized (ois) {
+
+            ois.readUTF(); //clear the stream
+
+            return (AttackResult) ois.readUnshared();
+        }
         // return (AttackResult) ois.readObject();
-        return null;
     }
 
     /**

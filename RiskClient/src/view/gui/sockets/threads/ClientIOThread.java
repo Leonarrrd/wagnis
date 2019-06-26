@@ -1,8 +1,11 @@
 package view.gui.sockets.threads;
 
 
+import datastructures.Phase;
+import exceptions.*;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import model.AttackResult;
 import model.Game;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.DialogVBox;
@@ -80,7 +83,6 @@ public class ClientIOThread extends Thread {
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
-
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
@@ -103,7 +105,7 @@ public class ClientIOThread extends Thread {
                         break;
                     case DEFENSE:
                         String defendingPlayerName = GameControllerFacade.getInstance().game.getCountries().get(split[3]).getOwner().getName();
-                        if (GameControllerFacade.getInstance().getPlayerName().equals(defendingPlayerName)){
+                        if (GameControllerFacade.getInstance().getPlayerName().equals(defendingPlayerName)) {
                             DialogVBox dialogVBox = (DialogVBox) GUIControl.getInstance().getComponentMap().get("dialog-vbox");
                             Platform.runLater(new Runnable() {
                                 @Override
@@ -112,17 +114,41 @@ public class ClientIOThread extends Thread {
                                 }
                             });
                         }
+//                        AttackResult ar = (AttackResult) reader.readUnshared();
+
                         break;
                     case FIGHT_FINISHED:
-                        // split [2] winner
-                        // split [3] attacker
-                        // split [4] defender
-                        // split [5] attackerdices
-                        // split [6] defenderdices
-                        //TODO: display dices
-                        //TODO: update countryInfoBoxes
-                        //TODO: update playerGraphs
-                        //TODO: evaluate split[2]
+                        // split [1} gameId
+                        // split [2] attacker
+                        // split [3] defender
+
+                        UUID gameId = UUID.fromString(split[1]);
+                        Game game = GameControllerFacade.getInstance().getGameById(gameId);
+                        String attacker = split[2];
+                        String defender = split[3];
+                        AttackResult ar = (AttackResult) reader.readUnshared();
+
+
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                GUIControl.getInstance().fight(game.getCountries().get(attacker), game.getCountries().get(defender), ar);
+                                GUIControl.getInstance().getComponentMap().get(attacker + "info-hbox").update();
+                                GUIControl.getInstance().getComponentMap().get(defender + "info-hbox").update();
+
+
+                                } catch (IOException e) {
+                                } catch (GameNotFoundException | CountriesNotAdjacentException | NotEnoughUnitsException | NoSuchCountryException | ClassNotFoundException | NoSuchPlayerException e) {
+                                    e.printStackTrace();
+                               }
+                            }
+                        });
+
+                        writer.writeUTF(SET_TURN + "," + gameId + "," + Phase.PERFORM_ANOTHER_ATTACK.toString());
+                        writer.flush();
+
                         break;
                     case MOVE:
                         //split[2] country1Name
@@ -138,6 +164,8 @@ public class ClientIOThread extends Thread {
                         GUIControl.getInstance().getComponentMap().get(country2Name + "info-hbox").update();
                         break;
                     case GET_GAME:
+                        writer.writeUTF(GET_GAME + "," + split[1]);
+                        writer.flush();
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
                         break;
 
@@ -152,7 +180,7 @@ public class ClientIOThread extends Thread {
                         new ErrorAlert(e);
                     }
                 });
-            } catch (ClassNotFoundException e) {
+            } catch (ClassNotFoundException | GameNotFoundException e) {
                 e.printStackTrace();
             }
         }
