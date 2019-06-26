@@ -329,7 +329,7 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException {
+    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException {
         Game game = getGameById(gameId);
         wc.moveUnits(game, srcCountry, destCountry, amount);
     }

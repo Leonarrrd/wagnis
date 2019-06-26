@@ -1,7 +1,6 @@
-package utils;
+package helper;
 
 public class Utils {
-
     public static boolean stringContainsDelimitters(String string) {
         if (string.contains("[")
                 || string.contains("]")
@@ -18,4 +17,3 @@ public class Utils {
         return false;
     }
 }
-

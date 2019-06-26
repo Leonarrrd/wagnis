@@ -2,7 +2,11 @@ package exceptions;
 
 import model.Card;
 
-public class NoSuchCardException extends Exception {
+import java.io.Serializable;
+
+public class NoSuchCardException extends Exception implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     public NoSuchCardException(Card card) {
         super("Card with Id " + card.getId() + " should not exist.");
     }

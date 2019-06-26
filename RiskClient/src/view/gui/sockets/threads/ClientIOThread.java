@@ -176,15 +176,20 @@ public class ClientIOThread extends Thread {
                                 GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
                             }
                         });
-
-
-
-
                         break;
                     case GET_GAME:
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
                         GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+                        break;
+                    case ERROR:
+                        Exception e = (Exception) reader.readUnshared();
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                new ErrorAlert(e);
+                            }
+                        });
 
                         break;
 

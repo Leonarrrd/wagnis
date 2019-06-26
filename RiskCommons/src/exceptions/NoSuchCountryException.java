@@ -2,7 +2,11 @@ package exceptions;
 
 import model.Country;
 
-public class NoSuchCountryException extends Exception {
+import java.io.Serializable;
+
+public class NoSuchCountryException extends Exception implements Serializable {
+    private static final long serialVersionUID = 1L;
+
 
     public NoSuchCountryException(Country country) {
         super("Country " + country.getName() + " should not exist.");
