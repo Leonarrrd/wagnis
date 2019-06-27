@@ -4,14 +4,12 @@ package view.gui.sockets.threads;
 import datastructures.Phase;
 import exceptions.*;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import model.AttackResult;
 import model.Game;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.DialogVBox;
 import view.gui.boxes.dialogboxes.DefenseVBox;
-import view.gui.boxes.dialogboxes.TrailUnitsVBox;
-import view.gui.boxes.dialogboxes.UseCardsVBox;
+
 import view.gui.helper.GUIControl;
 import view.gui.sockets.GameControllerFacade;
 
@@ -80,7 +78,8 @@ public class ClientIOThread extends Thread {
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
 
-                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+                        Game switchTurnsGame = (Game) reader.readUnshared();
+                        GameControllerFacade.getInstance().setGame(switchTurnsGame);
 
                         Platform.runLater(new Runnable() {
                             @Override
@@ -97,13 +96,14 @@ public class ClientIOThread extends Thread {
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
 
-                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+                        Game changeUnitsGame = (Game) reader.readUnshared();
+                        GameControllerFacade.getInstance().setGame(changeUnitsGame);
 
                         country1Name = split[2];
                         GUIControl.getInstance().getComponentMap().get(country1Name + "info-hbox").update();
                         break;
                     case DEFENSE:
-                        String defendingPlayerName = GameControllerFacade.getInstance().game.getCountries().get(split[3]).getOwner().getName();
+                        String defendingPlayerName = GameControllerFacade.getInstance().getGame().getCountries().get(split[3]).getOwner().getName();
                         if (GameControllerFacade.getInstance().getPlayerName().equals(defendingPlayerName)) {
                             DialogVBox dialogVBox = (DialogVBox) GUIControl.getInstance().getComponentMap().get("dialog-vbox");
                             Platform.runLater(new Runnable() {
@@ -113,7 +113,6 @@ public class ClientIOThread extends Thread {
                                 }
                             });
                         }
-//                        AttackResult ar = (AttackResult) reader.readUnshared();
 
                         break;
                     case FIGHT_FINISHED:
@@ -126,7 +125,6 @@ public class ClientIOThread extends Thread {
                         String attacker = split[2];
                         String defender = split[3];
                         AttackResult ar = (AttackResult) reader.readUnshared();
-
 
                         Platform.runLater(new Runnable() {
                             @Override
@@ -142,17 +140,23 @@ public class ClientIOThread extends Thread {
 
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
-                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+                        Game fightFinishedGame = (Game) reader.readUnshared();
+                        GameControllerFacade.getInstance().setGame(fightFinishedGame);
 
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
                                 GUIControl.getInstance().getComponentMap().get(attacker + "info-hbox").update();
                                 GUIControl.getInstance().getComponentMap().get(defender + "info-hbox").update();
+                                GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
                             }
                         });
 
-                        writer.writeUTF(SET_TURN + "," + gameId + "," + Phase.PERFORM_ANOTHER_ATTACK.toString());
+                        if (fightFinishedGame.getTurn().getPhase().equals(Phase.TRAIL_UNITS)) {
+                            writer.writeUTF(SET_TURN + "," + gameId + "," + Phase.TRAIL_UNITS.toString());
+                        } else {
+                            writer.writeUTF(SET_TURN + "," + gameId + "," + Phase.PERFORM_ANOTHER_ATTACK.toString());
+                        }
                         writer.flush();
 
                         break;
@@ -162,7 +166,8 @@ public class ClientIOThread extends Thread {
                         //split[4] trail
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
-                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+                        Game moveGame = (Game) reader.readUnshared();
+                        GameControllerFacade.getInstance().setGame(moveGame);
 
                         country1Name = split[2];
                         country2Name = split[3];
@@ -180,7 +185,8 @@ public class ClientIOThread extends Thread {
                     case GET_GAME:
                         writer.writeUTF(GET_GAME + "," + split[1]);
                         writer.flush();
-                        GameControllerFacade.getInstance().game = (Game) reader.readUnshared();
+                        Game getGame = (Game) reader.readUnshared();
+                        GameControllerFacade.getInstance().setGame(getGame);
                         break;
                     case ERROR:
                         Exception e = (Exception) reader.readUnshared();

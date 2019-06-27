@@ -162,7 +162,7 @@ public class GUIControl {
             } else {
                 lastFightCountry = new LastFightCountries(attackingCountry, defendingCountry);
                 getLog().update(defendingCountry + " successfully attacked. It is now owned by: " + defendingCountry.getOwner());
-                setTurnManually(Phase.TRAIL_UNITS);
+
             }
         } else {
             return;

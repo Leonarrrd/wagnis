@@ -20,6 +20,7 @@ import view.gui.helper.RiskUIElement;
 import view.gui.sockets.GameControllerFacade;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class DefenseVBox extends VBox implements RiskUIElement {
     private GUIControl guic = GUIControl.getInstance();
@@ -54,9 +55,9 @@ public class DefenseVBox extends VBox implements RiskUIElement {
             public void handle(ActionEvent event) {
                 int defendingUnits = defendingUnitsSpinner.getValue();
                 try {
-                    AttackResult ar = GameControllerFacade.getInstance().fight(null, attackingCountry, defendingCountry, attackingUnits, defendingUnits);
-                    //GUIControl.getInstance().fight(attackingCountry, defendingCountry, ar);
-                   // GUIControl.getInstance().forwardTurnPhase();
+                    //FIXME: Weird way to get the gameId
+                    UUID gameId = GameControllerFacade.getInstance().getGame().getId();
+                    GameControllerFacade.getInstance().fight(gameId, attackingCountry, defendingCountry, attackingUnits, defendingUnits);
                 } catch (IOException e) {
                     //this is fine
 

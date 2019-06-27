@@ -26,7 +26,7 @@ public class GameControllerFacade implements IGameController {
     private Socket clientSocket;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-    public Game game;
+    private Game game;
     private String playerName;
 
     private GameControllerFacade() {
@@ -329,17 +329,10 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException {
-        gameId = this.game.getId();
         oos.writeUTF(FIGHT + "," + gameId.toString() + "," + attackingCountry.getName() + "," + defendingCountry.getName() + "," + attackingUnits + "," + defendingUnits);
         oos.flush();
 
-        synchronized (ois) {
-
-            ois.readUTF(); //clear the stream
-
-            return (AttackResult) ois.readUnshared();
-        }
-        // return (AttackResult) ois.readObject();
+        return null;
     }
 
     /**
@@ -459,5 +452,13 @@ public class GameControllerFacade implements IGameController {
         // oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
         // oos.flush();
         return new ArrayList<>();
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }

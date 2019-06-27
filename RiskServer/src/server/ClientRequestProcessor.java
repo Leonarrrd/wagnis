@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static datastructures.Phase.TRAIL_UNITS;
 import static helper.Events.*;
 import static helper.Events.CHANGE_UNITS;
 
@@ -197,17 +198,25 @@ public class ClientRequestProcessor extends Thread {
                         int fightAttackingUnits = Integer.parseInt(split[4]);
                         int fightDefendingUnits = Integer.parseInt(split[5]);
                         AttackResult ar = gc.fight(gameId, fightAttackingCountry, fightDefendingCountry, fightAttackingUnits, fightDefendingUnits);
-                        updatePlayerGraph(game);
+
+                        if(ar.getWinner() != null) {
+                            if(ar.getWinner().equals(fightAttackingCountry)) {
+                                updatePlayerGraph(game);
+                                gc.setTurn(gameId, TRAIL_UNITS);
+                            }
+                        }
 
                         for (Socket s : SocketGameManager.getInstance().getGameIdSocketMap().get(gameId)) {
                             ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
                             sOos.writeUTF(FIGHT_FINISHED + "," + gameId.toString() + ","
-                                    + fightAttackingCountry.getName() + "," + fightDefendingCountry.getName() + ",");
-                            sOos.flush();
-                            sOos.writeUnshared(ar);
+                                    + fightAttackingCountry.getName() + "," + fightDefendingCountry.getName());
                             sOos.flush();
 
+                            sOos.writeUnshared(ar);
+                            sOos.flush();
                         }
+
+
                         break;
                     case MOVE:
                         game = gc.getGameById(gameId);
