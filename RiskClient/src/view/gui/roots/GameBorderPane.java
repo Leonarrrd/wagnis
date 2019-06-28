@@ -22,6 +22,7 @@ import view.gui.helper.RiskUIElement;
 import view.gui.panes.DiceGridPane;
 import view.gui.util.Util;
 
+import java.io.File;
 import java.io.IOException;
 
 import static view.gui.util.UIConstants.WINDOW_WIDTH;
@@ -37,11 +38,12 @@ public class GameBorderPane extends BorderPane implements RiskUIElement {
     @Override
     public void doStuff() {
 
-        ImageView mapImageView = new ImageView(new Image("file:assets/img/map.png"));
+        //ImageView mapImageView = new ImageView(new Image("file:assets/img/map.png"));
+        ImageView mapImageView = new ImageView(new Image("file:assets" + File.separator + "img" + File.separator + "map.png"));
         mapImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                String rawColorCode = mapImageView.getImage().getPixelReader().getColor((int)event.getX(),(int) event.getY()).toString();
+                String rawColorCode = mapImageView.getImage().getPixelReader().getColor((int) event.getX(), (int) event.getY()).toString();
                 String colorCode = Util.trimColorCode(rawColorCode);
                 if (GUIControl.getInstance().getCountryStringFromColorCode(colorCode) != null) {
                     try {

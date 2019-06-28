@@ -199,8 +199,8 @@ public class ClientRequestProcessor extends Thread {
                         int fightDefendingUnits = Integer.parseInt(split[5]);
                         AttackResult ar = gc.fight(gameId, fightAttackingCountry, fightDefendingCountry, fightAttackingUnits, fightDefendingUnits);
 
-                        if(ar.getWinner() != null) {
-                            if(ar.getWinner().equals(fightAttackingCountry)) {
+                        if (ar.getWinner() != null) {
+                            if (ar.getWinner().equals(fightAttackingCountry)) {
                                 updatePlayerGraph(game);
                                 gc.setTurn(gameId, TRAIL_UNITS);
                             }
@@ -249,7 +249,19 @@ public class ClientRequestProcessor extends Thread {
             }
 
 
-        } catch (NoSuchCardException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException | MaximumNumberOfPlayersReachedException | CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException | InvalidPlayerNameException e) {
+        } catch( InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
+
+            try {
+                oos.writeUTF(ERROR);
+                oos.flush();
+                oos.writeUnshared(e);
+                oos.flush();
+                socket.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+
+        } catch (NoSuchCardException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException |  CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException  e) {
             e.printStackTrace();
             try {
                 oos.writeUTF(ERROR);

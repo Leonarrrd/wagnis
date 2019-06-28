@@ -1,7 +1,9 @@
 package view.gui.roots;
 
+import helper.Utils;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.BorderPane;
+import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.JoinGameVBox;
 import view.gui.boxes.RiskTitleHBox;
 import view.gui.boxes.StartMenuLeftVBox;
@@ -30,9 +32,13 @@ public class StartBorderPane extends BorderPane implements RiskUIElement, StartM
         textInputDialog.setHeaderText("Please choose a name.");
         textInputDialog.setContentText("Please enter your name: ");
         Optional<String> result = textInputDialog.showAndWait();
-        if(result.isPresent()) {
-            this.setCenter(new StartNewGameGridPane(result.get()));
-        }
+        if (result.isPresent())
+            if (!Utils.stringContainsDelimitters(result.get())) {
+                this.setCenter(new StartNewGameGridPane(result.get()));
+            } else {
+                new ErrorAlert("Invalid Player Name", "Please choose another name", "Please do not use , ' - : in your name.");
+
+            }
 
     }
 

@@ -1,7 +1,10 @@
 package server;
 
 import exceptions.GameNotFoundException;
+import exceptions.InvalidPlayerNameException;
+import exceptions.MaximumNumberOfPlayersReachedException;
 import helper.GameInit;
+import helper.Utils;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,7 +18,7 @@ public class SocketGameManager {
     private Map<UUID, List<Socket>> gameIdSocketMap = new HashMap<>();
     private Map<Socket, ObjectOutputStream> socketObjectOutputStreamMap = new HashMap<>();
     private Map<Socket, ObjectInputStream> socketObjectInputStreamMap = new HashMap<>();
-    private Map<String, Socket> socketPlayerNameMap= new HashMap<>();
+    private Map<String, Socket> socketPlayerNameMap = new HashMap<>();
 
 
     private SocketGameManager() {
@@ -28,7 +31,19 @@ public class SocketGameManager {
         return instance;
     }
 
-    public void createNewGame(UUID gameId, String hostPlayerName, Socket socket) {
+    /**
+     * creates a new game Lobby to collect players to start the game
+     *
+     * @param gameId         The new game Id (Caller might pass a newly created UUID)
+     * @param hostPlayerName The name of the player that hosts the game
+     * @param socket         The socket for the host player
+     */
+    public void createNewGame(UUID gameId, String hostPlayerName, Socket socket) throws InvalidPlayerNameException{
+
+        if(Utils.stringContainsDelimitters(hostPlayerName)) {
+            throw new InvalidPlayerNameException(hostPlayerName);
+        }
+
         GameInit gameInit = new GameInit(gameId, new ArrayList(), new ArrayList<>());
         System.out.println(gameId);
         gameInit.getPlayerList().add(hostPlayerName);
@@ -37,13 +52,41 @@ public class SocketGameManager {
         gameInitList.add(gameInit);
     }
 
-    public void addPlayer(UUID gameId, String playerName, Socket socket) throws GameNotFoundException {
-        getGameInitById(gameId).getPlayerList().add(playerName);
-        getGameInitById(gameId).getSockets().add(socket);
+    /**
+     * adds a player to an existing GameInit (Lobby) by providing the game Id for the specific lobby
+     *
+     * @param gameId     The game Id for the exisiting Lobby
+     * @param playerName The name of the player that is being joined
+     * @param socket     the socket for the player that is being joined
+     * @throws GameNotFoundException
+     */
+    public void addPlayer(UUID gameId, String playerName, Socket socket) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
+
+        GameInit gameInit = getGameInitById(gameId);
+
+        if(gameInit.getPlayerList().size() >= 5) {
+            throw new MaximumNumberOfPlayersReachedException(gameInit.getPlayerList().size());
+        }
+
+        if(Utils.stringContainsDelimitters(playerName)) {
+            throw new InvalidPlayerNameException(playerName);
+        }
+
+        gameInit.getPlayerList().add(playerName);
+        gameInit.getSockets().add(socket);
+
+        //FIXME: the map needs to be the other way around, this way there won't be any mismatches with they key when player in two different games have the same names
         socketPlayerNameMap.put(playerName, socket);
     }
 
 
+    /**
+     * Returns the GameInit (Lobby) Object for
+     *
+     * @param gameId
+     * @return
+     * @throws GameNotFoundException
+     */
     public GameInit getGameInitById(UUID gameId) throws GameNotFoundException {
 
         for (GameInit gi : gameInitList) {
