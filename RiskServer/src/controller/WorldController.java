@@ -215,7 +215,7 @@ public class WorldController {
      * @param destCountry
      * @param amount
      */
-    void moveUnits(Game game, Country srcCountry, Country destCountry, int amount) throws NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException {
+    void moveUnits(Game game, Country srcCountry, Country destCountry, int amount) throws NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotConnectedException {
         if (!game.getCountries().values().contains(srcCountry)) {
             throw new NoSuchCountryException(srcCountry);
         }
@@ -229,7 +229,7 @@ public class WorldController {
             throw new CountryNotOwnedException(srcCountry);
         }
         if(!isConnected(game.getId(), srcCountry, destCountry)) {
-            throw new CountriesNotAdjacentException(srcCountry, destCountry);
+            throw new CountriesNotConnectedException(srcCountry, destCountry);
         }
 
         srcCountry.setUnits(srcCountry.getUnits() - amount);

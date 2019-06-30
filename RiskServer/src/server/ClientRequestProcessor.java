@@ -298,7 +298,7 @@ public class ClientRequestProcessor extends Thread {
                 e1.printStackTrace();
             }
 
-        } catch (NoSuchCardException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException | CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException e) {
+        } catch (NoSuchCardException| CountriesNotConnectedException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException | CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException e) {
             e.printStackTrace();
             try {
                 oos.writeUTF(ERROR);

@@ -150,17 +150,6 @@ public class GameController implements IGameController {
         wc.changeUnits(game, country, units);
     }
 
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public int assignUnits(UUID gameId) throws GameNotFoundException, InvalidNumberOfPlayersException {
-        Game game = getGameById(gameId);
-        return wc.assignUnits(game);
-    }
-
     /**
      * Server-side implementation
      * {@inheritDoc }
@@ -171,34 +160,6 @@ public class GameController implements IGameController {
         cdc.addCardToPlayer(game, player);
     }
 
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void addCardsToDeck(UUID gameId, List<Card> cards) throws GameNotFoundException {
-        Game game = getGameById(gameId);
-        cdc.addCardsToDeck(game, cards);
-    }
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards) {
-        return lc.getTradeBonusType(infantryCards, cavalryCards, artilleryCards);
-    }
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
-        Game game = getGameById(gameId);
-        lc.awardUnits(game, player);
-    }
 
     @Override
     public void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException {
@@ -214,58 +175,6 @@ public class GameController implements IGameController {
     public void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException {
         Game game = getGameById(gameId);
         lc.useCards(game, player, infantryCards, cavalryCards, artilleryCards);
-    }
-
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
-        Game game = getGameById(gameId);
-        return wc.getCountriesAttackCanBeLaunchedFrom(game, player);
-    }
-
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getCountriesWithMoreThanOneUnit(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException {
-        Game game = getGameById(gameId);
-        return wc.getCountriesWithMoreThanOneUnit(game, player);
-    }
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
-        Game game = getGameById(gameId);
-        return lc.hasCountryToMoveFrom(game, player);
-    }
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException {
-        Game game = getGameById(gameId);
-        return lc.hasCountryToAttackFrom(game, player);
-    }
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException {
-        Game game = getGameById(gameId);
-        return wc.getHostileNeighbors(game, country);
     }
 
     @Override
@@ -291,7 +200,7 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException {
+    public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotConnectedException, IOException{
         Game game = getGameById(gameId);
         wc.moveUnits(game, srcCountry, destCountry, amount);
     }
@@ -344,15 +253,6 @@ public class GameController implements IGameController {
     public void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         Game game = getGameById(gameId);
         lc.postPhaseCheck(game, turn);
-    }
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) {
-        return wc.isConnected(gameId, srcCountry, destCountry);
     }
 
     /**

@@ -180,7 +180,7 @@ public class GUIControl {
             componentMap.get(lastFightCountry.getSrcCountry() + "info-hbox").update();
             componentMap.get(lastFightCountry.getDestCountry() + "info-hbox").update();
 
-        } catch (IOException | CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | NoSuchCountryException | CountryNotOwnedException e) {
+        } catch (IOException | CountriesNotConnectedException | GameNotFoundException | NotEnoughUnitsException | NoSuchCountryException | CountryNotOwnedException e) {
             new ErrorAlert(e);
         }
     }
@@ -192,7 +192,7 @@ public class GUIControl {
             gc.moveUnits(getGame().getId(), srcCountryObj, destCountryObj, amount, false);
             getLog().update(srcCountryObj.getOwner().getName() + " moved " + amount + " from " + srcCountry + " to " + destCountry);
 
-        } catch (IOException | CountriesNotAdjacentException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
+        } catch (IOException | CountriesNotConnectedException | GameNotFoundException | NotEnoughUnitsException | CountryNotOwnedException | NoSuchCountryException e) {
             new ErrorAlert(e);
         }
     }
