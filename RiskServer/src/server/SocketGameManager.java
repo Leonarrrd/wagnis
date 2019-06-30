@@ -119,6 +119,9 @@ public class SocketGameManager {
         throw new GameNotFoundException(gameId);
     }
 
+    public void removeGameInit(UUID gameId) throws GameNotFoundException {
+        gameInitList.remove(getGameInitById(gameId));
+    }
 
     public Map<UUID, List<Socket>> getGameIdSocketMap() {
         return gameIdSocketMap;

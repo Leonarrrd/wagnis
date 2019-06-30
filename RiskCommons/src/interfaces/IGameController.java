@@ -5,20 +5,27 @@ import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
 import model.*;
-
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
 
+/**
+ * Main interface that defines the methods needed for controlling the game flow.
+ * There is a server-side implmentation of this Interface for handling the game logic server-side
+ * and a Client-side-Implementation that makes requests via this Facade Pattern using sockets.
+ */
 public interface IGameController {
 
-    String getPlayerName();
-
     /**
-     * TODO: add commentary
-     * @param hostPlayerName
+     * Create a new game while joining the first Player
+     *
+     * @param gameId The game Id - can be passed as a new random UUID
+     * @param hostPlayerName The name of the first player in this game
+     * @param socket The socket of the host Player
+     *
+     * @throws InvalidPlayerNameException
      */
-    void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) throws Exception;
+    void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) throws InvalidPlayerNameException;
 
 
     /**
@@ -50,6 +57,15 @@ public interface IGameController {
      */
     Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException, NoSuchPlayerException;
 
+    /**
+     * Helper-Method to start a loaded Game - needs different logic than start game..
+     * @param gameId
+     *
+     * @throws IOException most likely if the saved game could not be read correctly
+     * @throws GameNotFoundException if the loaded game could not be found
+     * @throws InvalidFormattedDataException if the save file is corrupted
+     * @throws ClassNotFoundException
+     */
     void startLoadedGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException;
 
     /**
@@ -64,18 +80,6 @@ public interface IGameController {
      */
     void addPlayer(UUID gameId, String playerName, Color color) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, IOException;
 
-    /**
-     * TODO: add comments
-     * FIXME: Kann die Methode weg oder ist das kunst?
-     *
-     * @param gameId
-     * @param countryAsString
-     * @param player
-     * @throws GameNotFoundException
-     * @throws CountryAlreadyOccupiedException
-     * @throws NoSuchCountryException
-     */
-    void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException, IOException;
 
     /**
      * Changes the units from a country by providing the Country-Object and the units
@@ -88,35 +92,7 @@ public interface IGameController {
      */
     void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException, IOException;
 
-    /**
-     * TODO: Add commentary
-     * FIXME: Kann weg oder?
-     *
-     * @param gameId
-     * @param country
-     * @param frozenUnits
-     * @throws GameNotFoundException
-     * @throws NoSuchCountryException
-     */
-    void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) throws GameNotFoundException, NoSuchCountryException;
 
-    /**
-     * Method that assignes countries to the players at the start of the game
-     *
-     * @param gameId needs to be provided at the start of the game.
-     * @throws GameNotFoundException if the game with the provided Id could not be found
-     * @throws CountriesAlreadyAssignedException Countries cannot be assigned twice, if called twice, this exception is thrown.
-     */
-    void assignCountries(UUID gameId) throws GameNotFoundException, CountriesAlreadyAssignedException;
-
-    /**
-     * Assigns missions to the players at the start of the game
-     * @param gameId needs to be provided to identify the correct game
-     *
-     * @throws GameNotFoundException if the game with the provided Id could not be found
-     * @throws MaximumNumberOfPlayersReachedException if there are too many players to assign missions to, this exception is thrown
-     */
-    void assignMissions(UUID gameId) throws GameNotFoundException, MaximumNumberOfPlayersReachedException;
 
     /**
      * TODO: add commentary

@@ -1,24 +1,18 @@
 package server;
 
 import controller.GameController;
-import controller.GraphController;
-import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
 import model.AttackResult;
 import model.Country;
 import model.Game;
 import model.Player;
-
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import static datastructures.Phase.TRAIL_UNITS;
 import static helper.Events.*;
-import static helper.Events.CHANGE_UNITS;
 
 public class ClientRequestProcessor extends Thread {
     private Socket socket;
@@ -70,15 +64,15 @@ public class ClientRequestProcessor extends Thread {
                     case LOAD_AVAILABLE_GAME_IDS:
                         List<String> gameIdsList = gc.loadAvailableGameIds();
                         StringBuilder sb1 = new StringBuilder();
-                        for (String ID : gameIdsList){
+                        for (String ID : gameIdsList) {
                             sb1.append(ID);
-                            if (!ID.equals(gameIdsList.get(gameIdsList.size() - 1))){
+                            if (!ID.equals(gameIdsList.get(gameIdsList.size() - 1))) {
                                 sb1.append(",");
                             }
                         }
                         oos.writeUTF(LOAD_AVAILABLE_GAME_IDS + "," + sb1.toString());
                         oos.flush();
-                    break;
+                        break;
                     case PLAYER_JOIN:
                         String playerName = split[2];
                         System.out.println("player joined: " + playerName);
@@ -118,6 +112,7 @@ public class ClientRequestProcessor extends Thread {
                             sOos.flush();
 
                         }
+                        SocketGameManager.getInstance().removeGameInit(gameId);
                         break;
                     case START_LOADED_GAME:
                         System.out.println("Game Starts...");
@@ -291,7 +286,7 @@ public class ClientRequestProcessor extends Thread {
             }
 
 
-        } catch( InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
+        } catch (InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
 
             try {
                 oos.writeUTF(ERROR);
@@ -303,7 +298,7 @@ public class ClientRequestProcessor extends Thread {
                 e1.printStackTrace();
             }
 
-        } catch (NoSuchCardException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException |  CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException  e) {
+        } catch (NoSuchCardException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException | CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException e) {
             e.printStackTrace();
             try {
                 oos.writeUTF(ERROR);

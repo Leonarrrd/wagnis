@@ -313,11 +313,6 @@ public class GameController implements IGameController {
     public void initAttack(UUID gameId, String attackingCountry, String defendingCountry, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
     }
 
-    @Override
-    //FIXME: i did not quite understand the igamecontroller purpose, we will talk about this
-    public String getPlayerName(){
-        return "something went wrong";
-    }
 
     /**
      * Server-side implementation
@@ -360,7 +355,7 @@ public class GameController implements IGameController {
     public void setTurn(UUID gameId, Phase phase) throws GameNotFoundException, NoSuchPlayerException, CardAlreadyOwnedException, NoSuchCardException, IOException {
         Game game = getGameById(gameId);
         game.getTurn().setPhase(phase);
-        GameController.getInstance().postPhaseCheck(game.getId(), game.getTurn());
+        postPhaseCheck(game.getId(), game.getTurn());
     }
 
     /**
