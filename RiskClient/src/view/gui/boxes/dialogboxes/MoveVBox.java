@@ -81,7 +81,6 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
             if (!firstCountrySelected) {
                 if(guic.getSelectedCountry().getUnits() == 1) {
                     new Alert(Alert.AlertType.INFORMATION, "Only one unit on this country.").showAndWait();
-                    // FIXME: Need to complete these methods first
                 } else {
                     if (guic.getCurrentPlayer().getCountryGraph().evaluateCountriesAllowedToMoveTo(guic.getSelectedCountry().getName()).size() == 1){
                         new Alert(Alert.AlertType.INFORMATION, "Country is not connected to any of your other countries.").showAndWait();
@@ -96,6 +95,9 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
                 }
             } else {
                 if(!guic.getCurrentPlayer().getCountryGraph().isConnected(guic.getSelectedCountry(), guic.getGame().getCountries().get(moveFromText.getText()))){
+                    moveFromText.setText("<Country to move from>");
+                    moveToText.setText("<Country to move to>");
+                    firstCountrySelected = false;
                     new Alert(Alert.AlertType.INFORMATION, "Countries are not connected").showAndWait();
                 } else {
                     moveToText.setText(guic.getSelectedCountry().getName());

@@ -24,6 +24,9 @@ public class GameController implements IGameController {
 
     private Map<UUID, Game> activeGames = new HashMap<>();
     private static GameController instance;
+
+
+
     private LogicController lc = LogicController.getInstance();
     private PlayerController pc = PlayerController.getInstance();
     private WorldController wc = WorldController.getInstance();
@@ -118,7 +121,9 @@ public class GameController implements IGameController {
 
         Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents, loadedMissions, loadedCards);
 
-        activeGames.put(game.getId(), game);
+        if (!activeGames.containsKey(game.getId())) {
+            activeGames.put(game.getId(), game);
+        }
         return game;
     }
 
@@ -127,7 +132,6 @@ public class GameController implements IGameController {
         // FIXME Idk what to put here
         //  request gets handled in ClientRequestProcessor
     }
-
 
     /**
      * Server-side implementation
@@ -282,6 +286,10 @@ public class GameController implements IGameController {
     @Override
     public List<String> loadAvailableGameIds() throws IOException {
         return FileReader.getInstance().loadAvailableGameIds();
+    }
+
+    public Map<UUID, Game> getActiveGames() {
+        return activeGames;
     }
 
 

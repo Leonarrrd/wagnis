@@ -48,10 +48,11 @@ public class StartLoadedGameGridPane extends GridPane implements RiskUIElement, 
     @Override
     public void doStuff() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         Game game = GUIControl.getInstance().getGame();
 
         List<String> choices = new ArrayList<>();
@@ -86,6 +87,7 @@ public class StartLoadedGameGridPane extends GridPane implements RiskUIElement, 
         @Override
         public void handle(ActionEvent event) {
             if (playerList.getChildren().size() == game.getPlayers().size()) {
+//                correctPlayerNames();
                 try {
                     GameControllerFacade.getInstance().startLoadedGame(gameId);
                 } catch (ClassNotFoundException | InvalidFormattedDataException | GameNotFoundException | IOException e) {

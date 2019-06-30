@@ -127,6 +127,10 @@ public class SocketGameManager {
         return gameIdSocketMap;
     }
 
+    public List<GameInit> getGameInitList() {
+        return gameInitList;
+    }
+
     public Map<Socket, ObjectOutputStream> getSocketObjectOutputStreamMap() {
         return socketObjectOutputStreamMap;
     }

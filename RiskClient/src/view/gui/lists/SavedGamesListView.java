@@ -30,9 +30,9 @@ public class SavedGamesListView extends ListView implements RiskUIElement, Updat
     }
 
     public void createList(List<String> gamIds){
-            ObservableList<String> gameIds = FXCollections.observableArrayList(gamIds);
-            this.setItems(gameIds);
-            this.setOnMouseClicked(new SavedGamesListViewItemClickHandler(this));
+        ObservableList<String> gameIds = FXCollections.observableArrayList(gamIds);
+        this.setItems(gameIds);
+        this.setOnMouseClicked(new SavedGamesListViewItemClickHandler(this));
     }
 
     @Override

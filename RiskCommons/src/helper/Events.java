@@ -4,6 +4,7 @@ public class Events {
 
     public static final String CREATE_GAME = "CREATE_GAME";
     public static final String PLAYER_JOIN = "PLAYER_JOIN";
+    public static final String CHECK_GAME_TYPE = "CHECK_GAME_TYPE";
     public static final String START_GAME = "START_GAME";
     public static final String START_LOADED_GAME = "START_LOADED_GAME";
     public static final String GET_GAME = "GET_GAME";

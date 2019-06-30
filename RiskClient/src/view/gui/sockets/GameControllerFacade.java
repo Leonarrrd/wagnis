@@ -55,6 +55,7 @@ public class GameControllerFacade implements IGameController {
             Thread clientIOThread = new ClientIOThread(ois, oos);
             clientIOThread.start();
 
+            GameLobbyManager.getInstance().setOos(oos);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -320,5 +321,4 @@ public class GameControllerFacade implements IGameController {
     public String getPlayerName() {
         return playerName;
     }
-
 }

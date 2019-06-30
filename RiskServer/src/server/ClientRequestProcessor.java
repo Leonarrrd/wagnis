@@ -3,6 +3,8 @@ package server;
 import controller.GameController;
 import datastructures.Phase;
 import exceptions.*;
+import helper.GameInit;
+import javafx.scene.Scene;
 import model.AttackResult;
 import model.Country;
 import model.Game;
@@ -71,6 +73,27 @@ public class ClientRequestProcessor extends Thread {
                             }
                         }
                         oos.writeUTF(LOAD_AVAILABLE_GAME_IDS + "," + sb1.toString());
+                        oos.flush();
+                        break;
+                    case CHECK_GAME_TYPE:
+                        String type = "invalid";
+                        StringBuilder sb = new StringBuilder();
+                        if (gc.getActiveGames().containsKey(gameId )) {
+                            for (Player player : gc.getActiveGames().get(gameId).getPlayers()){
+                                if (!SocketGameManager.getInstance().getSocketPlayerNameMap().containsKey(player.getName())) {
+                                    sb.append(player.getName());
+                                    sb.append(",");
+                                }
+                            }
+                            type = "loadedGame";
+                        } else {
+                            for (GameInit gi : SocketGameManager.getInstance().getGameInitList()) {
+                                if (gi.getGameId().equals(gameId)) {
+                                    type = "newGame";
+                                }
+                            }
+                        }
+                        oos.writeUTF(CHECK_GAME_TYPE + "," + gameId.toString() + "," + type + "," + sb.toString());
                         oos.flush();
                         break;
                     case PLAYER_JOIN:
@@ -147,7 +170,6 @@ public class ClientRequestProcessor extends Thread {
                         oos.flush();
                         oos.reset();
                         break;
-
                     case SWITCH_TURNS:
                         gc.switchTurns(gameId);
                         //Making sure that all Sockets get the SWITCH_TURNS
@@ -161,7 +183,6 @@ public class ClientRequestProcessor extends Thread {
                                         sOos.writeUTF(SWITCH_TURNS + "," + gameId.toString());
                                         sOos.flush();
                                     }
-
                                 }
                             }
                         } else {
@@ -276,16 +297,9 @@ public class ClientRequestProcessor extends Thread {
                             sOos.writeUTF(MOVE + "," + gameId.toString() + "," + c1.getName() + "," + c2.getName() + "," + trail);
                             sOos.flush();
                         }
-
-
                         break;
-
                 }
-
-
             }
-
-
         } catch (InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
 
             try {
@@ -298,7 +312,7 @@ public class ClientRequestProcessor extends Thread {
                 e1.printStackTrace();
             }
 
-        } catch (NoSuchCardException| CountriesNotConnectedException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException | CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException e) {
+        } catch (NoSuchCardException | CountriesNotConnectedException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException | CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException e) {
             e.printStackTrace();
             try {
                 oos.writeUTF(ERROR);
@@ -325,10 +339,9 @@ public class ClientRequestProcessor extends Thread {
         } catch (DuplicateGameIdException e) {
             e.printStackTrace();
         }
-
     }
 
-    /**
+        /**
      * Helper-Method that updates the Movement-Graph for each player
      *
      * @param game

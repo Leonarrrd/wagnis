@@ -39,7 +39,7 @@ public class TrailUnitsVBox extends VBox implements RiskUIElement {
 
         Button trailUnitsButton = new Button("Trail Units!");
 
-        int maxValue = GUIControl.getInstance().getLastFightCountry().getSrcCountry().getUnits()-1;
+        int maxValue = GUIControl.getInstance().getGame().getCountries().get(GUIControl.getInstance().getLastFightCountry().getSrcCountry().getName()).getUnits()-1;
         trailUnitsSpinner = new Spinner<>();
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxValue, 0);
         trailUnitsSpinner.setValueFactory(valueFactory);

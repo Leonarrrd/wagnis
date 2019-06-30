@@ -16,7 +16,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         Scene startupScene = new MainScene(new StartBorderPane());
-        stage.setTitle("Risiko - Leonard Tuturea & Philipp Moritzer");
+        stage.setTitle("Risiko - Leonard Tuturea & Philipp Poritzer");
         stage.setScene(startupScene);
         stage.setResizable(true);
         stage.show();

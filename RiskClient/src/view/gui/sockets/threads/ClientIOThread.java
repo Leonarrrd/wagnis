@@ -14,6 +14,7 @@ import model.Game;
 import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.DialogVBox;
+import view.gui.boxes.JoinGameVBox;
 import view.gui.boxes.dialogboxes.DefenseVBox;
 
 import view.gui.helper.GUIControl;
@@ -71,6 +72,19 @@ public class ClientIOThread extends Thread {
                             public void run() {
                                 SavedGamesListView lv = (SavedGamesListView) GUIControl.getInstance().getComponentMap().get("saved-games-list-view");
                                 lv.createList(gameIds);
+                            }
+                        });
+                        break;
+                    case CHECK_GAME_TYPE:
+                        List <String> playerNames = new ArrayList<>();
+                        for (int i = 3; i < split.length; i++){
+                            playerNames.add(split[i]);
+                        }
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                JoinGameVBox jgvb = (JoinGameVBox) GUIControl.getInstance().getComponentMap().get("join-game-vbox");
+                                jgvb.handleGameType(split[1], split[2], playerNames);
                             }
                         });
                         break;
@@ -223,7 +237,6 @@ public class ClientIOThread extends Thread {
                         });
 
                         break;
-
                 }
             } catch (EOFException e) {
                 //This is fine
