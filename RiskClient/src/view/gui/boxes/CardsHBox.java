@@ -24,6 +24,7 @@ public class CardsHBox extends BottomBarNodeHBox implements RiskUIElement, Updat
 //        this.getStyleClass().add("cards-hbox");
 
         Player player = GUIControl.getInstance().getPlayer();
+
         this.infantryCards = new Text("Infantry: " + player.getNumberOfCardsWithSymbol(CardSymbol.INFANTRY));
         this.cavalryCards = new Text("Cavalry: " + player.getNumberOfCardsWithSymbol(CardSymbol.CAVALRY));
         this.artilleryCards = new Text("Artillery: " + player.getNumberOfCardsWithSymbol(CardSymbol.ARTILLERY));

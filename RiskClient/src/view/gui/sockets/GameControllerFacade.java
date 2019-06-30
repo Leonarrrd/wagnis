@@ -92,7 +92,6 @@ public class GameControllerFacade implements IGameController {
         synchronized (game) {
             return game;
         }
-
     }
 
     /**
@@ -113,7 +112,18 @@ public class GameControllerFacade implements IGameController {
     public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
         oos.writeUTF(LOAD_GAME + "," + gameId.toString());
         oos.flush();
-        return (Game) ois.readObject();
+//        return (Game) ois.readObject();
+        return null;
+    }
+
+    /**
+     * Client-side implementation
+     * {@inheritDoc }
+     */
+    @Override
+    public void startLoadedGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
+        oos.writeUTF(START_LOADED_GAME + "," + gameId.toString());
+        oos.flush();
     }
 
     /**
@@ -429,8 +439,8 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void saveGame(UUID gameId) throws GameNotFoundException, IOException, DuplicateGameIdException {
-        //oos.writeUTF(SAVE_GAME + "," + gameId.toString());
-        //oos.flush();
+        oos.writeUTF(SAVE_GAME + "," + gameId.toString());
+        oos.flush();
     }
 
     /**
@@ -449,9 +459,11 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException {
-        // oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
-        // oos.flush();
-        return new ArrayList<>();
+        // MARK: confirm this is okay
+         oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
+         oos.flush();
+//        return new ArrayList<>();
+        return null;
     }
 
     public Game getGame() {

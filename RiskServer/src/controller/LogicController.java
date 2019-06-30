@@ -17,11 +17,17 @@ import model.Country;
 import model.Game;
 import model.Player;
 import persistence.FileWriter;
+import server.SocketGameManager;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static helper.Events.END_GAME;
+import static helper.Events.PLAYER_JOIN;
 
 public class LogicController {
 
@@ -50,7 +56,7 @@ public class LogicController {
         int units = 3;
         units += this.addUnitsByCountries(game, player);
         units += this.addUnitsByContinents(game, player);
-        player.setUnitsToPlace(units);
+        player.setUnitsToPlace(player.getUnitsToPlace() + units);
     }
 
     void changeUnits(Game game, Player player, int unitChange) throws NoSuchPlayerException {
@@ -301,11 +307,11 @@ public class LogicController {
             throw new NoSuchPlayerException(player);
         }
 
-        boolean winConditionMet = player.getMission().isAccomplished(player, game);
-        if(winConditionMet) {
-            FileWriter.getInstance().removeGame(game);
-            return winConditionMet;
-        }
+//        boolean winConditionMet = player.getMission().isAccomplished(player, game);
+//        if(winConditionMet) {
+//            FileWriter.getInstance().removeGame(game);
+//            return winConditionMet;
+//        }
         return player.getMission().isAccomplished(player, game);
     }
 
@@ -330,6 +336,17 @@ public class LogicController {
             throw new NoSuchPlayerException(currentPlayer);
         }
 
+        //check for winner
+        for (Player p : game.getPlayers()) {
+            if (checkWinCondition(game, p)){
+                for (Socket s : SocketGameManager.getInstance().getGameInitById(game.getId()).getSockets()) {
+                    ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                    sOos.writeUTF(END_GAME + "," + game.getId() + "," + p.getName());
+                    sOos.flush();
+                }
+            }
+        }
+
         // update graphs aswell as check if player has been kicked out
         if (phase.equals(Phase.TRAIL_UNITS)) {
             Player toBeRemoved = null; // avoid ConcurrentModificationException
@@ -343,10 +360,11 @@ public class LogicController {
             if (toBeRemoved != null){
                 game.getPlayers().remove(toBeRemoved);
             }
+
         }
 
-        if (phase.equals(Phase.USE_CARDS)) {
-            GameController.getInstance().awardUnits(game.getId(), turn.getPlayer());
+        if (phase.equals(Phase.PLACE_UNITS)) {
+            awardUnits(game, turn.getPlayer());
         }
         if (phase.equals(Phase.MOVE)) {
             if (currentPlayer.hasConqueredCountry()) {

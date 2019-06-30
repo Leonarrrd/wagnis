@@ -1,7 +1,9 @@
 package view.gui.boxes.dialogboxes;
 
 import datastructures.Phase;
+import exceptions.CardAlreadyOwnedException;
 import exceptions.GameNotFoundException;
+import exceptions.NoSuchCardException;
 import exceptions.NoSuchPlayerException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -40,7 +42,7 @@ public class PerformAnotherMoveVBox extends VBox implements RiskUIElement {
             public void handle(ActionEvent event) {
                 try {
                     GUIControl.getInstance().setTurnManually(Phase.MOVE);
-                } catch (NoSuchPlayerException | GameNotFoundException | IOException e) {
+                } catch (NoSuchPlayerException | GameNotFoundException | IOException | NoSuchCardException | CardAlreadyOwnedException e) {
                     e.printStackTrace();
                 }
 

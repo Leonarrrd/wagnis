@@ -5,6 +5,7 @@ public class Events {
     public static final String CREATE_GAME = "CREATE_GAME";
     public static final String PLAYER_JOIN = "PLAYER_JOIN";
     public static final String START_GAME = "START_GAME";
+    public static final String START_LOADED_GAME = "START_LOADED_GAME";
     public static final String GET_GAME = "GET_GAME";
     public static final String LOAD_GAME = "LOAD_GAME";
     public static final String ADD_COUNTRY = "ADD_COUNTRY";
@@ -37,4 +38,5 @@ public class Events {
     public static final String SAVE_GAME = "SAVE_GAME";
     public static final String REMOVE_GAME = "REMOVE_GAME";
     public static final String LOAD_AVAILABLE_GAME_IDS = "LOAD_AVAILABLE_GAME_IDS";
+    public static final String END_GAME = "END_GAME";
 }

@@ -1,9 +1,12 @@
 package persistence;
 
+import controller.GameController;
+import controller.GraphController;
 import datastructures.Color;
 import datastructures.Phase;
 import exceptions.GameNotFoundException;
 import exceptions.InvalidFormattedDataException;
+import exceptions.NoSuchPlayerException;
 import model.*;
 import persistence.helper.GameLoadUtils;
 import persistence.helpermodels.RawCountryData;
@@ -184,7 +187,7 @@ public class FileReader {
      * @throws GameNotFoundException
      * @throws InvalidFormattedDataException
      */
-    public Game loadGame(UUID gameId, List<Country> loadedCountries, List<Continent> loadedContinents, List<Mission> loadedMissions, List<Card> loadedCards) throws IOException, GameNotFoundException, InvalidFormattedDataException {
+    public Game loadGame(UUID gameId, List<Country> loadedCountries, List<Continent> loadedContinents, List<Mission> loadedMissions, List<Card> loadedCards) throws IOException, GameNotFoundException, InvalidFormattedDataException, NoSuchPlayerException {
         String[] gameData = getStringLinesFromData("savedgames.dat");
         String dataset = null;
 
@@ -212,10 +215,6 @@ public class FileReader {
         }
 
         String[] commaSplit = dataset.split(",");
-
-        //Determine gameId
-        //TODO: might remove, might needed later
-        UUID nGameId = UUID.fromString(commaSplit[0]);
 
         //evaluate Player array
         String[] playerNames = GameLoadUtils.evaluatePlayerArrayFromDataString(commaSplit[1]);
@@ -333,6 +332,12 @@ public class FileReader {
         Game game = new Game(gameId, loadedCountriesMap, loadedContinents, loadedMissions, loadedCards, cardDeck);
         game.setPlayers(players);
         game.setTurn(turn);
+
+        for (int i = 0; i < game.getPlayers().size(); i++){
+            Player player = game.getPlayers().get(i);
+            GraphController.getInstance().updateGraph(game, player);
+            player.setColor(Color.values()[i]);
+        }
 
         return game;
     }

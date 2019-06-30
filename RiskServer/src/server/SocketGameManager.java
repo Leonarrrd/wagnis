@@ -52,6 +52,27 @@ public class SocketGameManager {
         gameInitList.add(gameInit);
     }
 
+//    /**
+//     * creates a new game Lobby to collect players to start the game
+//     *
+//     * @param gameId         The new game Id (Caller might pass a newly created UUID)
+//     * @param hostPlayerName The name of the player that hosts the game
+//     * @param socket         The socket for the host player
+//     */
+//    public void createLoadedGame(UUID gameId, String hostPlayerName, Socket socket) throws InvalidPlayerNameException{
+//
+//        if(Utils.stringContainsDelimitters(hostPlayerName)) {
+//            throw new InvalidPlayerNameException(hostPlayerName);
+//        }
+//
+//        GameInit gameInit = new GameInit(gameId, new ArrayList(), new ArrayList<>());
+//        System.out.println(gameId);
+//        gameInit.getPlayerList().add(hostPlayerName);
+//        gameInit.getSockets().add(socket);
+//        socketPlayerNameMap.put(hostPlayerName, socket);
+//        gameInitList.add(gameInit);
+//    }
+
     /**
      * adds a player to an existing GameInit (Lobby) by providing the game Id for the specific lobby
      *

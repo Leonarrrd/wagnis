@@ -37,7 +37,7 @@ public interface IGameController {
      * @throws IOException If files needed to load the game could not be found (e.g. the country.dat file)
      * @throws InvalidFormattedDataException If files that are needed are saved in the wrong format (e.g. the country.dat file)
      */
-    void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException, NoSuchPlayerException;
+    void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException;
 
     /**
      * Loads a saved game
@@ -48,7 +48,9 @@ public interface IGameController {
      * @throws GameNotFoundException if the game with the provided Id could not be found
      * @throws InvalidFormattedDataException if the saved game file is corrupted
      */
-    Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException;
+    Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException, NoSuchPlayerException;
+
+    void startLoadedGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException;
 
     /**
      * Methods that adds a player to the game
@@ -222,7 +224,7 @@ public interface IGameController {
 
     boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
-    void setTurn(UUID gameId, Phase phase) throws GameNotFoundException, NoSuchPlayerException, IOException;
+    void setTurn(UUID gameId, Phase phase) throws GameNotFoundException, NoSuchPlayerException, IOException, CardAlreadyOwnedException, NoSuchCardException;
 
     void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException;
 

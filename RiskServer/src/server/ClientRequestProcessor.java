@@ -54,7 +54,10 @@ public class ClientRequestProcessor extends Thread {
                 String event = split[0];
                 System.out.println(event);
 
-                UUID gameId = UUID.fromString(split[1]);
+                UUID gameId = null;
+                if (!split[0].equals(LOAD_AVAILABLE_GAME_IDS)) {
+                    gameId = UUID.fromString(split[1]);
+                }
 
                 Game game = null;
                 Country country = null;
@@ -64,24 +67,36 @@ public class ClientRequestProcessor extends Thread {
                         System.out.println("Room created: " + split[1]);
 
                         break;
+                    case LOAD_AVAILABLE_GAME_IDS:
+                        List<String> gameIdsList = gc.loadAvailableGameIds();
+                        StringBuilder sb1 = new StringBuilder();
+                        for (String ID : gameIdsList){
+                            sb1.append(ID);
+                            if (!ID.equals(gameIdsList.get(gameIdsList.size() - 1))){
+                                sb1.append(",");
+                            }
+                        }
+                        oos.writeUTF(LOAD_AVAILABLE_GAME_IDS + "," + sb1.toString());
+                        oos.flush();
+                    break;
                     case PLAYER_JOIN:
                         String playerName = split[2];
                         System.out.println("player joined: " + playerName);
 
                         SocketGameManager.getInstance().addPlayer(gameId, playerName, socket);
 
-                        StringBuilder sb = new StringBuilder();
+                        StringBuilder sb2 = new StringBuilder();
                         List<String> playerList = SocketGameManager.getInstance().getGameInitById(gameId).getPlayerList();
                         for (String s : playerList) {
-                            sb.append(s);
+                            sb2.append(s);
                             if (!(playerList.indexOf(s) == playerList.size() - 1)) {
-                                sb.append(",");
+                                sb2.append(",");
                             }
                         }
 
                         for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
                             ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
-                            sOos.writeUTF(PLAYER_JOIN + "," + sb.toString());
+                            sOos.writeUTF(PLAYER_JOIN + "," + sb2.toString());
                             sOos.flush();
                         }
                         break;
@@ -103,6 +118,33 @@ public class ClientRequestProcessor extends Thread {
                             sOos.flush();
 
                         }
+                        break;
+                    case START_LOADED_GAME:
+                        System.out.println("Game Starts...");
+
+                        List<Socket> gameSockets1 = SocketGameManager.getInstance().getGameInitById(gameId).getSockets();
+                        SocketGameManager.getInstance().getGameIdSocketMap().put(gameId, gameSockets1);
+
+                        for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
+                            ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                            sOos.writeUTF(START_GAME + "," + gameId);
+                            sOos.flush();
+                        }
+                        for (Socket s : SocketGameManager.getInstance().getGameInitById(gameId).getSockets()) {
+                            ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                            sOos.writeUTF(GET_GAME + "," + gameId);
+                            sOos.flush();
+                        }
+                        break;
+                    case LOAD_GAME:
+                        GameController.getInstance().loadGame(gameId);
+                        System.out.println("Room created: " + split[1]);
+                        oos.writeUTF(GET_GAME + "," + gameId);
+                        oos.flush();
+                        break;
+                    case SAVE_GAME:
+                        gc.saveGame(UUID.fromString(split[1]));
+                        System.out.println("Game saved: " + split[1]);
                         break;
                     case GET_GAME:
                         game = GameController.getInstance().getGameById(gameId);
@@ -285,6 +327,8 @@ public class ClientRequestProcessor extends Thread {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
+        } catch (DuplicateGameIdException e) {
+            e.printStackTrace();
         }
 
     }

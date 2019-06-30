@@ -67,7 +67,7 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException, NoSuchPlayerException {
+    public void initNewGame(UUID gameId) throws IOException, InvalidFormattedDataException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, CountriesAlreadyAssignedException, GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         Map<String, Country> countries = null;
         List<Continent> continents = null;
         List<Mission> missions = null;
@@ -89,7 +89,6 @@ public class GameController implements IGameController {
         for (int i = 0; i < gameInit.getPlayerList().size(); i++) {
             Color color = Color.values()[i];
             pc.addPlayer(game, gameInit.getPlayerList().get(i), color);
-
         }
 
         activeGames.put(game.getId(), game);
@@ -110,7 +109,7 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException {
+    public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, NoSuchPlayerException {
         List<Country> loadedCountries = new ArrayList<>(FileReader.getInstance().loadCountries().values());
         List<Continent> loadedContinents = new ArrayList<>(FileReader.getInstance().loadContinents(loadedCountries));
         List<Mission> loadedMissions = new ArrayList<>(FileReader.getInstance().loadMissions(loadedContinents));
@@ -118,8 +117,15 @@ public class GameController implements IGameController {
 
 
         Game game = FileReader.getInstance().loadGame(gameId, loadedCountries, loadedContinents, loadedMissions, loadedCards);
+
         activeGames.put(game.getId(), game);
         return game;
+    }
+
+    @Override
+    public void startLoadedGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
+        // FIXME Idk what to put here
+        //  request gets handled in ClientRequestProcessor
     }
 
 
@@ -339,6 +345,7 @@ public class GameController implements IGameController {
      * Server-side implementation
      * {@inheritDoc }
      */
+    //FIXME: potentially unnecessary? winconditions get checkec by LogicController automatically in postTurnCheck
     @Override
     public boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException {
         Game game = getGameById(gameId);
@@ -350,9 +357,10 @@ public class GameController implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void setTurn(UUID gameId, Phase phase) throws GameNotFoundException {
+    public void setTurn(UUID gameId, Phase phase) throws GameNotFoundException, NoSuchPlayerException, CardAlreadyOwnedException, NoSuchCardException, IOException {
         Game game = getGameById(gameId);
         game.getTurn().setPhase(phase);
+        GameController.getInstance().postPhaseCheck(game.getId(), game.getTurn());
     }
 
     /**

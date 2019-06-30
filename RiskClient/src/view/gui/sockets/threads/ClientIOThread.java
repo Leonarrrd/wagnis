@@ -4,13 +4,22 @@ package view.gui.sockets.threads;
 import datastructures.Phase;
 import exceptions.*;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.control.ListView;
+import javafx.scene.text.Text;
 import model.AttackResult;
 import model.Game;
+import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.DialogVBox;
 import view.gui.boxes.dialogboxes.DefenseVBox;
 
 import view.gui.helper.GUIControl;
+import view.gui.helper.Updatable;
+import view.gui.lists.SavedGamesListView;
+import view.gui.roots.GameBorderPane;
 import view.gui.sockets.GameControllerFacade;
 
 import java.io.*;
@@ -37,7 +46,6 @@ public class ClientIOThread extends Thread {
 
         while (true) {
             try {
-
                 String response = null;
 
                 synchronized (reader) {
@@ -51,6 +59,21 @@ public class ClientIOThread extends Thread {
                 String country1Name = null;
                 String country2Name = null;
                 switch (event) {
+                    case LOAD_AVAILABLE_GAME_IDS:
+                        List<String> gameIds = new ArrayList<>();
+                        for (String s : split){
+                            gameIds.add(s);
+                        }
+                        // remove the event from the list
+                        gameIds.remove(0);
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                SavedGamesListView lv = (SavedGamesListView) GUIControl.getInstance().getComponentMap().get("saved-games-list-view");
+                                lv.createList(gameIds);
+                            }
+                        });
+                        break;
                     case PLAYER_JOIN:
                         List<String> playerList = new ArrayList<>();
                         for (int i = 1; i <= split.length - 1; i++) {
@@ -62,7 +85,6 @@ public class ClientIOThread extends Thread {
                             @Override
                             public void run() {
                                 GUIControl.getInstance().playerJoined();
-
                             }
                         });
                         break;
@@ -181,6 +203,9 @@ public class ClientIOThread extends Thread {
                                 GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
                             }
                         });
+                        break;
+                    case END_GAME:
+                        System.out.println(split[2] + " has won the game");
                         break;
                     case GET_GAME:
                         writer.writeUTF(GET_GAME + "," + split[1]);

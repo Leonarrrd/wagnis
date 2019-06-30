@@ -30,11 +30,10 @@ public class TurnController {
     /**
      * inits turn object at the start of the game
      */
-    public void setTurn(Game game) throws NoSuchPlayerException {
+    public void setTurn(Game game) throws NoSuchPlayerException, IOException, CardAlreadyOwnedException, NoSuchCardException, GameNotFoundException {
         game.setTurn(new Turn(game.getPlayers().get(0), Phase.PLACE_UNITS));
         // TODO: the method call should PROBABLY be refactored to somewhere else
             LogicController.getInstance().awardUnits(game, game.getPlayers().get(0));
-
     }
 
     /**
@@ -44,7 +43,7 @@ public class TurnController {
 
         Turn turn = game.getTurn();
 
-        switch (game.getTurn().getPhase()) {
+        switch (turn.getPhase()) {
             case USE_CARDS:
                 turn.setPhase(Phase.PLACE_UNITS);
                 break;

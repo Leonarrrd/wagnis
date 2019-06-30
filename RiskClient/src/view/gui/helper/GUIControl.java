@@ -28,7 +28,7 @@ public class GUIControl {
     private UUID gameId;
     private Map<String, CountryViewHelper> countryViewMap = CountryRelationLoadHelper.buildCountryViewMap();
     private IGameController gc = GameControllerFacade.getInstance();
-    private String selectedCountry;
+    private String selectedCountry = "Brazil";
     private LastFightCountries lastFightCountry;
 
     private List<String> playersInLobby = new ArrayList();
@@ -62,16 +62,18 @@ public class GUIControl {
             gc.loadGame(gameId);
         } catch (GameNotFoundException | ClassNotFoundException | IOException | InvalidFormattedDataException e) {
             new ErrorAlert(e);
+        } catch (NoSuchPlayerException e) {
+            e.printStackTrace();
         }
 
-        this.gameId = gameId;
-        getGame().getPlayers().get(0).setColor(Color.BLUE);
-        getGame().getPlayers().get(1).setColor(Color.RED);
-        if (getGame().getPlayers().size() > 2) getGame().getPlayers().get(2).setColor(Color.GREEN);
-        if (getGame().getPlayers().size() > 3) getGame().getPlayers().get(3).setColor(Color.YELLOW);
-        if (getGame().getPlayers().size() > 4) getGame().getPlayers().get(4).setColor(Color.MACADAMIA);
-        // MARK: FOR TESTING
-        getGame().getTurn().getPlayer().setUnitsToPlace(7);
+//        this.gameId = gameId;
+//        getGame().getPlayers().get(0).setColor(Color.BLUE);
+//        getGame().getPlayers().get(1).setColor(Color.RED);
+//        if (getGame().getPlayers().size() > 2) getGame().getPlayers().get(2).setColor(Color.GREEN);
+//        if (getGame().getPlayers().size() > 3) getGame().getPlayers().get(3).setColor(Color.YELLOW);
+//        if (getGame().getPlayers().size() > 4) getGame().getPlayers().get(4).setColor(Color.MACADAMIA);
+//        // MARK: FOR TESTING
+//        getGame().getTurn().getPlayer().setUnitsToPlace(7);
     }
 
     public void switchToGameScene(UUID gameId) {
@@ -212,7 +214,7 @@ public class GUIControl {
 
     }
 
-    public void setTurnManually(Phase phase) throws NoSuchPlayerException, GameNotFoundException, IOException {
+    public void setTurnManually(Phase phase) throws NoSuchPlayerException, GameNotFoundException, IOException, NoSuchCardException, CardAlreadyOwnedException {
         gc.setTurn(gameId, phase);
 
     }

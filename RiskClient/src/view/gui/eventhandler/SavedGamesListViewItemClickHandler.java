@@ -1,12 +1,20 @@
 package view.gui.eventhandler;
 
+import exceptions.GameNotFoundException;
+import exceptions.InvalidFormattedDataException;
 import javafx.event.EventHandler;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import model.Game;
 import view.gui.helper.GUIControl;
+import view.gui.panes.StartLoadedGameGridPane;
 import view.gui.roots.GameBorderPane;
+import view.gui.roots.StartBorderPane;
+import view.gui.sockets.GameControllerFacade;
 
+import java.io.IOException;
 import java.util.UUID;
 
 public class SavedGamesListViewItemClickHandler implements EventHandler<MouseEvent> {
@@ -20,9 +28,13 @@ public class SavedGamesListViewItemClickHandler implements EventHandler<MouseEve
     public void handle(MouseEvent event) {
         String gameIdString = (String) this.listView.getSelectionModel().getSelectedItem();
         UUID gameId = UUID.fromString(gameIdString);
-        GUIControl.getInstance().initLoadedGame(gameId);
+        try {
+            GameControllerFacade.getInstance().loadGame(gameId);
+        } catch (IOException | GameNotFoundException | InvalidFormattedDataException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        // kinda weird to access the scene like this?
-        listView.getScene().setRoot(new GameBorderPane());
+        StartBorderPane sbp = (StartBorderPane) listView.getParent();
+        sbp.setCenter(new StartLoadedGameGridPane(gameId));
     }
 }

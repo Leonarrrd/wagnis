@@ -1,9 +1,7 @@
 package view.gui.boxes.dialogboxes;
 
 import datastructures.Phase;
-import exceptions.GameNotFoundException;
-import exceptions.NoSuchCountryException;
-import exceptions.NoSuchPlayerException;
+import exceptions.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -86,7 +84,7 @@ public class AttackVBox extends VBox implements RiskUIElement, Updatable {
             public void handle(ActionEvent event) {
                 try {
                     guic.setTurnManually(Phase.MOVE);
-                } catch (NoSuchPlayerException | GameNotFoundException | IOException e) {
+                } catch (NoSuchPlayerException | GameNotFoundException | IOException | NoSuchCardException | CardAlreadyOwnedException e) {
                     e.printStackTrace();
                 }
             }

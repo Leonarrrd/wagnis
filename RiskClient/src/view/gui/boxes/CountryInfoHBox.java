@@ -72,6 +72,7 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
             @Override
             public void handle(MouseEvent event) {
                 try {
+
                     GUIControl.getInstance().countryClicked(countryString);
                 } catch (GameNotFoundException | IOException | ClassNotFoundException e) {
                     new ErrorAlert(e);
@@ -90,7 +91,6 @@ public class CountryInfoHBox extends HBox implements RiskUIElement, Updatable {
      * @return an image URL to a flag image whose color matches the country owner
      */
     private String getFlagImageUrl(){
-
         return  "file:assets/img/flag"
                 + GUIControl.getInstance().getGame().getCountries().get(countryString).getOwner().getColor().name()
                 + ".png";
