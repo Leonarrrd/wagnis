@@ -1,6 +1,5 @@
 package view.gui.sockets;
 
-import datastructures.CardBonus;
 import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
@@ -8,9 +7,12 @@ import interfaces.IGameController;
 import model.*;
 import view.gui.sockets.threads.ClientIOThread;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.*;
+import java.util.List;
+import java.util.UUID;
 
 import static helper.Events.*;
 import static view.gui.util.UIConstants.SOCKET_PORT;
@@ -60,9 +62,6 @@ public class GameControllerFacade implements IGameController {
 
     }
 
-    public String getPlayerName() {
-        return playerName;
-    }
 
     /**
      * Client-side implementation
@@ -143,58 +142,11 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException, IOException {
-        //oos.writeUTF(ADD_COUNTRY + "," + gameId.toString() + "," + countryAsString + "," + player.getName());
-        //oos.flush();
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
     public void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
         oos.writeUTF(CHANGE_UNITS + "," + gameId.toString() + "," + country.getName() + "," + units);
         oos.flush();
     }
 
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) throws GameNotFoundException, NoSuchCountryException {
-        //TODO: not used
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void assignCountries(UUID gameId) throws GameNotFoundException, CountriesAlreadyAssignedException {
-        throw new UnsupportedOperationException("This method does not need to be called on client side.");
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void assignMissions(UUID gameId) throws GameNotFoundException, MaximumNumberOfPlayersReachedException {
-        throw new UnsupportedOperationException("This method does not need to be called on client side.");
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public int assignUnits(UUID gameId) throws GameNotFoundException, InvalidNumberOfPlayersException, IOException {
-        //oos.writeUTF(ASSIGN_UNITS + "," + gameId.toString());
-        //oos.flush();
-        return 0;
-    }
 
     /**
      * Client-side implementation
@@ -203,35 +155,6 @@ public class GameControllerFacade implements IGameController {
     @Override
     public void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
         //oos.writeUTF(ADD_CARD + "," + gameId.toString() + "," + player.getName());
-        //oos.flush();
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void addCardsToDeck(UUID gameId, List<Card> cards) throws GameNotFoundException {
-        throw new UnsupportedOperationException("This method does not need to be called on client side.");
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards) {
-        //MARK: I don't know what to do with this
-        return null;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException {
-        //oos.writeUTF(AWARD_UNITS + "," + gameId.toString() + "," + player.getName());
         //oos.flush();
     }
 
@@ -253,72 +176,6 @@ public class GameControllerFacade implements IGameController {
     public void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException, IOException {
         oos.writeUTF(USE_CARDS + "," + gameId.toString() + "," + player.getName() + "," + infantryCards + "," + cavalryCards + "," + artilleryCards);
         oos.flush();
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException, ClassNotFoundException {
-        //oos.writeUTF(GET_COUNTRIES_ATTACK_CAN_BE_LAUNCHED_FROM + "," + gameId.toString());
-        //oos.flush();
-
-        //return (Map<String, Country>) ois.readObject();
-        return new HashMap<>();
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getCountriesWithMoreThanOneUnit(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException, ClassNotFoundException {
-        //oos.writeUTF(GET_COUNTRIES_WITH_MORE_THAN_ONE_UNIT + "," + gameId.toString() + "," + player.getName());
-        //oos.flush();
-
-        //return (Map<String, Country>) ois.readObject();
-        return new HashMap<>();
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException {
-//        oos.writeUTF(HAS_COUNTRY_TO_MOVE_FROM + "," + gameId.toString() + "," + player.getName());
-//        oos.flush();
-//        synchronized (ois) {
-//            return ois.readBoolean();
-//        }
-        return true;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException {
-        //oos.writeUTF(HAS_COUNTRY_TO_ATTACK_FROM + "," + gameId.toString() + "," + player.getName());
-        //oos.flush();
-
-        //return ois.readBoolean();
-        return true;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException {
-        //oos.writeUTF(GET_HOSTILE_NEIGHBORS + "," + gameId.toString() + "," + country.getName());
-        //oos.flush();
-
-        //return (Map<String, Country>) ois.readObject();
-        return new HashMap<>();
     }
 
     /**
@@ -424,20 +281,6 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) throws IOException {
-        //oos.writeUTF(IS_CONNECTED + "," + gameId.toString() + "," + srcCountry.getName() + "," + destCountry.getName());
-        //oos.flush();
-
-        //return ois.readBoolean();
-
-        return true;
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
     public void saveGame(UUID gameId) throws GameNotFoundException, IOException, DuplicateGameIdException {
         oos.writeUTF(SAVE_GAME + "," + gameId.toString());
         oos.flush();
@@ -460,8 +303,8 @@ public class GameControllerFacade implements IGameController {
     @Override
     public List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException {
         // MARK: confirm this is okay
-         oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
-         oos.flush();
+        oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
+        oos.flush();
 //        return new ArrayList<>();
         return null;
     }
@@ -473,4 +316,9 @@ public class GameControllerFacade implements IGameController {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
 }

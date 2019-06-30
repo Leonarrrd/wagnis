@@ -313,7 +313,7 @@ public class GUIControl {
         //  The code below was supposed to fix this problem, I have not investigated yet why it still crashes
 
         if (gc.getGameById(gameId) != null) {
-            return gc.getPlayerName().equals(getGame().getTurn().getPlayer().getName());
+            return GameControllerFacade.getInstance().getPlayerName().equals(getGame().getTurn().getPlayer().getName());
         } else {
             return false;
         }
@@ -342,7 +342,7 @@ public class GUIControl {
     }
 
     public String getPlayerName() {
-        return gc.getPlayerName();
+        return GameControllerFacade.getInstance().getPlayerName();
     }
 
     private LogHBox getLog() {

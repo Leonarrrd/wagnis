@@ -1,20 +1,16 @@
 package interfaces;
 
-import datastructures.CardBonus;
 import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
 import model.*;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
 
-/**
- * Main interface that defines the methods needed for controlling the game flow.
- * There is a server-side implmentation of this Interface for handling the game logic server-side
- * and a Client-side-Implementation that makes requests via this Facade Pattern using sockets.
- */
 public interface IGameController {
+
 
     /**
      * Create a new game while joining the first Player
@@ -25,7 +21,7 @@ public interface IGameController {
      *
      * @throws InvalidPlayerNameException
      */
-    void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) throws InvalidPlayerNameException;
+    void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) throws InvalidPlayerNameException, IOException;
 
 
     /**
@@ -58,12 +54,12 @@ public interface IGameController {
     Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException, NoSuchPlayerException;
 
     /**
-     * Helper-Method to start a loaded Game - needs different logic than start game..
-     * @param gameId
+     * Starts a loaded game. Needs another implementation than starting a new game.
      *
-     * @throws IOException most likely if the saved game could not be read correctly
-     * @throws GameNotFoundException if the loaded game could not be found
-     * @throws InvalidFormattedDataException if the save file is corrupted
+     * @param gameId The game Id of the game that should be started.
+     * @throws IOException if the game could not be read or a socket exception occurs.
+     * @throws GameNotFoundException if the game with the provided Id could not be found.
+     * @throws InvalidFormattedDataException if the file that the game is saved in is corrupted.
      * @throws ClassNotFoundException
      */
     void startLoadedGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException;
@@ -93,18 +89,6 @@ public interface IGameController {
     void changeUnits(UUID gameId, Country country, int units) throws GameNotFoundException, NoSuchCountryException, IOException;
 
 
-
-    /**
-     * TODO: add commentary
-     * FIXME: kann weg oder?
-     *
-     * @param gameId
-     * @return
-     * @throws GameNotFoundException
-     * @throws InvalidNumberOfPlayersException
-     */
-    int assignUnits(UUID gameId) throws GameNotFoundException, InvalidNumberOfPlayersException, IOException;
-
     /**
      * Adds a card to a player after a successful attack
      *
@@ -117,35 +101,6 @@ public interface IGameController {
      */
     void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException;
 
-    /**
-     * Adds cards to the Card Deck that is "drawn" from
-     *
-     * @param gameId needs to be provided to identify the correct game
-     * @param cards the list of cards that need to be added to the Deck
-     * @throws GameNotFoundException if the game with the provided Id could not be found
-     */
-    void addCardsToDeck(UUID gameId, List<Card> cards) throws GameNotFoundException;
-
-    /**
-     * Gets the right values for the provided cards if a player decides to use his cards
-     *
-     * @param infantryCards the amount of infantry cards provided by the player
-     * @param cavalryCards the amount of cavalry cards provided by the player
-     * @param artilleryCards the amount of artillery cards provided by the player
-     * @return CardBonus-Object that holds the values for the cards
-     */
-    CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards);
-
-    /**
-     * Awards units to the player
-     * Called at the start of each Turn for the provided player
-     *
-     * @param gameId needs to be provided to identify the correct game
-     * @param player the player that should be awarded units
-     * @throws GameNotFoundException if the game with the provided Id could not be found
-     * @throws NoSuchPlayerException if the player to award units to does not exist
-     */
-    void awardUnits(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
     /**
      * Changes the units that can be placed by a player
@@ -155,25 +110,36 @@ public interface IGameController {
      * @param player the player that places units
      * @param unitChange the units that are added / substracted
      * @throws GameNotFoundException if the game with the provided Id could not be found
-     * @throws NoSuchPlayerException
+     * @throws NoSuchPlayerException if the player does not exist
      */
     void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
 
+    /**
+     * Method for using cards at the start of the turn
+     * @param gameId needs to be provided to identify the correct game
+     * @param player the player that uses the cards
+     * @param infantryCards amount of infantry cards
+     * @param cavalryCards amount of infantry cards
+     * @param artilleryCards amount of infantry cards
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws NoSuchCardException if the cards that wants to be used does not exist
+     * @throws NoSuchPlayerException if the player that uses the cards does not exist
+     * @throws IOException if a socket exception occurs
+     */
     void useCards(UUID gameId, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws GameNotFoundException, NoSuchCardException, NoSuchPlayerException, IOException;
 
-    Map<String, Country> getCountriesAttackCanBeLaunchedFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException, ClassNotFoundException;
 
-    Map<String, Country> getCountriesWithMoreThanOneUnit(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException, ClassNotFoundException;
-
-
-    boolean hasCountryToMoveFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException;
-
-
-    boolean hasCountryToAttackFrom(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCountryException, IOException;
-
-    Map<String, Country> getHostileNeighbors(UUID gameId, Country country) throws GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException;
-
+    /**
+     * Method that initialises an attack
+     * @param gameId needs to be provided to identify the correct game
+     * @param attackingCountry the country that starts the attack
+     * @param defendingCountry the country that is being attacked
+     * @param units the amount of units that is attacked with
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws NoSuchCountryException if the country does not exist
+     * @throws IOException if a socket exception occurs
+     */
     void initAttack(UUID gameId, String attackingCountry, String defendingCountry, int units) throws  GameNotFoundException, NoSuchCountryException, IOException;
 
     /**
@@ -183,6 +149,7 @@ public interface IGameController {
      * The method is rather long and might be rewritten in a more elegant way
      * Probably better to split this method in 2-3 smaller methods, with dice rolls, unit deducts, and checking for a winner separate
      *
+     * @param gameId needs to be provided to identify the correct game
      * @param attackingCountry the country to attack from
      * @param defendingCountry the country that is defending the attack
      * @param attackingUnits the amount of units the attacking country attacks with
@@ -191,11 +158,25 @@ public interface IGameController {
      * @throws CountriesNotAdjacentException if the countries that should be fighting are not adjacent to each other
      * @throws GameNotFoundException if the game with the provided game Id could not be found
      * @throws NoSuchCountryException if the given countries do not exist
-     * @return
+     * @return An AttackResult-Object that includes the dices rolled and the winner
      */
     AttackResult fight(UUID gameId, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, GameNotFoundException, NoSuchCountryException, IOException, ClassNotFoundException;
 
-    void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotAdjacentException, IOException;
+    /**
+     * Method to move methods from one friendly country to another connected
+     * @param gameId needs to be provided to identify the correct game
+     * @param srcCountry the country that wants to be moved from
+     * @param destCountry the country that wants to be moved to
+     * @param amount the amount of units that are being moved
+     * @param trail Trailing units also works for this method. Flag if it's for trailing units or moving. false = move, true = trail untis
+     * @throws GameNotFoundException needs to be provided to identify the correct game
+     * @throws NotEnoughUnitsException if there are not enough units to move
+     * @throws CountryNotOwnedException if the source country or destination country is not owned by the player that wants to move
+     * @throws NoSuchCountryException if the source country or destination country does not exist
+     * @throws CountriesNotConnectedException if the countries are not connected
+     * @throws IOException if a socket exception occurs
+     */
+    void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotConnectedException, IOException;
 
 
     boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
@@ -208,8 +189,6 @@ public interface IGameController {
     void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
     void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException;
-
-    boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) throws IOException;
 
     void saveGame(UUID gameId) throws GameNotFoundException, IOException, DuplicateGameIdException;
 

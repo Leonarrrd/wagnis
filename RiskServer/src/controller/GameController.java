@@ -139,15 +139,6 @@ public class GameController implements IGameController {
         pc.addPlayer(game, playerName, color);
     }
 
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void addCountry(UUID gameId, String countryAsString, Player player) throws GameNotFoundException, CountryAlreadyOccupiedException, NoSuchCountryException {
-        Game game = getGameById(gameId);
-        wc.addCountry(game, countryAsString, player);
-    }
 
     /**
      * Server-side implementation
@@ -159,36 +150,6 @@ public class GameController implements IGameController {
         wc.changeUnits(game, country, units);
     }
 
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void changeFrozenUnits(UUID gameId, Country country, int frozenUnits) throws GameNotFoundException, NoSuchCountryException {
-        Game game = getGameById(gameId);
-        wc.changeFrozenUnits(game, country, frozenUnits);
-    }
-
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void assignCountries(UUID gameId) throws GameNotFoundException, CountriesAlreadyAssignedException {
-        Game game = getGameById(gameId);
-        wc.assignCountries(game);
-    }
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public void assignMissions(UUID gameId) throws GameNotFoundException, MaximumNumberOfPlayersReachedException {
-        Game game = getGameById(gameId);
-        pc.assignMissions(game);
-    }
 
     /**
      * Server-side implementation
