@@ -202,7 +202,7 @@ public class GUIControl {
 
     public void forwardTurnPhase() {
         try {
-            gc.switchTurns(gameId);
+            GameControllerFacade.getInstance().switchTurns(gameId, false);
         } catch (GameNotFoundException | IOException | NoSuchCardException | NoSuchPlayerException | CardAlreadyOwnedException e) {
             new ErrorAlert(e);
         }

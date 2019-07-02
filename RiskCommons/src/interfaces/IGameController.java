@@ -59,17 +59,6 @@ public interface IGameController {
     Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException, NoSuchPlayerException;
 
     /**
-     * Starts a loaded game. Needs another implementation than starting a new game.
-     *
-     * @param gameId The game Id of the game that should be started.
-     * @throws IOException if the game could not be read or a socket exception occurs.
-     * @throws GameNotFoundException if the game with the provided Id could not be found.
-     * @throws InvalidFormattedDataException if the file that the game is saved in is corrupted.
-     * @throws ClassNotFoundException
-     */
-    void startLoadedGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException;
-
-    /**
      * Methods that adds a player to the game
      *
      * @param gameId The game Id of the game that the player should be added to
@@ -186,18 +175,6 @@ public interface IGameController {
      */
     void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotConnectedException, IOException;
 
-
-    /**
-     * Method that checks the player's wining condition
-     *
-     * @param gameId needs to be provided to identify the correct game
-     * @param player the player whose win condition needs to be checked
-     * @return true if game is won, otherwise false
-     * @throws GameNotFoundException if the game with the provided game Id could not be found
-     * @throws NoSuchPlayerException if the player whose win condition needs to be checked does not exist
-     * @throws IOException
-     */
-    boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
     /**
      * Set the turn manually by prividing a phase from {@link datastructures.Phase}

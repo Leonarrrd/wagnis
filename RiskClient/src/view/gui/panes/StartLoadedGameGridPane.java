@@ -18,6 +18,7 @@ import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 import view.gui.roots.GameBorderPane;
 import view.gui.sockets.GameControllerFacade;
+import view.gui.sockets.GameLobbyManager;
 import view.gui.viewhelper.PlayerColorItem;
 
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class StartLoadedGameGridPane extends GridPane implements RiskUIElement, 
             if (playerList.getChildren().size() == game.getPlayers().size()) {
 //                correctPlayerNames();
                 try {
-                    GameControllerFacade.getInstance().startLoadedGame(gameId);
+                    GameLobbyManager.getInstance().startLoadedGame(gameId);
                 } catch (ClassNotFoundException | InvalidFormattedDataException | GameNotFoundException | IOException e) {
                     e.printStackTrace();
                 }
