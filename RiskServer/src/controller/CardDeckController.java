@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Controller that needs to control the card mechanism
+ */
 public class CardDeckController {
     private static CardDeckController instance;
 
@@ -25,6 +28,15 @@ public class CardDeckController {
         return instance;
     }
 
+    /**
+     * Adds a card to a player
+     *
+     * @param game needs to be provided to identify the correct game
+     * @param player
+     * @throws NoSuchPlayerException
+     * @throws NoSuchCardException
+     * @throws CardAlreadyOwnedException
+     */
     void addCardToPlayer(Game game, Player player) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
@@ -40,10 +52,11 @@ public class CardDeckController {
         player.getCards().add(game.getCardDeck().remove(0));
     }
 
-    void addCardsToDeck(Game game, List<Card> cards){
-        game.getCardDeck().addAll(cards);
-    }
 
+    /**
+     * Creates the card deck
+     * @return List<Card> Shuffled Cards
+     */
     List<Card> createCardDeck(){
         List<Card> cardDeck = new ArrayList<>();
         int id = 1;

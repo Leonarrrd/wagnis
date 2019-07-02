@@ -94,7 +94,7 @@ public class Country implements Serializable {
         }
     }
 
-    public String printRepresantation() {
+    public String printRepresentation() {
         return "Name: " + this.name + " Owner: " + this.owner + " Units: " + this.units;
     }
 

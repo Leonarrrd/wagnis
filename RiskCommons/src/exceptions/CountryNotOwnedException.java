@@ -1,10 +1,12 @@
 package exceptions;
 
 import model.Country;
-import model.Player;
 
 import java.io.Serializable;
 
+/**
+ * Thrown if an action for a country is initiated but the Country that the action is associated with is not owned by the player.
+ */
 public class CountryNotOwnedException extends Exception implements Serializable {
     private static final long serialVersionUID = 1L;
 

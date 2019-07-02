@@ -16,6 +16,10 @@ import java.util.UUID;
 import static datastructures.Phase.TRAIL_UNITS;
 import static helper.Events.*;
 
+/**
+ * ClientRequestProcessor is a thread active for every socket that reads input
+ * and sends responses to certain sockets depending on the input
+ */
 public class ClientRequestProcessor extends Thread {
     private Socket socket;
     private GameController gc = GameController.getInstance();

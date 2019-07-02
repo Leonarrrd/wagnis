@@ -9,10 +9,13 @@ import exceptions.NoSuchPlayerException;
 import model.Game;
 import model.Player;
 import model.Turn;
-import sun.rmi.runtime.Log;
 
 import java.io.IOException;
+import java.util.UUID;
 
+/**
+ * Controller that handles the turn mechanism
+ */
 public class TurnController {
 
     private static TurnController instance;
@@ -29,16 +32,16 @@ public class TurnController {
 
 
     /**
-     * inits turn object at the start of the game
+     * @see interfaces.IGameController#setTurn(UUID, Phase)
      */
     public void setTurn(Game game) throws NoSuchPlayerException, IOException, CardAlreadyOwnedException, NoSuchCardException, GameNotFoundException {
         game.setTurn(new Turn(game.getPlayers().get(0), Phase.PLACE_UNITS));
         // TODO: the method call should PROBABLY be refactored to somewhere else
-            LogicController.getInstance().awardUnits(game, game.getPlayers().get(0));
+        LogicController.getInstance().awardUnits(game, game.getPlayers().get(0));
     }
 
     /**
-     * switch turns (phase or phase and player)
+     * @see interfaces.IGameController#switchTurns(UUID)
      */
     void switchTurns(Game game) throws NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, GameNotFoundException, IOException {
 

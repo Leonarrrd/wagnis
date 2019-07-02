@@ -7,6 +7,11 @@ import helper.Utils;
 import model.Game;
 import model.Player;
 
+import java.util.UUID;
+
+/**
+ * Controller that handles the player mechanism.
+ */
 public class PlayerController {
 
     private static PlayerController instance;
@@ -22,12 +27,7 @@ public class PlayerController {
     }
 
     /**
-     * adds a player to a game.
-     * @param game
-     * @param name
-     * @return
-     * @throws MaximumNumberOfPlayersReachedException
-     * @throws InvalidPlayerNameException
+     * @see interfaces.IGameController#addPlayer(UUID, String, Color)
      */
     Player addPlayer(Game game, String name, Color color) throws MaximumNumberOfPlayersReachedException, InvalidPlayerNameException {
         if (game.getPlayers().size() >= 5) {

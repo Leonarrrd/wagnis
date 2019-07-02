@@ -2,6 +2,9 @@ package exceptions;
 
 import java.io.Serializable;
 
+/**
+ * Thrown if the data that is loaded from files is corrupt.
+ */
 public class InvalidFormattedDataException extends Exception implements Serializable {
     private static final long serialVersionUID = 1L;
 

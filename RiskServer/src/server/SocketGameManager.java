@@ -96,7 +96,6 @@ public class SocketGameManager {
         gameInit.getPlayerList().add(playerName);
         gameInit.getSockets().add(socket);
 
-        //FIXME: the map needs to be the other way around, this way there won't be any mismatches with they key when player in two different games have the same names
         socketPlayerNameMap.put(socket, playerName);
     }
 

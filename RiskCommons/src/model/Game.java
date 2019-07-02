@@ -83,7 +83,7 @@ public class Game implements Serializable {
         }
         sb.append("\nCountries: \n");
         for (Country c : this.countries.values()) {
-            sb.append(c.printRepresantation() + "\n");
+            sb.append(c.printRepresentation() + "\n");
         }
         sb.append("\nContinents: \n");
 

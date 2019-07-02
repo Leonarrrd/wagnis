@@ -7,6 +7,9 @@ import model.Player;
 
 import java.util.*;
 
+/**
+ * Controller that handles world mechanisms (countries, etc.)
+ */
 public class WorldController {
 
     private static WorldController instance;
@@ -22,34 +25,9 @@ public class WorldController {
         return instance;
     }
 
-    /**
-     * @param countryAsString
-     * @param player
-     */
-    void addCountry(Game game, String countryAsString, Player player) throws CountryAlreadyOccupiedException, NoSuchCountryException {
-
-
-       Country country = game.getCountries().get(countryAsString);
-        if (!game.getCountries().containsKey(countryAsString)) {
-            throw new NoSuchCountryException(country);
-        }
-
-        if (country.getOwner() != null) {
-            throw new CountryAlreadyOccupiedException(country);
-        }
-
-        player.getCountries().put(countryAsString, country);
-        country.setOwner(player);
-    }
 
     /**
-     * MARK: Misleading method name.
-     *  Gives the impression that the functionality would be that of setUnits() rather than addUnits()
-     *
-     * Add units to the specified country
-     *
-     * @param country
-     * @param units   units to add
+     * @see interfaces.IGameController#changeUnits(UUID, Country, int)
      */
     void changeUnits(Game game, Country country, int units) throws NoSuchCountryException {
         if (!game.getCountries().containsValue(country)) {
@@ -59,15 +37,7 @@ public class WorldController {
         game.getCountries().get(country.getName()).setUnits(tempUnits + units);
     }
 
-    void changeFrozenUnits(Game game, Country country, int frozenUnits) throws NoSuchCountryException {
-        if (!game.getCountries().containsValue(country)) {
-            throw new NoSuchCountryException(country);
-        }
-        int tempFrozenUnits = game.getCountries().get(country.getName()).getUnits();
-        game.getCountries().get(country.getName()).setFrozenUnits(tempFrozenUnits + frozenUnits);
-    }
-
-    /**
+     /**
      * Assigns all countries to players randomly
      * Only used in simple game mode, for normal game mode, we let people choose their own country, see UI
      */
@@ -98,59 +68,8 @@ public class WorldController {
         }
     }
 
-    /**
-     * Assigns a number of starting units to players depending on the number of players
-     *
-     * @return the amount of units assigned
-     */
-    int assignUnits(Game game) throws InvalidNumberOfPlayersException {
-
-        int startingUnits;
-        switch (game.getPlayers().size()) {
-            case 2:
-                startingUnits = 5; //TODO: its actually 40, just put 5 for testing
-                break;
-            case 3:
-                startingUnits = 35;
-                break;
-            case 4:
-                startingUnits = 30;
-                break;
-            case 5:
-                startingUnits = 25;
-                break;
-            default:
-                throw new InvalidNumberOfPlayersException(game.getPlayers().size());
-        }
-        return startingUnits;
-    }
 
     /**
-     * Returns a map not a list so we can print keys in the interface more easily
-     * Map contains countries that have: a) More than one unit; b) at least one hostile neighbour
-     * Used to determine eligible source attack and countries
-     * TODO: inconsistent naming with method below?
-     *
-     * @param player
-     * @return map of countries with more than one unit
-     */
-    Map<String, Country> getCountriesAttackCanBeLaunchedFrom(Game game, Player player) throws NoSuchPlayerException, NoSuchCountryException {
-        if (!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player);
-        }
-
-
-        Map<String, Country> countriesWithMoreThanOneUnit = new HashMap<>();
-        for (Country country : player.getCountries().values()) {
-            if (country.getUnits() > 1 && !getHostileNeighbors(game, country).isEmpty()) {
-                countriesWithMoreThanOneUnit.put(country.getName(), country);
-            }
-        }
-        return countriesWithMoreThanOneUnit;
-    }
-
-    /**
-     * TODO: Same concerns as above
      * Looks at all neighbors the country has and creates a map of the ones that are not occupied by the player occupying it
      * Used to determine eligible attack destinations
      *
@@ -171,8 +90,8 @@ public class WorldController {
     }
 
     /**
-     * @param country
-     * @return
+     * @param country to get allied neighbours from
+     * @return Map of allied neighbours
      */
     Map<String, Country> getAlliedNeighbors(Game game, Country country) throws NoSuchCountryException {
         if (!game.getCountries().containsValue(country)) {
@@ -188,7 +107,6 @@ public class WorldController {
     }
 
     /**
-     * TODO:Same as above just that country doesnt need to have hostile neighbors
      * Used to determine move countries
      *
      * @param player
@@ -209,11 +127,7 @@ public class WorldController {
 
 
     /**
-     * TODO: We should use changeUnits() here, but we have no gameID
-     *
-     * @param srcCountry
-     * @param destCountry
-     * @param amount
+     * @see interfaces.IGameController#moveUnits(UUID, Country, Country, int, boolean)
      */
     void moveUnits(Game game, Country srcCountry, Country destCountry, int amount) throws NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotConnectedException {
         if (!game.getCountries().values().contains(srcCountry)) {
@@ -228,7 +142,7 @@ public class WorldController {
         if (!srcCountry.getOwner().equals(destCountry.getOwner())) {
             throw new CountryNotOwnedException(srcCountry);
         }
-        if(!isConnected(game.getId(), srcCountry, destCountry)) {
+        if(!isConnected(srcCountry, destCountry)) {
             throw new CountriesNotConnectedException(srcCountry, destCountry);
         }
 
@@ -237,12 +151,12 @@ public class WorldController {
     }
 
     /**
+     * Checks if two countries are connected
      *
-     * @param srcCountry
-     * @param destCountry
+     * @param srcCountry source country
+     * @param destCountry destination country
      */
-    // TODO: GAME UEBERGEBEN UND EXCEPTIONS
-    boolean isConnected(UUID gameId, Country srcCountry, Country destCountry) {
+    boolean isConnected(Country srcCountry, Country destCountry) {
         return srcCountry.getOwner().getCountryGraph().evaluateCountriesAllowedToMoveTo(srcCountry.getName()).contains(destCountry.getName());
     }
 

@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.*;
 
+/**
+ * Interfaces the provides all the methodes that control the Game state / Game flow
+ * Implemented by the client as Facade for socket requests and Server to handle the request and change the game state
+ */
 public interface IGameController {
 
 
@@ -44,6 +48,7 @@ public interface IGameController {
 
     /**
      * Loads a saved game
+     *
      * @param gameId The game Id of the game that should be loaded. Can be allocated
      *               by the method loadAvailableGameIds()
      * @return
@@ -117,6 +122,7 @@ public interface IGameController {
 
     /**
      * Method for using cards at the start of the turn
+     *
      * @param gameId needs to be provided to identify the correct game
      * @param player the player that uses the cards
      * @param infantryCards amount of infantry cards
@@ -132,6 +138,7 @@ public interface IGameController {
 
     /**
      * Method that initialises an attack
+     *
      * @param gameId needs to be provided to identify the correct game
      * @param attackingCountry the country that starts the attack
      * @param defendingCountry the country that is being attacked
@@ -164,12 +171,13 @@ public interface IGameController {
 
     /**
      * Method to move methods from one friendly country to another connected
+     *
      * @param gameId needs to be provided to identify the correct game
      * @param srcCountry the country that wants to be moved from
      * @param destCountry the country that wants to be moved to
      * @param amount the amount of units that are being moved
      * @param trail Trailing units also works for this method. Flag if it's for trailing units or moving. false = move, true = trail untis
-     * @throws GameNotFoundException needs to be provided to identify the correct game
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
      * @throws NotEnoughUnitsException if there are not enough units to move
      * @throws CountryNotOwnedException if the source country or destination country is not owned by the player that wants to move
      * @throws NoSuchCountryException if the source country or destination country does not exist
@@ -179,20 +187,94 @@ public interface IGameController {
     void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotConnectedException, IOException;
 
 
+    /**
+     * Method that checks the player's wining condition
+     *
+     * @param gameId needs to be provided to identify the correct game
+     * @param player the player whose win condition needs to be checked
+     * @return true if game is won, otherwise false
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws NoSuchPlayerException if the player whose win condition needs to be checked does not exist
+     * @throws IOException
+     */
     boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
+    /**
+     * Set the turn manually by prividing a phase from {@link datastructures.Phase}
+     *
+     * @param gameId needs to be provided to identify the correct game
+     * @param phase the game phase {@link datastructures.Phase}
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws NoSuchPlayerException The turn also contains the Player that's why there is a check if that player exists
+     * @throws IOException if a socket exception occurs
+     * @throws CardAlreadyOwnedException
+     * @throws NoSuchCardException
+     */
     void setTurn(UUID gameId, Phase phase) throws GameNotFoundException, NoSuchPlayerException, IOException, CardAlreadyOwnedException, NoSuchCardException;
 
+    /**
+     * Switches turns based on the current turn and the Order: PLACE_UNITS -> ... -> USE_CARDS {@link datastructures.Phase}
+     *
+     * @param gameId needs to be provided to identify the correct game
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws NoSuchPlayerException he turn also contains the Player that's why there is a check if that player exists
+     * @throws NoSuchCardException
+     * @throws CardAlreadyOwnedException
+     * @throws IOException if a socket exception occurs
+     */
     void switchTurns(UUID gameId) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException;
 
-
+    /**
+     * Updates the Player-Graph map to update which countries owned by the player are connected.
+     * Needs to be called after a country ownership is switched.
+     *
+     * @param gameId needs to be provided to identify the correct game
+     * @param p the player whose graph needs to be updated
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws NoSuchPlayerException if the player does not exist
+     * @throws IOException if a socket exception occurs
+     */
     void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException, IOException;
 
+    /**
+     * Checks if something needs to be done after a phase is over. (e.g. removing a player, checking a winning condition)
+     *
+     * @param gameId needs to be provided to identify the correct game
+     * @param turn
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws IOException if a socket exception occurs
+     * @throws NoSuchPlayerException if the player does not exist
+     * @throws NoSuchCardException
+     * @throws CardAlreadyOwnedException
+     */
     void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException;
 
+    /**
+     * Method to save the game
+     * Games are saved in savedgames.dat server-side
+     *
+     * @param gameId needs to be provided to identify the correct game
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws IOException if a socket exception or file system exception occurs
+     * @throws DuplicateGameIdException if a game with the same Id has already been saved
+     */
     void saveGame(UUID gameId) throws GameNotFoundException, IOException, DuplicateGameIdException;
 
+    /**
+     * Removes a game from saved games
+     *
+     * @param gameId needs to be provided to identify the correct game
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws IOException if a socket exception or file system exception occurs
+     */
     void removeGame(UUID gameId) throws GameNotFoundException, IOException;
 
+    /**
+     * Loads all GameIds that are ready to be loaded
+     *
+     * @return List of Ids (Strings)
+     * @throws IOException if a socket exception or file system exception occurs
+     * @throws ClassNotFoundException
+     */
     List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException;
 }

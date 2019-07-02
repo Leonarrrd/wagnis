@@ -26,9 +26,13 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static helper.Events.*;
 
+/**
+ * Controller that handles Logic Operations
+ */
 public class LogicController {
 
     private static LogicController instance;
@@ -43,7 +47,7 @@ public class LogicController {
         return instance;
     }
 
-       /**
+    /**
      * Calculates the amount of units the player is eligible to get for this turn
      * Get units for: default, total number of countries, full continents, Cards played
      *
@@ -59,6 +63,9 @@ public class LogicController {
         player.setUnitsToPlace(player.getUnitsToPlace() + units);
     }
 
+    /**
+     * @see interfaces.IGameController#changeUnits(UUID, Country, int)
+     */
     void changeUnits(Game game, Player player, int unitChange) throws NoSuchPlayerException {
         if(!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
@@ -86,17 +93,7 @@ public class LogicController {
     }
 
     /**
-     * Carries out one round of an attack
-     * Rolls the dices and deducts units from the countries depending on the roll's outcome
-     * The method does NOT handle invalid parameters. The instance that calls this function must ensure the parameters are valid
-     * The method is rather long and might be rewritten in a more elegant way
-     * Probably better to split this method in 2-3 smaller methods, with dice rolls, unit deducts, and checking for a winner separate
-     *
-     * @param attackingCountry
-     * @param defendingCountry
-     * @param attackingUnits
-     * @param defendingUnits
-     * @return Attack-Result object
+     * @see interfaces.IGameController#fight(UUID, Country, Country, int, int)
      */
     AttackResult fight(Game game, Country attackingCountry, Country defendingCountry, int attackingUnits, int defendingUnits) throws NotEnoughUnitsException, CountriesNotAdjacentException, NoSuchCountryException {
         if(!game.getCountries().containsValue(attackingCountry)) {
@@ -173,6 +170,9 @@ public class LogicController {
         return (bonusUnits > 0) ? bonusUnits : 0;
     }
 
+    /**
+     * Gets the trade bonus type by type card
+     */
     public CardBonus getTradeBonusType(int infantryCards, int cavalryCards, int artilleryCards){
         if (infantryCards + cavalryCards + artilleryCards != 3){
             return null;
@@ -193,13 +193,7 @@ public class LogicController {
     }
 
     /**
-     * TODO: OVERSIMPLIFIED AT THE MOMENT
-     * Removes the cards the player wants to use from his hand
-     * Calculates and returns the number of units the player is awarded for the value of his cards
-     *
-     * @param player
-     * @param
-     * @return
+     * @see interfaces.IGameController#useCards(UUID, Player, int, int, int)
      */
     void useCards(Game game, Player player, int infantryCards, int cavalryCards, int artilleryCards) throws NoSuchPlayerException, NoSuchCardException{
         if(!game.getPlayers().contains(player)) {
@@ -230,53 +224,6 @@ public class LogicController {
     }
 
     /**
-     * Returns true if player has a country that has: a) more than one unit, b) at least one hostile neighbor
-     *
-     * @param player
-     * @return
-     */
-    boolean hasCountryToAttackFrom(Game game, Player player) throws NoSuchPlayerException, NoSuchCountryException {
-
-        for (Player p : game.getPlayers()) {
-            GraphController.getInstance().updateGraph(game, p);
-        }
-        boolean hasCountryToAttackFrom = false;
-        for (Country country : WorldController.getInstance().getCountriesWithMoreThanOneUnit(game, player).values()) {
-            if (!WorldController.getInstance().getHostileNeighbors(game, country).isEmpty()) {
-                hasCountryToAttackFrom = true;
-            }
-        }
-        return hasCountryToAttackFrom;
-    }
-
-    /**
-     * Returns true if player has a country that has: a) more than one unit, b) is connected to at least one friendly country
-     *
-     * @param player
-     * @return
-     */
-    boolean hasCountryToMoveFrom(Game game, Player player) throws NoSuchPlayerException, NoSuchCountryException {
-        for (Player p : game.getPlayers()) {
-            GraphController.getInstance().updateGraph(game, p);
-        }
-        if(!game.getPlayers().contains(player)) {
-            throw new NoSuchPlayerException(player);
-        }
-        boolean hasCountryToMoveFrom = false;
-        for (Country country : WorldController.getInstance().getCountriesWithMoreThanOneUnit(game, player).values()) {
-            if (!WorldController.getInstance().getAlliedNeighbors(game, country).isEmpty()) {
-                hasCountryToMoveFrom = true;
-            }
-        }
-        return hasCountryToMoveFrom;
-    }
-
-    public boolean hasCountryToMoveTo(Game game, Country country) throws GameNotFoundException {
-        List<String> countriesInGraph = country.getOwner().getCountryGraph().evaluateCountriesAllowedToMoveTo(country.getName());
-        return countriesInGraph.size() == 1;
-    }
-
-    /**
      * Also responsible for sorting the list
      *
      * @param numberOfDices to be rolled
@@ -296,38 +243,18 @@ public class LogicController {
     }
 
     /**
-     * checks if the win condition of param player is met
-     * if true: removes the savegame from file
-     * @param player
-     * @return
+     * @see interfaces.IGameController#checkWinCondidtion(UUID, Player)
      */
-    //FIXME: IOException muss da besser gehandlet werden. Macht semantisch keinen Sinn.
     boolean checkWinCondition(Game game, Player player) throws NoSuchPlayerException, IOException, GameNotFoundException {
         if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
         }
 
-//        boolean winConditionMet = player.getMission().isAccomplished(player, game);
-//        if(winConditionMet) {
-//            FileWriter.getInstance().removeGame(game);
-//            return winConditionMet;
-//        }
         return player.getMission().isAccomplished(player, game);
     }
 
     /**
-     * checks that get performed every time a phase switch happens
-     * updates country graphs on every phase
-     * awards player units before using cards
-     * awards player a card at the end of his turn (if country has been conquered)
-     * also checks if a player if out of the game and if true removes him
-     * @param game
-     * @param turn
-     * @throws NoSuchPlayerException
-     * @throws IOException
-     * @throws GameNotFoundException
-     * @throws NoSuchCardException
-     * @throws CardAlreadyOwnedException
+     * @see interfaces.IGameController#postPhaseCheck(UUID, Turn)
      */
     void postPhaseCheck(Game game, Turn turn) throws NoSuchPlayerException, IOException, GameNotFoundException, NoSuchCardException, CardAlreadyOwnedException {
         Player currentPlayer = turn.getPlayer();

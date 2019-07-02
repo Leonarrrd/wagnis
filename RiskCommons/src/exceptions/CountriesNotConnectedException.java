@@ -4,6 +4,9 @@ import model.Country;
 
 import java.io.Serializable;
 
+/**
+ * Thrown when trying to move from a country to another that are not connected by the player's owned countries.
+ */
 public class CountriesNotConnectedException extends Exception implements Serializable {
 
     private static final long serialVersionUID = 1L;

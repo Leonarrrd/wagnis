@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller that controls the Graph mechanism
+ */
 public class GraphController {
 
     private static GraphController instance;
@@ -23,12 +26,23 @@ public class GraphController {
         return instance;
     }
 
+    /**
+     * Creates the graph by providing the game
+     * @param game the game that the graph needs to be created for
+     * @throws NoSuchPlayerException
+     */
     public void createGraphs(Game game) throws NoSuchPlayerException {
         for (Player player : game.getPlayers()){
             updateGraph(game, player);
         }
     }
 
+    /**
+     * Updates a Graph (e.g. if a country changes ownership).
+     * @param game
+     * @param player
+     * @throws NoSuchPlayerException
+     */
     public void updateGraph(Game game, Player player) throws NoSuchPlayerException {
         if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);

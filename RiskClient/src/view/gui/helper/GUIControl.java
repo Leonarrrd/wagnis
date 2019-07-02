@@ -327,7 +327,7 @@ public class GUIControl {
         if (lost) {
             message = "You lost.";
         } else {
-            message = "You won!!111!!!!111!!!! 8===D";
+            message = "You won!!";
         }
         new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
         ((Node) componentMap.get("log-hbox")).getScene().setRoot(new StartBorderPane());

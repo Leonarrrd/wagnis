@@ -45,7 +45,10 @@ public class GameController implements IGameController {
     }
 
 
-
+    /**
+     * Server-side implementation
+     * {@inheritDoc }
+     */
     @Override
     public void createGameRoom(UUID gameId, String hostPlayerName, Socket socket) throws InvalidPlayerNameException {
         SocketGameManager.getInstance().createNewGame(gameId, hostPlayerName, socket);

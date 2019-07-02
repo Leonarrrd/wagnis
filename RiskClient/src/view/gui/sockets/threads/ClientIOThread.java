@@ -180,20 +180,23 @@ public class ClientIOThread extends Thread {
                         Game fightFinishedGame = (Game) reader.readUnshared();
                         GameControllerFacade.getInstance().setGame(fightFinishedGame);
 
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                GUIControl.getInstance().getComponentMap().get(attacker + "info-hbox").update();
-                                GUIControl.getInstance().getComponentMap().get(defender + "info-hbox").update();
-                                GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
-                            }
-                        });
-
                         if (fightFinishedGame.getTurn().getPhase().equals(Phase.TRAIL_UNITS)) {
                             writer.writeUTF(SET_TURN + "," + gameId + "," + Phase.TRAIL_UNITS.toString());
                         } else {
                             writer.writeUTF(SET_TURN + "," + gameId + "," + Phase.PERFORM_ANOTHER_ATTACK.toString());
                         }
+
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                GUIControl.getInstance().getComponentMap().get(attacker + "info-hbox").update();
+                                GUIControl.getInstance().getComponentMap().get(defender + "info-hbox").update();
+
+                                GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
+                            }
+                        });
+
+
                         writer.flush();
 
                         break;
