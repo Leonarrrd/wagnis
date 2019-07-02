@@ -40,4 +40,5 @@ public class Events {
     public static final String REMOVE_GAME = "REMOVE_GAME";
     public static final String LOAD_AVAILABLE_GAME_IDS = "LOAD_AVAILABLE_GAME_IDS";
     public static final String END_GAME = "END_GAME";
+    public static final String REMOVE_PLAYER = "REMOVE_PLAYER";
 }

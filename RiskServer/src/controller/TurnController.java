@@ -9,6 +9,7 @@ import exceptions.NoSuchPlayerException;
 import model.Game;
 import model.Player;
 import model.Turn;
+import sun.rmi.runtime.Log;
 
 import java.io.IOException;
 
@@ -72,7 +73,7 @@ public class TurnController {
             default:
                 break;
         }
-        GameController.getInstance().postPhaseCheck(game.getId(), turn);
+        LogicController.getInstance().postPhaseCheck(game, turn);
     }
 
     /**

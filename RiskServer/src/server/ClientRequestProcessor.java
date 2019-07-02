@@ -80,7 +80,7 @@ public class ClientRequestProcessor extends Thread {
                         StringBuilder sb = new StringBuilder();
                         if (gc.getActiveGames().containsKey(gameId )) {
                             for (Player player : gc.getActiveGames().get(gameId).getPlayers()){
-                                if (!SocketGameManager.getInstance().getSocketPlayerNameMap().containsKey(player.getName())) {
+                                if (!SocketGameManager.getInstance().getSocketPlayerNameMap().containsValue(player.getName())) {
                                     sb.append(player.getName());
                                     sb.append(",");
                                 }

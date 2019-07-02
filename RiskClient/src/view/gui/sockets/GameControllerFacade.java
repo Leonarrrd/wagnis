@@ -303,7 +303,6 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException {
-        // MARK: confirm this is okay
         oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
         oos.flush();
 //        return new ArrayList<>();

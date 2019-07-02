@@ -10,6 +10,7 @@ import exceptions.NoSuchCardException;
 import exceptions.NoSuchCountryException;
 import exceptions.NoSuchPlayerException;
 import exceptions.NotEnoughUnitsException;
+import javafx.application.Platform;
 import model.*;
 import model.AttackResult;
 import model.Continent;
@@ -26,8 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static helper.Events.END_GAME;
-import static helper.Events.PLAYER_JOIN;
+import static helper.Events.*;
 
 public class LogicController {
 
@@ -339,28 +339,41 @@ public class LogicController {
         //check for winner
         for (Player p : game.getPlayers()) {
             if (checkWinCondition(game, p)){
+                // MARK: we also have a method checkForWinCondition that we might want to use here
                 for (Socket s : SocketGameManager.getInstance().getGameInitById(game.getId()).getSockets()) {
                     ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
+                    sOos.reset();
+                    sOos.flush();
                     sOos.writeUTF(END_GAME + "," + game.getId() + "," + p.getName());
                     sOos.flush();
+
                 }
+                return;
             }
         }
 
         // update graphs aswell as check if player has been kicked out
         if (phase.equals(Phase.TRAIL_UNITS)) {
-            Player toBeRemoved = null; // avoid ConcurrentModificationException
+            Player playerToBeRemoved = null; // avoid ConcurrentModificationException
             for (Player p : game.getPlayers()) {
                 GraphController.getInstance().updateGraph(game, p);
                 if (p.getCountries().values().isEmpty()){
-                    toBeRemoved = p;
+                    playerToBeRemoved = p;
                     break;
                 }
             }
-            if (toBeRemoved != null){
-                game.getPlayers().remove(toBeRemoved);
+            if (playerToBeRemoved != null){
+                game.getPlayers().remove(playerToBeRemoved);
+                for (Socket socket : SocketGameManager.getInstance().getGameIdSocketMap().get(game.getId())){
+                    String name = SocketGameManager.getInstance().getSocketPlayerNameMap().get(socket);
+                    if (name.equals(playerToBeRemoved.getName())){
+                        ObjectOutputStream oos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(socket);
+                        oos.reset();
+                        oos.flush();
+                        oos.writeUTF(REMOVE_PLAYER);
+                    }
+                }
             }
-
         }
 
         if (phase.equals(Phase.PLACE_UNITS)) {

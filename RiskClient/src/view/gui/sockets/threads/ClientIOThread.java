@@ -23,6 +23,7 @@ import view.gui.lists.SavedGamesListView;
 import view.gui.roots.GameBorderPane;
 import view.gui.sockets.GameControllerFacade;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -219,7 +220,28 @@ public class ClientIOThread extends Thread {
                         });
                         break;
                     case END_GAME:
-                        System.out.println(split[2] + " has won the game");
+                        System.out.println("end game...");
+                        boolean isWon;
+                        if (split[2].equals(GameControllerFacade.getInstance().getPlayerName())){
+                            isWon = false;
+                        } else {
+                            isWon = true;
+                        }
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                GUIControl.getInstance().returnToLobby(isWon);
+                            }
+                        });
+                        break;
+                    case REMOVE_PLAYER:
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                GUIControl.getInstance().returnToLobby(true);
+                            }
+                        });
+
                         break;
                     case GET_GAME:
                         writer.writeUTF(GET_GAME + "," + split[1]);

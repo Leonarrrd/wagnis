@@ -4,6 +4,8 @@ import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
 import interfaces.IGameController;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.GridPane;
 import model.AttackResult;
 import model.Country;
@@ -13,6 +15,7 @@ import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.LogHBox;
 import view.gui.panes.DiceGridPane;
 import view.gui.roots.GameBorderPane;
+import view.gui.roots.StartBorderPane;
 import view.gui.sockets.GameControllerFacade;
 import view.gui.viewhelper.CountryViewHelper;
 import view.gui.viewhelper.LastFightCountries;
@@ -319,17 +322,15 @@ public class GUIControl {
         }
     }
 
-    public Player checkForWinner() {
-        for (Player player : getGame().getPlayers()) {
-            try {
-                if (gc.checkWinCondidtion(gameId, player)) {
-                    return player;
-                }
-            } catch (GameNotFoundException | NoSuchPlayerException | IOException e) {
-                e.printStackTrace();
-            }
+    public void returnToLobby(boolean lost){
+        String message = "";
+        if (lost) {
+            message = "You lost.";
+        } else {
+            message = "You won!!111!!!!111!!!! 8===D";
         }
-        return null;
+        new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
+        ((Node) componentMap.get("log-hbox")).getScene().setRoot(new StartBorderPane());
     }
 
 

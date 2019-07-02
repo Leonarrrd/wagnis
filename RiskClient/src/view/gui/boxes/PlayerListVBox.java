@@ -15,7 +15,6 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
 
     public PlayerListVBox() {
         super();
-
         addAsUpdateElement("player-list-vbox", this);
     }
 
@@ -27,7 +26,6 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
     }
 
     @Override
-
     public void update() {
         this.getChildren().clear();
 

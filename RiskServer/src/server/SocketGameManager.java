@@ -18,7 +18,7 @@ public class SocketGameManager {
     private Map<UUID, List<Socket>> gameIdSocketMap = new HashMap<>();
     private Map<Socket, ObjectOutputStream> socketObjectOutputStreamMap = new HashMap<>();
     private Map<Socket, ObjectInputStream> socketObjectInputStreamMap = new HashMap<>();
-    private Map<String, Socket> socketPlayerNameMap = new HashMap<>();
+    private Map<Socket, String> socketPlayerNameMap = new HashMap<>();
 
 
     private SocketGameManager() {
@@ -48,7 +48,7 @@ public class SocketGameManager {
         System.out.println(gameId);
         gameInit.getPlayerList().add(hostPlayerName);
         gameInit.getSockets().add(socket);
-        socketPlayerNameMap.put(hostPlayerName, socket);
+        socketPlayerNameMap.put(socket, hostPlayerName);
         gameInitList.add(gameInit);
     }
 
@@ -97,7 +97,7 @@ public class SocketGameManager {
         gameInit.getSockets().add(socket);
 
         //FIXME: the map needs to be the other way around, this way there won't be any mismatches with they key when player in two different games have the same names
-        socketPlayerNameMap.put(playerName, socket);
+        socketPlayerNameMap.put(socket, playerName);
     }
 
 
@@ -139,7 +139,7 @@ public class SocketGameManager {
         return socketObjectInputStreamMap;
     }
 
-    public Map<String, Socket> getSocketPlayerNameMap() {
+    public Map<Socket, String> getSocketPlayerNameMap() {
         return socketPlayerNameMap;
     }
 }
