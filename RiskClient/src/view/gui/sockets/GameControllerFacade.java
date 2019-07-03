@@ -112,16 +112,6 @@ public class GameControllerFacade implements IGameController {
      * {@inheritDoc }
      */
     @Override
-    public void startLoadedGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
-        oos.writeUTF(START_LOADED_GAME + "," + gameId.toString());
-        oos.flush();
-    }
-
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
     public void addPlayer(UUID gameId, String playerName, Color color) throws GameNotFoundException, MaximumNumberOfPlayersReachedException, InvalidPlayerNameException, IOException {
         this.playerName = playerName;
         oos.writeUTF(PLAYER_JOIN + "," + gameId.toString() + "," + playerName);
@@ -238,7 +228,8 @@ public class GameControllerFacade implements IGameController {
     }
 
     public void switchTurns(UUID gameId, boolean notifyAll) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
-        oos.writeUTF(SWITCH_TURNS + "," + gameId.toString() + "," + "notifyall");
+        String notifyAllFlag = notifyAll ? "doNotifyAll" : "dontNotifyAll";
+        oos.writeUTF(SWITCH_TURNS + "," + gameId.toString() + "," + notifyAllFlag);
         oos.flush();
     }
 

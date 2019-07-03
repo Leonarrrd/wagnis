@@ -130,12 +130,6 @@ public class GameController implements IGameController {
         return game;
     }
 
-    @Override
-    public void startLoadedGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
-        // FIXME Idk what to put here
-        //  request gets handled in ClientRequestProcessor
-    }
-
     /**
      * Server-side implementation
      * {@inheritDoc }
@@ -210,18 +204,6 @@ public class GameController implements IGameController {
     public void moveUnits(UUID gameId, Country srcCountry, Country destCountry, int amount, boolean trail) throws GameNotFoundException, NotEnoughUnitsException, CountryNotOwnedException, NoSuchCountryException, CountriesNotConnectedException, IOException{
         Game game = getGameById(gameId);
         wc.moveUnits(game, srcCountry, destCountry, amount);
-    }
-
-
-    /**
-     * Server-side implementation
-     * {@inheritDoc }
-     */
-    //FIXME: potentially unnecessary? winconditions get checkec by LogicController automatically in postTurnCheck
-    @Override
-    public boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException {
-        Game game = getGameById(gameId);
-        return lc.checkWinCondition(game, player);
     }
 
     /**

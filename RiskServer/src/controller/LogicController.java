@@ -1,6 +1,5 @@
 package controller;
 
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import datastructures.CardBonus;
 import datastructures.Phase;
 import exceptions.CardAlreadyOwnedException;
@@ -10,14 +9,12 @@ import exceptions.NoSuchCardException;
 import exceptions.NoSuchCountryException;
 import exceptions.NoSuchPlayerException;
 import exceptions.NotEnoughUnitsException;
-import javafx.application.Platform;
 import model.*;
 import model.AttackResult;
 import model.Continent;
 import model.Country;
 import model.Game;
 import model.Player;
-import persistence.FileWriter;
 import server.SocketGameManager;
 
 import java.io.IOException;
@@ -243,7 +240,12 @@ public class LogicController {
     }
 
     /**
-     * @see interfaces.IGameController#checkWinCondidtion(UUID, Player)
+     * Method that checks the player's wining condition
+     * @param player the player whose win condition needs to be checked
+     * @return true if game is won, otherwise false
+     * @throws GameNotFoundException if the game with the provided game Id could not be found
+     * @throws NoSuchPlayerException if the player whose win condition needs to be checked does not exist
+     * @throws IOException
      */
     boolean checkWinCondition(Game game, Player player) throws NoSuchPlayerException, IOException, GameNotFoundException {
         if (!game.getPlayers().contains(player)) {
@@ -266,12 +268,13 @@ public class LogicController {
         //check for winner
         for (Player p : game.getPlayers()) {
             if (checkWinCondition(game, p)){
-                // MARK: we also have a method checkForWinCondition that we might want to use here
+                // MARK: I have not refactored this to ServerIOThread yet, since I dont know the best
+                //  way to access its methods from outside - make it a singleton?
                 for (Socket s : SocketGameManager.getInstance().getGameInitById(game.getId()).getSockets()) {
                     ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
                     sOos.reset();
                     sOos.flush();
-                    sOos.writeUTF(END_GAME + "," + game.getId() + "," + p.getName());
+                    sOos.writeUTF(END_GAME + "," + p.getName());
                     sOos.flush();
 
                 }
@@ -290,6 +293,8 @@ public class LogicController {
                 }
             }
             if (playerToBeRemoved != null){
+                // MARK: I have not refactored this to ServerIOThread yet, since I dont know the best
+                //  way to access its methods from outside - make it a singleton?
                 game.getPlayers().remove(playerToBeRemoved);
                 for (Socket socket : SocketGameManager.getInstance().getGameIdSocketMap().get(game.getId())){
                     String name = SocketGameManager.getInstance().getSocketPlayerNameMap().get(socket);

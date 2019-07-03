@@ -33,7 +33,7 @@ public class Server {
                 e.printStackTrace();
             }
 
-            new ClientRequestProcessor(socket).start();
+            new ServerIOThread(socket).start();
         }
     }
 }
