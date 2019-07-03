@@ -198,16 +198,7 @@ public class GameControllerFacade implements IGameController {
 
     }
 
-    /**
-     * Client-side implementation
-     * {@inheritDoc }
-     */
-    @Override
-    public boolean checkWinCondidtion(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, IOException {
-        throw new UnsupportedOperationException("Only supported Serverside");
-    }
-
-    /**
+      /**
      * Client-side implementation
      * {@inheritDoc }
      */
