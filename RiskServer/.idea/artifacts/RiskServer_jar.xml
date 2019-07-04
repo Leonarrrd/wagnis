@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="RiskServer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/RiskServer_jar</output-path>
+    <root id="archive" name="RiskServer.jar">
+      <element id="module-output" name="RisikoCommons" />
+      <element id="module-output" name="risikoDraft" />
+    </root>
+  </artifact>
+</component>

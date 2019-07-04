@@ -1,7 +1,5 @@
 package persistence.helper;
 
-
-
 import persistence.helpermodels.RawCountryData;
 
 import java.util.ArrayList;
@@ -11,7 +9,6 @@ import java.util.Map;
 
 public class GameLoadUtils {
 
-    //TODO: wieder zurückändern
     public static final String PROJECT_DATA_DIR = System.getProperty("user.dir") + "/../RiskServer/data/";
 
 
@@ -73,11 +70,5 @@ public class GameLoadUtils {
         }
         return cardData;
     }
-
-
-    public static void main(String... args) {
-        Map<Integer, RawCountryData[]> x = evaluateCountryData("{[1'2-5'6]:[3'2-2'7]:[4'6-6'2]}");
-    }
-
 }
 

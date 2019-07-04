@@ -54,6 +54,7 @@ public class StartLoadedGameGridPane extends GridPane implements RiskUIElement, 
             e.printStackTrace();
         }
 
+
         Game game = GUIControl.getInstance().getGame();
 
         List<String> choices = new ArrayList<>();

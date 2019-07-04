@@ -2,29 +2,22 @@ package view.gui.sockets.threads;
 
 
 import datastructures.Phase;
-import exceptions.*;
+import exceptions.GameNotFoundException;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.control.ListView;
-import javafx.scene.text.Text;
 import model.AttackResult;
 import model.Game;
-import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.DialogVBox;
 import view.gui.boxes.JoinGameVBox;
 import view.gui.boxes.dialogboxes.DefenseVBox;
-
 import view.gui.helper.GUIControl;
-import view.gui.helper.Updatable;
 import view.gui.lists.SavedGamesListView;
-import view.gui.roots.GameBorderPane;
 import view.gui.sockets.GameControllerFacade;
 
-import javax.xml.bind.SchemaOutputResolver;
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -64,7 +57,7 @@ public class ClientIOThread extends Thread {
                     case LOAD_AVAILABLE_GAME_IDS:
                         //split[1-x] gameIds
                         List<String> gameIds = new ArrayList<>();
-                        for (String s : split){
+                        for (String s : split) {
                             gameIds.add(s);
                         }
                         // remove the event from the list
@@ -76,8 +69,8 @@ public class ClientIOThread extends Thread {
                         // split[1] gameId
                         // split[2] gameType
                         // split[3-x] playerNames
-                        List <String> playerNames = new ArrayList<>();
-                        for (int i = 3; i < split.length; i++){
+                        List<String> playerNames = new ArrayList<>();
+                        for (int i = 3; i < split.length; i++) {
                             playerNames.add(split[i]);
                         }
                         checkGameType(split[1], split[2], playerNames);
@@ -91,7 +84,7 @@ public class ClientIOThread extends Thread {
                         playerJoin(playerList);
                         break;
                     case START_GAME:
-                            startGame(split[1]);
+                        startGame(split[1]);
                         break;
                     case SWITCH_TURNS:
                         // split[1] gameId
@@ -153,7 +146,7 @@ public class ClientIOThread extends Thread {
         }
     }
 
-    private void loadAvailableGameIds(List<String> gameIds){
+    private void loadAvailableGameIds(List<String> gameIds) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -163,7 +156,7 @@ public class ClientIOThread extends Thread {
         });
     }
 
-    private void checkGameType(String gameId, String gameType, List<String> playerNames){
+    private void checkGameType(String gameId, String gameType, List<String> playerNames) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -173,7 +166,7 @@ public class ClientIOThread extends Thread {
         });
     }
 
-    private void playerJoin(List<String> playerNames){
+    private void playerJoin(List<String> playerNames) {
 
         GUIControl.getInstance().setPlayersInLobby(playerNames);
 
@@ -185,7 +178,7 @@ public class ClientIOThread extends Thread {
         });
     }
 
-    private void startGame(String gameId){
+    private void startGame(String gameId) {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -194,7 +187,7 @@ public class ClientIOThread extends Thread {
         });
     }
 
-    private void removePlayer(){
+    private void removePlayer() {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
@@ -203,7 +196,7 @@ public class ClientIOThread extends Thread {
         });
     }
 
-    private void endGame(String winner){
+    private void endGame(String winner) {
         boolean isWinner = winner.equals(GameControllerFacade.getInstance().getPlayerName());
         Platform.runLater(new Runnable() {
             @Override
@@ -248,7 +241,7 @@ public class ClientIOThread extends Thread {
         GUIControl.getInstance().getComponentMap().get(countryString + "info-hbox").update();
     }
 
-    private void defense(String attackingCountry, String defendingCountry, String units){
+    private void defense(String attackingCountry, String defendingCountry, String units) {
         String defendingPlayerName = GameControllerFacade.getInstance().getGame().getCountries().get(defendingCountry).getOwner().getName();
         if (GameControllerFacade.getInstance().getPlayerName().equals(defendingPlayerName)) {
             DialogVBox dialogVBox = (DialogVBox) GUIControl.getInstance().getComponentMap().get("dialog-vbox");
@@ -269,12 +262,9 @@ public class ClientIOThread extends Thread {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                try {
-                    GUIControl.getInstance().fight(game.getCountries().get(attacker), game.getCountries().get(defender), ar);
-                } catch (IOException e) {
-                } catch (GameNotFoundException | CountriesNotAdjacentException | NotEnoughUnitsException | NoSuchCountryException | ClassNotFoundException | NoSuchPlayerException e) {
-                    e.printStackTrace();
-                }
+
+                GUIControl.getInstance().fight(game.getCountries().get(attacker), game.getCountries().get(defender), ar);
+
             }
         });
 

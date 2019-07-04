@@ -1,6 +1,5 @@
 package view.gui.helper;
 
-import datastructures.Color;
 import datastructures.Phase;
 import exceptions.*;
 import interfaces.IGameController;
@@ -82,7 +81,7 @@ public class GUIControl {
     public void switchToGameScene(UUID gameId) {
         this.gameId = gameId;
 
-        //FIXME:!!!! workaround to access the scene
+        //FIXME: workaround to access the scene
         ((GridPane) componentMap.get("start-new-game-grid-pane")).getScene().setRoot(new GameBorderPane());
     }
 
@@ -144,7 +143,7 @@ public class GUIControl {
         gc.initAttack(gameId, attackingCountry, defendingCountry, units);
     }
 
-    public void fight(Country attackingCountry, Country defendingCountry, AttackResult ar) throws GameNotFoundException, NoSuchPlayerException, IOException, ClassNotFoundException, NoSuchCountryException, NotEnoughUnitsException, CountriesNotAdjacentException {
+    public void fight(Country attackingCountry, Country defendingCountry, AttackResult ar) {
 
         componentMap.get(attackingCountry + "info-hbox").update();
         componentMap.get(defendingCountry + "info-hbox").update();
@@ -176,7 +175,7 @@ public class GUIControl {
 
     }
 
-    public void trailUnits(int value) throws NoSuchPlayerException {
+    public void trailUnits(int value) {
         try {
 
             gc.moveUnits(gameId, lastFightCountry.getSrcCountry(), lastFightCountry.getDestCountry(), value, true);
@@ -279,9 +278,11 @@ public class GUIControl {
         }
     }
 
-    // Mark: methods to verify input locally, rather than requesting verification from the server
-    //  since the server itself later verifies if the operation is legal,
-    //  doing the input verification locally should be fine
+    /**
+     * Mark: methods to verify input locally, rather than requesting verification from the server
+     * since the server itself later verifies if the operation is legal,
+     * doing the input verification locally should be fine
+     */
     public boolean hasHostileNeighbors(Country country) {
         for (Country neighbor : country.getNeighbors()) {
             if (!country.getOwner().equals(neighbor.getOwner()))
@@ -312,8 +313,6 @@ public class GUIControl {
     }
 
     public boolean myTurn() throws GameNotFoundException, IOException, ClassNotFoundException {
-        // FIXME: this point crashes often, it did not crash when we had Thread.sleep
-        //  The code below was supposed to fix this problem, I have not investigated yet why it still crashes
 
         if (gc.getGameById(gameId) != null) {
             return GameControllerFacade.getInstance().getPlayerName().equals(getGame().getTurn().getPlayer().getName());
@@ -322,7 +321,7 @@ public class GUIControl {
         }
     }
 
-    public void returnToLobby(boolean lost){
+    public void returnToLobby(boolean lost) {
         String message = "";
         if (lost) {
             message = "You lost.";

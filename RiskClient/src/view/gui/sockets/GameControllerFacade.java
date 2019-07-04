@@ -42,9 +42,6 @@ public class GameControllerFacade implements IGameController {
         return instance;
     }
 
-    public static void main(String... args) {
-        getInstance();
-    }
 
     private void initSocket() {
         try {
@@ -102,7 +99,8 @@ public class GameControllerFacade implements IGameController {
     public Game loadGame(UUID gameId) throws IOException, GameNotFoundException, InvalidFormattedDataException, ClassNotFoundException {
         oos.writeUTF(LOAD_GAME + "," + gameId.toString());
         oos.flush();
-//        return (Game) ois.readObject();
+
+        //Game is read in ClientIOThread to support multiple sockets getting the game, not just the caller
         return null;
     }
 
@@ -135,8 +133,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void addCardToPlayer(UUID gameId, Player player) throws GameNotFoundException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException, IOException {
-        //oos.writeUTF(ADD_CARD + "," + gameId.toString() + "," + player.getName());
-        //oos.flush();
+        throw new UnsupportedOperationException("Only supported Serverside");
     }
 
     /**
@@ -145,8 +142,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void changeUnitsToPlace(UUID gameId, Player player, int unitChange) throws GameNotFoundException, NoSuchPlayerException, IOException {
-        //oos.writeUTF(CHANGE_UNITS_TO_PLACE + "," + gameId.toString() + "," + player.getName() + "," + unitChange);
-        //oos.flush();
+        throw new UnsupportedOperationException("Only supported Serverside");
     }
 
     /**
@@ -199,7 +195,7 @@ public class GameControllerFacade implements IGameController {
 
     }
 
-    /**
+      /**
      * Client-side implementation
      * {@inheritDoc }
      */
@@ -231,8 +227,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void updatePlayerGraphMap(UUID gameId, Player p) throws GameNotFoundException, NoSuchPlayerException, IOException {
-        //oos.writeUTF(UPDATE_PLAYER_GRAPH_MAP + "," + gameId.toString() + "," + p.getName());
-        //oos.flush();
+        throw new UnsupportedOperationException("Only supported Serverside");
     }
 
     /**
@@ -241,8 +236,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void postPhaseCheck(UUID gameId, Turn turn) throws GameNotFoundException, IOException, NoSuchPlayerException, NoSuchCardException, CardAlreadyOwnedException {
-        //oos.writeUTF(POST_PHASE_CHECK + "," + gameId.toString() + "," + turn.getPhase().toString());
-        //oos.flush();
+        throw new UnsupportedOperationException("Only supported Serverside");
     }
 
     /**
@@ -261,8 +255,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public void removeGame(UUID gameId) throws GameNotFoundException, IOException {
-//        oos.writeUTF(REMOVE_GAME + "," + gameId.toString());
-        //oos.flush();
+        throw new UnsupportedOperationException("Only supported Serverside");
     }
 
     /**
@@ -273,7 +266,6 @@ public class GameControllerFacade implements IGameController {
     public List<String> loadAvailableGameIds() throws IOException, ClassNotFoundException {
         oos.writeUTF(LOAD_AVAILABLE_GAME_IDS);
         oos.flush();
-//        return new ArrayList<>();
         return null;
     }
 
