@@ -13,9 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
-import view.gui.sockets.GameControllerFacade;
 
 import java.io.IOException;
 
@@ -23,11 +23,11 @@ public class PerformAnotherMoveVBox extends VBox implements RiskUIElement {
 
     public PerformAnotherMoveVBox() {
         applyStyling(this, "perform-another-move-vbox", "perform_another_move_vbox.css");
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
 
         HBox answers = new HBox();
         Text text = new Text("Do you want to perform another move operation?");
@@ -43,7 +43,7 @@ public class PerformAnotherMoveVBox extends VBox implements RiskUIElement {
                 try {
                     GUIControl.getInstance().setTurnManually(Phase.MOVE);
                 } catch (NoSuchPlayerException | GameNotFoundException | IOException | NoSuchCardException | CardAlreadyOwnedException e) {
-                    e.printStackTrace();
+                    new ErrorAlert(e);
                 }
 
             }

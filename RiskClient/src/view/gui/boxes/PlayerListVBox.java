@@ -19,7 +19,7 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(10);
         update();
@@ -27,6 +27,7 @@ public class PlayerListVBox extends BottomBarNodeHBox implements RiskUIElement, 
 
     @Override
     public void update() {
+        //TODO: many css operations need to be delegated to the css-File
         this.getChildren().clear();
 
         VBox vBox = new VBox();

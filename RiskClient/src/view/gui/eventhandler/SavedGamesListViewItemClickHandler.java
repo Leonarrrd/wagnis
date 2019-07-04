@@ -8,6 +8,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import model.Game;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.panes.StartLoadedGameGridPane;
 import view.gui.roots.GameBorderPane;
@@ -31,7 +32,7 @@ public class SavedGamesListViewItemClickHandler implements EventHandler<MouseEve
         try {
             GameControllerFacade.getInstance().loadGame(gameId);
         } catch (IOException | GameNotFoundException | InvalidFormattedDataException | ClassNotFoundException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
 
         StartBorderPane sbp = (StartBorderPane) listView.getParent();

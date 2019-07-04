@@ -260,9 +260,6 @@ public class FileReader {
             }
         }
         //evaluate cards
-        //TODO: Evaluating cards
-        //TODO: Create cardDeck
-        // key is the player index, values or List of cardIds
         List<Card> cardDeck = (ArrayList)((ArrayList)loadedCards).clone();
 
         Map<Integer, List<Integer>> cardData = GameLoadUtils.evaluateCardData(commaSplit[4]);

@@ -20,7 +20,7 @@ public class ErrorAlert extends Alert implements RiskUIElement {
         this.titleText = titleText;
         this.headerText = headerText;
         this.contentText = contentText;
-        doStuff();
+        init();
     }
 
     public ErrorAlert(Exception exception) {
@@ -31,7 +31,7 @@ public class ErrorAlert extends Alert implements RiskUIElement {
 
 
     @Override
-    public void doStuff() {
+    public void init() {
         this.setTitle(this.titleText);
         this.setHeaderText(this.headerText);
         if (this.exception == null) {

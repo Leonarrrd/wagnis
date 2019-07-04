@@ -3,6 +3,11 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Mission Subclass for continent win conditions
+ * Extends abstract class mission and has a custom isAccomplished()-Method
+ * that checks if the mission is accomplished
+ */
 public class ContinentMission extends Mission implements Serializable {
 
     private static final long serialVersionUID = 1L;

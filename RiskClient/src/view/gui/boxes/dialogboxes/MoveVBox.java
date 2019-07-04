@@ -1,6 +1,5 @@
 package view.gui.boxes.dialogboxes;
 
-import exceptions.GameNotFoundException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -9,13 +8,9 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
-import view.gui.sockets.GameControllerFacade;
-
-import java.io.IOException;
 
 public class MoveVBox extends VBox implements RiskUIElement, Updatable {
 
@@ -28,17 +23,22 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
     public MoveVBox() {
         applyStyling(this, "move-vbox", "move_vbox.css");
         addAsUpdateElement(this.getId(), this);
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         Text moveFromInfoText = new Text("Country to move from");
         moveFromText = new Text("<click on first country>");
         Text moveToInfoText = new Text("Country to move to");
         moveToText = new Text("<click on second country>");
 
         int maxUnitsToMove = GUIControl.getInstance().getSelectedCountry().getUnits() - 1;
+
+        //hacky fix
+        if(maxUnitsToMove < 1) {
+            maxUnitsToMove = 1;
+        }
 
         unitsToMoveWithSpinner = new Spinner<>();
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxUnitsToMove, maxUnitsToMove);

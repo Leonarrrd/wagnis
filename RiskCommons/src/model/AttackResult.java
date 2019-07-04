@@ -3,6 +3,10 @@ package model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * AttackResult class
+ * will be initialized when a fight is done
+ */
 public class AttackResult implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -11,6 +11,9 @@ import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 
+/**
+ * TODO: Work in progress - updates not yet done
+ */
 public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updatable {
 
     TextArea textArea;
@@ -21,7 +24,7 @@ public class LogHBox extends BottomBarNodeHBox implements RiskUIElement, Updatab
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
 
         textArea = new TextArea("Welcome to Risk!");
         textArea.setMaxHeight(140);

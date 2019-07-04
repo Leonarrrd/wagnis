@@ -41,7 +41,7 @@ public class ClientIOThread extends Thread {
 
         while (true) {
             try {
-                String response = null;
+                String response;
 
                 synchronized (reader) {
                     response = reader.readUTF();
@@ -239,6 +239,7 @@ public class ClientIOThread extends Thread {
         GameControllerFacade.getInstance().setGame(changeUnitsGame);
 
         GUIControl.getInstance().getComponentMap().get(countryString + "info-hbox").update();
+        GUIControl.getInstance().getLog().update(countryString + " units has been increased.");
     }
 
     private void defense(String attackingCountry, String defendingCountry, String units) {
@@ -284,7 +285,6 @@ public class ClientIOThread extends Thread {
             public void run() {
                 GUIControl.getInstance().getComponentMap().get(attacker + "info-hbox").update();
                 GUIControl.getInstance().getComponentMap().get(defender + "info-hbox").update();
-
                 GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
             }
         });
@@ -303,7 +303,6 @@ public class ClientIOThread extends Thread {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-
                 GUIControl.getInstance().getComponentMap().get("dialog-vbox").update();
             }
         });

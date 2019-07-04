@@ -1,3 +1,6 @@
+//MARK: CUI is abandoned
+
+
 //package view.cui;
 //
 //import exceptions.GameNotFoundException;
@@ -28,7 +31,7 @@
 //        } catch (GameNotFoundException e) {
 //            e.printStackTrace();
 //        }
-//        player = game.getTurn().getPlayer();
+//        player = game.getTurn().getThisPlayer();
 //
 //        try {
 //            unitsToPlace = awardUnits(gameId, player);

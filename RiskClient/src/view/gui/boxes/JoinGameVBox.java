@@ -1,12 +1,11 @@
 package view.gui.boxes;
 
 import exceptions.GameNotFoundException;
-import exceptions.InvalidFormattedDataException;
 import exceptions.InvalidPlayerNameException;
 import exceptions.MaximumNumberOfPlayersReachedException;
+import helper.Utils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceDialog;
@@ -20,7 +19,6 @@ import view.gui.roots.StartBorderPane;
 import view.gui.sockets.GameControllerFacade;
 import view.gui.sockets.GameLobbyManager;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -31,11 +29,11 @@ public class JoinGameVBox extends VBox implements RiskUIElement, Updatable {
     public JoinGameVBox() {
         applyStyling(this, "join-game-vbox", "join_game_vbox.css");
         addAsUpdateElement(this.getId(), this);
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         TextField textFieldId = new TextField("Insert UUID");
         getChildren().add(textFieldId);
         Button joinGame = new Button("Join Game");
@@ -48,7 +46,7 @@ public class JoinGameVBox extends VBox implements RiskUIElement, Updatable {
                     try {
                         GameLobbyManager.getInstance().checkGameType(textFieldId.getText());
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        new ErrorAlert(e);
                     }
                     } else {
                     new Alert(Alert.AlertType.INFORMATION, "Not a UUID").showAndWait();
@@ -81,11 +79,17 @@ public class JoinGameVBox extends VBox implements RiskUIElement, Updatable {
         joinGame.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                try {
-                    ((StartBorderPane) getParent()).setCenter(new StartNewGameGridPane());
-                    GameControllerFacade.getInstance().addPlayer(UUID.fromString(gameId), playerNameTextField.getText(), null);
-                } catch (IOException | GameNotFoundException | InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
-                    new ErrorAlert(e);
+                String name = playerNameTextField.getText();
+                if (!Utils.stringContainsDelimitters(name) && name.length() < 10) {
+                    try {
+                        ((StartBorderPane) getParent()).setCenter(new StartNewGameGridPane());
+                        GameControllerFacade.getInstance().addPlayer(UUID.fromString(gameId), name, null);
+                    } catch (IOException | GameNotFoundException | InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
+                        new ErrorAlert(e);
+                    }
+                } else {
+                    new ErrorAlert("Invalid Player Name", "Please choose another name",
+                            "Please do not use , ' - : in your name. Also, your name must not be longer than 10 characters");
                 }
             }
         });
@@ -114,6 +118,10 @@ public class JoinGameVBox extends VBox implements RiskUIElement, Updatable {
         }
     }
 
+    /**
+     * FIXME: Empty update method so that it is accessible as via component map from the IOThread
+     *  potential better solution: scene.lookup()-method
+     */
     @Override
     public void update() {
     }

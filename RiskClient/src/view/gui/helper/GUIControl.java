@@ -35,12 +35,16 @@ public class GUIControl {
 
     private List<String> playersInLobby = new ArrayList();
 
-
+    /**
+     * return the game by the provieded Id
+     *
+     * @return
+     */
     public Game getGame() {
         try {
             return gc.getGameById(gameId);
         } catch (GameNotFoundException | IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
         return null;
     }
@@ -55,29 +59,20 @@ public class GUIControl {
         return instance;
     }
 
+    /**
+     * updates the lobby grid pane
+     * needs to be called when a player joined
+     */
     public void playerJoined() {
         componentMap.get("start-new-game-grid-pane").update();
     }
 
-    public void initLoadedGame(UUID gameId) {
-        try {
-            gc.loadGame(gameId);
-        } catch (GameNotFoundException | ClassNotFoundException | IOException | InvalidFormattedDataException e) {
-            new ErrorAlert(e);
-        } catch (NoSuchPlayerException e) {
-            e.printStackTrace();
-        }
-
-//        this.gameId = gameId;
-//        getGame().getPlayers().get(0).setColor(Color.BLUE);
-//        getGame().getPlayers().get(1).setColor(Color.RED);
-//        if (getGame().getPlayers().size() > 2) getGame().getPlayers().get(2).setColor(Color.GREEN);
-//        if (getGame().getPlayers().size() > 3) getGame().getPlayers().get(3).setColor(Color.YELLOW);
-//        if (getGame().getPlayers().size() > 4) getGame().getPlayers().get(4).setColor(Color.MACADAMIA);
-//        // MARK: FOR TESTING
-//        getGame().getTurn().getPlayer().setUnitsToPlace(7);
-    }
-
+    /**
+     * switches from the lobby to the game scene
+     * needs to be called when a game is being started
+     *
+     * @param gameId
+     */
     public void switchToGameScene(UUID gameId) {
         this.gameId = gameId;
 
@@ -85,34 +80,52 @@ public class GUIControl {
         ((GridPane) componentMap.get("start-new-game-grid-pane")).getScene().setRoot(new GameBorderPane());
     }
 
+    /**
+     * Sends the request to the Facade to use cards and forwards the phase
+     *
+     * @param infantryCards
+     * @param cavalryCards
+     * @param artilleryCards
+     */
     public void useCards(int infantryCards, int cavalryCards, int artilleryCards) {
         try {
             gc.useCards(gameId, getCurrentPlayer(), infantryCards, cavalryCards, artilleryCards);
-            // FIXME: SAME AS BELOW
+            //FIXME: Server needs time to process
+            // this solution is very hacky, needs to be fixed, because the server
+            // can be slower than the client wait time.
+
             try {
                 Thread.sleep(200);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                new ErrorAlert(e);
             }
             forwardTurnPhase();
 
         } catch (GameNotFoundException | NoSuchCardException | NoSuchPlayerException | IOException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
     }
 
+    /**
+     * Sends the request to the Facade and places the units
+     *
+     * @param units
+     * @throws GameNotFoundException
+     * @throws NoSuchCountryException
+     * @throws IOException
+     */
     public void placeUnits(int units) throws GameNotFoundException, NoSuchCountryException, IOException {
         Country c = getGame().getCountries().get(selectedCountry);
         gc.changeUnits(gameId, c, units);
         getLog().update(c.getOwner() + " placed " + units + " units on " + c.getName());
 
-        // MARK: Need to wait client/server interaction
-        //  this only occurs here, because at all other instances, we call forwardTurnPhase manually
-        //  we could avoid this by also forwarding the turn in place units manually
+        //FIXME: Server needs time to process
+        // this solution is very hacky, needs to be fixed, because the server
+        // can be slower than the client wait time.
         try {
             Thread.sleep(200);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
 
         if (getGame().getTurn().getPlayer().getUnitsToPlace() <= 0) {
@@ -135,14 +148,25 @@ public class GUIControl {
      */
     public void initAttack(String attackingCountry, String defendingCountry, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
         forwardTurnPhase();
+
+        //FIXME: Server needs time to process
+        // this solution is very hacky, needs to be fixed, because the server
+        // can be slower than the client wait time.
         try {
-            Thread.sleep(500);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
         gc.initAttack(gameId, attackingCountry, defendingCountry, units);
     }
 
+    /**
+     * Excecutes the fight and updates GUI components accordingly
+     *
+     * @param attackingCountry
+     * @param defendingCountry
+     * @param ar
+     */
     public void fight(Country attackingCountry, Country defendingCountry, AttackResult ar) {
 
         componentMap.get(attackingCountry + "info-hbox").update();
@@ -175,6 +199,11 @@ public class GUIControl {
 
     }
 
+    /**
+     * Sends the request to trail units to the facade an updates the GUI-Elements accordingly
+     *
+     * @param value
+     */
     public void trailUnits(int value) {
         try {
 
@@ -187,6 +216,13 @@ public class GUIControl {
         }
     }
 
+    /**
+     * Send the request to move units to the facade with given parameters
+     *
+     * @param srcCountry
+     * @param destCountry
+     * @param amount
+     */
     public void move(String srcCountry, String destCountry, int amount) {
         Country srcCountryObj = getCountryFromString(srcCountry);
         Country destCountryObj = getCountryFromString(destCountry);
@@ -199,6 +235,9 @@ public class GUIControl {
         }
     }
 
+    /**
+     * Sends the request to switch the turns to the Facade
+     */
     public void forwardTurnPhase() {
         try {
             GameControllerFacade.getInstance().switchTurns(gameId, false);
@@ -207,6 +246,9 @@ public class GUIControl {
         }
     }
 
+    /**
+     * Sends the request to switch the turns to the Facade and notifies all players (server side logic)
+     */
     public void nextPlayerTurn() {
         try {
             GameControllerFacade.getInstance().switchTurns(gameId, true);
@@ -264,11 +306,16 @@ public class GUIControl {
         return null;
     }
 
-
     public Map<String, CountryViewHelper> getCountryViewMap() {
         return countryViewMap;
     }
 
+    /**
+     * gets the country object from param country name
+     *
+     * @param countryString
+     * @return
+     */
     public Country getCountryFromString(String countryString) {
         try {
             return gc.getGameById(gameId).getCountries().get(countryString);
@@ -279,10 +326,37 @@ public class GUIControl {
     }
 
     /**
-     * Mark: methods to verify input locally, rather than requesting verification from the server
-     * since the server itself later verifies if the operation is legal,
-     * doing the input verification locally should be fine
+     * Returns to lobby when the player has lost or another player has won
+     * @param lost
      */
+    public void returnToLobby(boolean lost) {
+        String message = "";
+        if (lost) {
+            message = "You lost.";
+        } else {
+            message = "You won!!";
+        }
+        new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
+        ((Node) componentMap.get("log-hbox")).getScene().setRoot(new StartBorderPane());
+    }
+
+    /**
+     * get the player from this client
+     * @return
+     */
+    public Player getThisPlayer() {
+        for (Player player : getGame().getPlayers()) {
+            if (player.getName().equals(getPlayerName()))
+                return player;
+        }
+        return null;
+    }
+
+
+    // Mark: methods below to verify input locally, rather than requesting verification from the server
+    // since the server itself later verifies if the operation is legal,
+    // doing the input verification locally should be fine
+
     public boolean hasHostileNeighbors(Country country) {
         for (Country neighbor : country.getNeighbors()) {
             if (!country.getOwner().equals(neighbor.getOwner()))
@@ -304,16 +378,7 @@ public class GUIControl {
         return false;
     }
 
-    public Player getPlayer() {
-        for (Player player : getGame().getPlayers()) {
-            if (player.getName().equals(getPlayerName()))
-                return player;
-        }
-        return null;
-    }
-
     public boolean myTurn() throws GameNotFoundException, IOException, ClassNotFoundException {
-
         if (gc.getGameById(gameId) != null) {
             return GameControllerFacade.getInstance().getPlayerName().equals(getGame().getTurn().getPlayer().getName());
         } else {
@@ -321,16 +386,7 @@ public class GUIControl {
         }
     }
 
-    public void returnToLobby(boolean lost) {
-        String message = "";
-        if (lost) {
-            message = "You lost.";
-        } else {
-            message = "You won!!";
-        }
-        new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
-        ((Node) componentMap.get("log-hbox")).getScene().setRoot(new StartBorderPane());
-    }
+    //MARK: end
 
 
     public Country getSelectedCountry() {
@@ -345,7 +401,7 @@ public class GUIControl {
         return GameControllerFacade.getInstance().getPlayerName();
     }
 
-    private LogHBox getLog() {
+    public LogHBox getLog() {
         return (LogHBox) componentMap.get("log-hbox");
     }
 

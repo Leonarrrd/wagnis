@@ -49,7 +49,7 @@ public class FileWriter {
      * @param game
      */
     public void removeGame(Game game) throws IOException, GameNotFoundException {
-        //TODO: duplicate code with updateGameRecord()-method. might want to change
+        //TODO: duplicate code with updateGameRecord()-method. Might want to change
         String[] savedGameStrings = FileReader.getInstance().getStringLinesFromData("savedgames.dat");
         List<String> availableGames = FileReader.getInstance().loadAvailableGameIds();
         if (!availableGames.contains(game.getId().toString())) {

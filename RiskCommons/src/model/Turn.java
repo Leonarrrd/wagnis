@@ -1,9 +1,11 @@
 package model;
 
 import datastructures.Phase;
-
 import java.io.Serializable;
 
+/**
+ * Turn-Class that identifies which phase it is and whose players turn it is
+ */
 public class Turn implements Serializable {
 
     private static final long serialVersionUID = 1L;

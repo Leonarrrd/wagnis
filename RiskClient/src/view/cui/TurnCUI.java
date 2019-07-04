@@ -1,3 +1,6 @@
+//MARK: CUI is abandoned
+
+
 //package view.cui;
 //
 //import exceptions.CardAlreadyOwnedException;
@@ -31,8 +34,8 @@
 //        boolean gameWon = false;
 //
 //        while (!gameWon) {
-//            Player player = game.getTurn().getPlayer();
-//            System.out.println(game.getTurn().getPlayer() + "'s turn!");
+//            Player player = game.getTurn().getThisPlayer();
+//            System.out.println(game.getTurn().getThisPlayer() + "'s turn!");
 //
 //            try {
 //                switch (game.getTurn().getPhase()) {
@@ -66,7 +69,7 @@
 //            e.printStackTrace();
 //        }
 //        if (winCondition) {
-//            gameResult(game.getTurn().getPlayer());
+//            gameResult(game.getTurn().getThisPlayer());
 //            return;
 //        }
 //

@@ -1,3 +1,5 @@
+//MARK: CUI is abandoned
+
 //package view.cui;
 //
 //import controller.GraphController;
@@ -29,7 +31,7 @@
 //        } catch (GameNotFoundException e) {
 //            e.printStackTrace();
 //        }
-//        player = game.getTurn().getPlayer();
+//        player = game.getTurn().getThisPlayer();
 //
 //        //might need another phase to do this
 //        //might wanna do this in the controller move method

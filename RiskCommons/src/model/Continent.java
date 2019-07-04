@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Continent class that specifies the name, an id, the countries in this continent
+ * and the bonus units when owning this continent.
+ */
 public class Continent implements Serializable {
 
     private static final long serialVersionUID = 1L;

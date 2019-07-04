@@ -5,7 +5,7 @@ import java.util.*;
 
 /*
  * Class for Game Objects
- * Holds (all?) information about the current game state
+ * Holds information about the current game and can be saved.
  * Could potentially be amplified to hold all game information so that we could save and load games
  */
 public class Game implements Serializable {

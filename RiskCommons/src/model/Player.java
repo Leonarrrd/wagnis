@@ -10,8 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*
-* Class  for player objects
+/**
+* Class  for player objects that hold a name, a color, the owned countries
+ * and a graph to know which countries are connected
  */
 public class Player implements Serializable {
 

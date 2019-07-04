@@ -10,10 +10,10 @@ import static view.gui.util.UIConstants.WINDOW_HEIGHT;
 public class MainScene extends Scene implements RiskUIElement {
     public MainScene(Parent root) {
         super(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
     }
 }

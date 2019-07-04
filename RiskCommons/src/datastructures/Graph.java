@@ -6,7 +6,9 @@ import model.Country;
 import java.io.Serializable;
 import java.util.*;
 
-
+/**
+ * Graph for connecting Countries
+ */
 public class Graph implements Serializable {
     private static final long serialVersionUID = 1L;
 

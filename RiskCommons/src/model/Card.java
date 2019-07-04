@@ -1,13 +1,13 @@
 package model;
 
-/*
-* Class for Card objects
- */
-
 import datastructures.CardSymbol;
 
 import java.io.Serializable;
 
+/*
+ * Class for Card objects
+ * holds the symbol and an id
+ */
 public class Card implements Serializable {
 
     private static final long serialVersionUID = 1L;

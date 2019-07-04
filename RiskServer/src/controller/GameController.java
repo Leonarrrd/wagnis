@@ -91,7 +91,6 @@ public class GameController implements IGameController {
 
         Game game = new Game(gameInit.getGameId(), countries, continents, missions, cards, cardDeck);
 
-        //TODO: Farben könnte man auch noch schöner zuweisen.
         for (int i = 0; i < gameInit.getPlayerList().size(); i++) {
             Color color = Color.values()[i];
             pc.addPlayer(game, gameInit.getPlayerList().get(i), color);
@@ -178,10 +177,13 @@ public class GameController implements IGameController {
         lc.useCards(game, player, infantryCards, cavalryCards, artilleryCards);
     }
 
+    /**
+     * Server-side implementation
+     * {@inheritDoc }
+     */
     @Override
-    // MARK: ???
-    // FIXME
     public void initAttack(UUID gameId, String attackingCountry, String defendingCountry, int units) throws GameNotFoundException, NoSuchCountryException, IOException {
+        throw new UnsupportedOperationException("Only implemented client side.");
     }
 
 

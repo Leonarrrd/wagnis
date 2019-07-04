@@ -20,16 +20,15 @@ public class StartMenuLeftVBox extends VBox implements RiskUIElement {
     public StartMenuLeftVBox(StartActionListener listener) {
         this.startActionListener = listener;
         applyStyling(this, "start-menu-left-vbox", "start_menu_left_vbox.css");
-        doStuff();
+        init();
     }
 
 
     @Override
-    public void doStuff() {
+    public void init() {
         Text newGameText = new Text("New Game");
         newGameText.getStyleClass().add("start-menu-left-text");
         TextOnlyHBox newGameTextBox = new TextOnlyHBox(newGameText);
-//        newGameTextBox.setOnMouseClicked(new NewGameEventHandler());
         newGameTextBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

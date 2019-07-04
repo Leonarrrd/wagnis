@@ -1,5 +1,8 @@
 package persistence.helpermodels;
 
+/**
+ * Helper class that maps ids with units
+ */
 public class RawCountryData {
 
     private int id;

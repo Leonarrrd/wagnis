@@ -6,7 +6,6 @@ import javafx.scene.text.Text;
 import model.Player;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
-import view.gui.helper.Updatable;
 
 public class MissionHBox extends BottomBarNodeHBox implements RiskUIElement {
     private Text missionText;
@@ -16,8 +15,7 @@ public class MissionHBox extends BottomBarNodeHBox implements RiskUIElement {
     }
 
     @Override
-    public void doStuff() {
-//        this.setMaxWidth(300); // ????
+    public void init() {
         for (Player player : GUIControl.getInstance().getGame().getPlayers()){
             if (player.getName().equals(GUIControl.getInstance().getPlayerName()))
                 this.missionText = new Text(player.getMission().getMessage());

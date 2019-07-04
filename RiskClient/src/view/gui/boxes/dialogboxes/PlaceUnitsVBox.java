@@ -11,6 +11,7 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import model.Country;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
@@ -28,17 +29,16 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
     public PlaceUnitsVBox() {
         applyStyling(this, "place-units-vbox", "place_units_vbox.css");
         addAsUpdateElement(this.getId(), this);
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
 
         Text selectCountryInfoText = new Text("Select Country to place units on");
         selectedCountryText = new Text("<no country selected>");
         unitsToPlaceSpinner = new Spinner<>();
 
-        //TODO: maximale units anzeigen
         int maxValue = GUIControl.getInstance().getGame().getTurn().getPlayer().getUnitsToPlace();
 
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxValue, maxValue);
@@ -53,7 +53,7 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
                 try {
                     GUIControl.getInstance().placeUnits(unitsToPlaceSpinner.getValue());
                 } catch (GameNotFoundException | NoSuchCountryException | IOException e) {
-                    e.printStackTrace();
+                    new ErrorAlert(e);
                 }
             }
         });
@@ -66,7 +66,6 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void update() {
-        //TODO: oooooofff funktionsaufrufe
 
         int maxValue = GUIControl.getInstance().getGame().getTurn().getPlayer().getUnitsToPlace();
 
@@ -74,7 +73,6 @@ public class PlaceUnitsVBox extends VBox implements RiskUIElement, Updatable {
         unitsToPlaceSpinner.setValueFactory(valueFactory);
 
         List<Country> playerCountries = new ArrayList(GUIControl.getInstance().getCurrentPlayer().getCountries().values());
-//        Country selectedCountry = GUIControl.getInstance().getGame().getCountries().get(GUIControl.getInstance().getSelectedCountry());
         Country selectedCountry = GUIControl.getInstance().getSelectedCountry();
 
         if (playerCountries.contains(selectedCountry)) {

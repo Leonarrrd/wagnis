@@ -15,15 +15,8 @@ public class LastFightCountries {
         return srcCountry;
     }
 
-    public void setSrcCountry(Country srcCountry) {
-        this.srcCountry = srcCountry;
-    }
-
     public Country getDestCountry() {
         return destCountry;
     }
 
-    public void setDestCountry(Country destCountry) {
-        this.destCountry = destCountry;
-    }
 }

@@ -1,5 +1,10 @@
 package view.gui.boxes.dialogboxes;
 
+import datastructures.Phase;
+import exceptions.CardAlreadyOwnedException;
+import exceptions.GameNotFoundException;
+import exceptions.NoSuchCardException;
+import exceptions.NoSuchPlayerException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -10,8 +15,11 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
+
+import java.io.IOException;
 
 public class TrailUnitsVBox extends VBox implements RiskUIElement {
 
@@ -19,11 +27,21 @@ public class TrailUnitsVBox extends VBox implements RiskUIElement {
 
     public TrailUnitsVBox() {
         applyStyling(this, "trail-units-vbox", "trail_units_vbox.css");
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
+        int maxValue = GUIControl.getInstance().getGame().getCountries().get(GUIControl.getInstance().getLastFightCountry().getSrcCountry().getName()).getUnits() - 1;
+        if (maxValue < 1){
+            try {
+                GUIControl.getInstance().setTurnManually(Phase.PERFORM_ANOTHER_ATTACK);
+            } catch (NoSuchPlayerException | GameNotFoundException | IOException | NoSuchCardException | CardAlreadyOwnedException e) {
+                new ErrorAlert(e);
+            }
+            return;
+        }
+
         HBox answers = new HBox();
         Text text = new Text("Do you want to trail units?");
 
@@ -34,7 +52,6 @@ public class TrailUnitsVBox extends VBox implements RiskUIElement {
 
         Button trailUnitsButton = new Button("Trail Units!");
 
-        int maxValue = GUIControl.getInstance().getGame().getCountries().get(GUIControl.getInstance().getLastFightCountry().getSrcCountry().getName()).getUnits() - 1;
         trailUnitsSpinner = new Spinner<>();
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxValue, 0);
         trailUnitsSpinner.setValueFactory(valueFactory);

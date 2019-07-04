@@ -1,14 +1,12 @@
 package view.gui.boxes;
 
 import exceptions.GameNotFoundException;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.VBox;
-import model.Player;
+import view.gui.alerts.ErrorAlert;
 import view.gui.boxes.dialogboxes.*;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
-import view.gui.roots.StartBorderPane;
 
 import java.io.IOException;
 
@@ -16,11 +14,11 @@ public class DialogVBox extends VBox implements RiskUIElement, Updatable {
     public DialogVBox() {
         applyStyling(this, "dialog-vbox", "dialog_vbox.css");
         addAsUpdateElement(getId(), this);
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         setLayoutY(640);
         setLayoutX(10);
         this.getChildren().add(new VBox());
@@ -29,14 +27,8 @@ public class DialogVBox extends VBox implements RiskUIElement, Updatable {
 
     @Override
     public void update() {
-//        Player winner = GUIControl.getInstance().checkForWinner();
-//        if (winner != null){
-//            new Alert(Alert.AlertType.INFORMATION, winner.getName()+ " has won the Game!").showAndWait();
-//            getScene().setRoot(new StartBorderPane());
-//        }
-
         try {
-            if(GUIControl.getInstance().myTurn()) {
+            if (GUIControl.getInstance().myTurn()) {
                 switch (GUIControl.getInstance().getGame().getTurn().getPhase()) {
                     case USE_CARDS:
                         this.getChildren().set(0, new UseCardsVBox());
@@ -67,7 +59,7 @@ public class DialogVBox extends VBox implements RiskUIElement, Updatable {
                 this.getChildren().set(0, new WaitVBox());
             }
         } catch (GameNotFoundException | IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
     }
 }

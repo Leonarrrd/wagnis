@@ -36,7 +36,6 @@ public class TurnController {
      */
     public void setTurn(Game game) throws NoSuchPlayerException, IOException, CardAlreadyOwnedException, NoSuchCardException, GameNotFoundException {
         game.setTurn(new Turn(game.getPlayers().get(0), Phase.PLACE_UNITS));
-        // TODO: the method call should PROBABLY be refactored to somewhere else
         LogicController.getInstance().awardUnits(game, game.getPlayers().get(0));
     }
 

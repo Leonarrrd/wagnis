@@ -8,12 +8,12 @@ public class BottomBarHBox extends HBox implements RiskUIElement {
 
     public BottomBarHBox() {
         applyStyling(this, "bottom-bar-hbox", "bottom_bar_hbox.css");
-        doStuff();
+        init();
     }
 
 
     @Override
-    public void doStuff() {
+    public void init() {
         this.setFillHeight(true);
         this.setPrefHeight(150);
 

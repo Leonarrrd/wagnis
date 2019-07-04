@@ -1,18 +1,13 @@
 package view.gui.boxes.dialogboxes;
 
-import datastructures.Phase;
 import exceptions.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-import model.AttackResult;
 import model.Country;
 import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
@@ -33,16 +28,15 @@ public class DefenseVBox extends VBox implements RiskUIElement {
         this.attackingCountry = guic.getGame().getCountries().get(attackingCountryString);
         this.defendingCountry = guic.getGame().getCountries().get(defendingCountryString);
         this.attackingUnits = Integer.parseInt(unitsString);
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         Text infoText = new Text(attackingCountry.getOwner().getName() + " is attacking you in "
                 + defendingCountry.getName() + " from " + attackingCountry.getName() + "!"
                 + "\nHow many units do you want to defend with?");
 
-        //TODO: maximale units anzeigen
         int maxValue = defendingCountry.getUnits() < 2 ? 1 : 2;
 
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, maxValue, maxValue);
@@ -55,13 +49,10 @@ public class DefenseVBox extends VBox implements RiskUIElement {
             public void handle(ActionEvent event) {
                 int defendingUnits = defendingUnitsSpinner.getValue();
                 try {
-                    //FIXME: Weird way to get the gameId
+                    //FIXME: Unusual way to get the gameId
                     UUID gameId = GameControllerFacade.getInstance().getGame().getId();
                     GameControllerFacade.getInstance().fight(gameId, attackingCountry, defendingCountry, attackingUnits, defendingUnits);
-                } catch (IOException e) {
-                    //this is fine
-
-                } catch (GameNotFoundException | ClassNotFoundException | NoSuchCountryException | NotEnoughUnitsException | CountriesNotAdjacentException e) {
+                } catch (IOException | GameNotFoundException | ClassNotFoundException | NoSuchCountryException | NotEnoughUnitsException | CountriesNotAdjacentException e) {
                     new ErrorAlert(e);
                 }
             }

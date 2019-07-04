@@ -17,15 +17,15 @@ public class SavedGamesListView extends ListView implements RiskUIElement, Updat
         super();
         applyStyling(this, "saved-games-list-view", "saved_games_list_view.css");
         addAsUpdateElement("saved-games-list-view", this);
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         try {
             GameControllerFacade.getInstance().loadAvailableGameIds();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
     }
 

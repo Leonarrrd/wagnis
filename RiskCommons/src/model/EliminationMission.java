@@ -5,6 +5,11 @@ import datastructures.Color;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * Mission Subclass for elimination win conditions
+ * Extends abstract class mission and has a custom isAccomplished()-Method
+ * that checks if the mission is accomplished
+ */
 public class EliminationMission extends Mission  implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -4,7 +4,7 @@ import datastructures.Phase;
 import exceptions.DuplicateGameIdException;
 import exceptions.GameNotFoundException;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ToggleButton;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 
@@ -13,11 +13,11 @@ import java.io.IOException;
 public class SaveButton extends javafx.scene.control.Button implements RiskUIElement {
     public SaveButton(){
         applyStyling(this, "save-button", "save_button.css");
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         setLayoutX(1370);
         setOnMouseClicked(event -> {
             try {
@@ -30,7 +30,7 @@ public class SaveButton extends javafx.scene.control.Button implements RiskUIEle
                 }
                 new Alert(Alert.AlertType.INFORMATION, message).showAndWait();
             } catch (GameNotFoundException | DuplicateGameIdException | IOException | ClassNotFoundException e){
-                e.printStackTrace();
+                new ErrorAlert(e);
             }
         });
     }

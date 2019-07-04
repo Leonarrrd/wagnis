@@ -1,10 +1,7 @@
 package view.gui.roots;
 
-import exceptions.DuplicateGameIdException;
 import exceptions.GameNotFoundException;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -25,20 +22,17 @@ import view.gui.util.Util;
 import java.io.File;
 import java.io.IOException;
 
-import static view.gui.util.UIConstants.WINDOW_WIDTH;
-
 
 public class GameBorderPane extends BorderPane implements RiskUIElement {
 
     public GameBorderPane() {
         applyStyling(this, "game-vbox", "game_vbox.css");
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
 
-        //ImageView mapImageView = new ImageView(new Image("file:assets/img/map.png"));
         ImageView mapImageView = new ImageView(new Image("file:assets" + File.separator + "img" + File.separator + "map.png"));
         mapImageView.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

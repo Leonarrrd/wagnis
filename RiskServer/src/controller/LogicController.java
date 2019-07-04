@@ -251,7 +251,6 @@ public class LogicController {
         if (!game.getPlayers().contains(player)) {
             throw new NoSuchPlayerException(player);
         }
-
         return player.getMission().isAccomplished(player, game);
     }
 
@@ -268,7 +267,7 @@ public class LogicController {
         //check for winner
         for (Player player : game.getPlayers()) {
             if (checkWinCondition(game, player)){
-                for (Socket socket : SocketGameManager.getInstance().getGameInitById(game.getId()).getSockets()) {
+                for (Socket socket : SocketGameManager.getInstance().getGameIdSocketMap().get(game.getId())) {
                     SocketGameManager.getInstance().getSocketServerIOThreadMap().get(socket).endGame(player.getName());
                 }
                 return;

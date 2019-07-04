@@ -1,30 +1,20 @@
 package view.gui.panes;
 
 import exceptions.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import model.Player;
 import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
-import view.gui.roots.GameBorderPane;
 import view.gui.sockets.GameControllerFacade;
-import view.gui.viewhelper.PlayerColorItem;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class StartNewGameGridPane extends GridPane implements RiskUIElement, Updatable {
@@ -42,7 +32,7 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
         applyStyling(this, "start-new-game-grid-pane", "start_new_game_grid_pane.css");
         addAsUpdateElement(getId(), this);
         this.add(playerList, 0, 0);
-        doStuff();
+        init();
 
 
     }
@@ -55,11 +45,11 @@ public class StartNewGameGridPane extends GridPane implements RiskUIElement, Upd
     public StartNewGameGridPane(String hostPlayerName) {
         this();
         this.hostPlayerName = hostPlayerName;
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
 
         if (this.hostPlayerName != null) {
             UUID gameId = UUID.randomUUID();

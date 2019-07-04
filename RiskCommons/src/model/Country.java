@@ -5,20 +5,19 @@ import java.util.*;
 
 /*
  * Class for Country objects
+ * A country can be owned, has units to fight and neighbour countries
+ * Main objects to interact with
  */
 public class Country implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-
     private int id;
     private String name;
     private Player owner;
     private int units;
-    private int frozenUnits;
     private List<Country> neighbors = new ArrayList<>();
 
-    //TODO: Constructor might be redundant
     public Country(String name) {
         this.name = name;
     }
@@ -51,14 +50,6 @@ public class Country implements Serializable {
 
     public void setUnits(int units) {
         this.units = units;
-    }
-
-    public int getFrozenUnits() {
-        return frozenUnits;
-    }
-
-    public void setFrozenUnits(int frozenUnits) {
-        this.frozenUnits = frozenUnits;
     }
 
     public List<Country> getNeighbors() {

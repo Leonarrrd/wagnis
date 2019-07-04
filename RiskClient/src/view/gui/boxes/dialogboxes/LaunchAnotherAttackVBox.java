@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 
@@ -22,11 +23,11 @@ public class LaunchAnotherAttackVBox extends VBox implements RiskUIElement {
 
     public LaunchAnotherAttackVBox() {
         applyStyling(this, "launch-another-attack-vbox", "launch_another_attack_vbox.css");
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         Text questionText = new Text("Do you want to launch another attack?");
 
         HBox answers = new HBox();
@@ -41,7 +42,7 @@ public class LaunchAnotherAttackVBox extends VBox implements RiskUIElement {
                 try {
                     GUIControl.getInstance().setTurnManually(Phase.ATTACK);
                 } catch (NoSuchPlayerException | GameNotFoundException | IOException | NoSuchCardException | CardAlreadyOwnedException e) {
-                    e.printStackTrace();
+                    new ErrorAlert(e);
                 }
             }
         });

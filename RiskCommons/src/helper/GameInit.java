@@ -4,6 +4,10 @@ import java.net.Socket;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * "Lobby"-Objects can be instantiated and hold the gameId
+ * on which player can join.
+ */
 public class GameInit {
 
     private UUID gameId;

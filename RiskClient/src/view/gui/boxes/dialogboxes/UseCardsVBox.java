@@ -14,29 +14,25 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import model.Player;
-import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
-import view.gui.sockets.GameControllerFacade;
 
 public class UseCardsVBox extends VBox implements RiskUIElement {
-//    private Spinner oneStarCardSpinner = new Spinner<>();
-
 
     public UseCardsVBox() {
         applyStyling(this, "use-cards-vbox", "use_cards_vbox.css");
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         Text questionText = new Text("Select cards to use");
         questionText.getStyleClass().add("questionText");
         Text infantryText = new Text("Infantry cards:");
         Text cavalryText = new Text("Cavalry cards:");
         Text artilleryText = new Text("Artillery cards:");
 
-        Player player =GUIControl.getInstance().getPlayer();
+        Player player =GUIControl.getInstance().getThisPlayer();
         int playerTotalInfantryCards = player.getNumberOfCardsWithSymbol(CardSymbol.INFANTRY);
         int playerTotalCavalryCards = player.getNumberOfCardsWithSymbol(CardSymbol.CAVALRY);
         int playerTotalArtilleryCards = player.getNumberOfCardsWithSymbol(CardSymbol.ARTILLERY);
@@ -68,7 +64,6 @@ public class UseCardsVBox extends VBox implements RiskUIElement {
         confirmButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-//                if (GameControllerFacade.getInstance().getTradeBonusType(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue()) == null){
                 if (!GUIControl.getInstance().isLegalCardUse(infantryCardsSpinner.getValue(), cavalryCardsSpinner.getValue(), artilleryCardsSpinner.getValue())) {
                     new Alert(Alert.AlertType.INFORMATION, "Neither 3 of a kind nor multi.").showAndWait();
                 } else {

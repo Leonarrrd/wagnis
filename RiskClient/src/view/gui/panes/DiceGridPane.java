@@ -1,11 +1,7 @@
 package view.gui.panes;
 
-import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import model.Player;
-import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
 
@@ -15,15 +11,14 @@ import static view.gui.util.UIConstants.WINDOW_WIDTH;
 
 public class DiceGridPane extends GridPane implements RiskUIElement, Updatable {
 
-    private boolean visible;
     public DiceGridPane() {
         applyStyling(this, "dice-grid", "dice_grid.css");
         addAsUpdateElement(this.getId(), this);
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         setLayoutY(720);
         setLayoutX(WINDOW_WIDTH-200);
     }

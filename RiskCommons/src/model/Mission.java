@@ -2,6 +2,9 @@ package model;
 
 import java.io.Serializable;
 
+/**
+ * Abstract class for missions that defines abstract method for mission subclasses
+ */
 public abstract class Mission implements Serializable {
 
     private static final long serialVersionUID = 1L;

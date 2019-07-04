@@ -1,3 +1,5 @@
+//MARK: CUI is abandoned
+
 //package view.cui;
 //
 //import view.cui.ConsoleUserInterface;

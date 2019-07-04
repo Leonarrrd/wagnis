@@ -377,7 +377,9 @@ public class ServerIOThread extends Thread {
 
         if (ar.getWinner() != null) {
             if (ar.getWinner().equals(fightAttackingCountry)) {
-                updatePlayerGraph(game);
+                for (Player p : game.getPlayers()) {
+                    GameController.getInstance().updatePlayerGraphMap(game.getId(), p);
+                }
                 gc.setTurn(gameId, TRAIL_UNITS);
             }
         }
@@ -425,20 +427,4 @@ public class ServerIOThread extends Thread {
         oos.writeUTF(END_GAME + "," + playerString);
         oos.flush();
     }
-
-    /**
-     * Helper-Method that updates the Movement-Graph for each player
-     *
-     * @param game
-     * @throws NoSuchPlayerException if there is no such player for this Graph
-     * @throws GameNotFoundException if the does not exist
-     */
-    private void updatePlayerGraph(Game game) throws NoSuchPlayerException, GameNotFoundException {
-        for (Player p : game.getPlayers()) {
-            GameController.getInstance().updatePlayerGraphMap(game.getId(), p);
-        }
-    }
-
-
-
 }

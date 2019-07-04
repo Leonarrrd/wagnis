@@ -11,13 +11,22 @@ public class GameLoadUtils {
 
     public static final String PROJECT_DATA_DIR = System.getProperty("user.dir") + "/../RiskServer/data/";
 
-
+    /**
+     * parses player data
+     * @param dataString
+     * @return
+     */
     public static String[] evaluatePlayerArrayFromDataString(String dataString) {
         dataString = dataString.replace("[", "").replace("]", "");
         String[] split = dataString.split(":");
         return split;
     }
 
+    /**
+     * parses country data
+     * @param dataString
+     * @return
+     */
     public static  Map<Integer, RawCountryData[]> evaluateCountryData(String dataString) {
         dataString = dataString.replace("{", "").replace( "}", ""); //[1(2)*5(6)]:[3(2)*2(7)]:[4(6)*6(2)]},[1:2:3],{[1*2]:[4*5]:[7*8]
         String[] split = dataString.split(":"); // [1(2)*5(6)]
@@ -42,6 +51,11 @@ public class GameLoadUtils {
         return playerIndicesCountryDataMap;
     }
 
+    /**
+     * parses the mission data
+     * @param dataString
+     * @return
+     */
     public static List<Integer> evaluateMissionData(String dataString){
         List<Integer> missionIds = new ArrayList<>();
         dataString = dataString.replace("[", "").replace("]", "");
@@ -53,6 +67,11 @@ public class GameLoadUtils {
         return missionIds;
     }
 
+    /**
+     * parses the card Data
+     * @param dataString
+     * @return
+     */
     public static Map<Integer, List<Integer>> evaluateCardData(String dataString){
         Map<Integer, List<Integer>> cardData = new HashMap<>();
         dataString = dataString.replace("[", "").replace("]", "");

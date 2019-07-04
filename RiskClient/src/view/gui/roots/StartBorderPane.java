@@ -16,11 +16,11 @@ import java.util.Optional;
 public class StartBorderPane extends BorderPane implements RiskUIElement, StartMenuLeftVBox.StartActionListener {
     public StartBorderPane() {
         applyStyling(this, "start-border-pane", "start_border_pane.css");
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
         this.setTop(new RiskTitleHBox());
         this.setLeft(new StartMenuLeftVBox(this));
     }
@@ -33,13 +33,12 @@ public class StartBorderPane extends BorderPane implements RiskUIElement, StartM
         textInputDialog.setContentText("Please enter your name: ");
         Optional<String> result = textInputDialog.showAndWait();
         if (result.isPresent())
-            if (!Utils.stringContainsDelimitters(result.get())) {
+            if (!Utils.stringContainsDelimitters(result.get()) && result.get().length() < 10) {
                 this.setCenter(new StartNewGameGridPane(result.get()));
             } else {
-                new ErrorAlert("Invalid Player Name", "Please choose another name", "Please do not use , ' - : in your name.");
-
+                new ErrorAlert("Invalid Player Name", "Please choose another name",
+                    "Please do not use , ' - : in your name. Also your name must not be longer than 9 characters");
             }
-
     }
 
     @Override

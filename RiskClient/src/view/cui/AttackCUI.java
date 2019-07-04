@@ -1,3 +1,5 @@
+//MARK: CUI is abandoned
+
 //package view.cui;
 //
 //import model.AttackResult;
@@ -28,7 +30,7 @@
 //        } catch (GameNotFoundException e) {
 //            e.printStackTrace();
 //        }
-//        player = game.getTurn().getPlayer();
+//        player = game.getTurn().getThisPlayer();
 //        boolean hasCountryToAttackFrom = false;
 //        try {
 //            hasCountryToAttackFrom = gc.hasCountryToAttackFrom(gameId, player);

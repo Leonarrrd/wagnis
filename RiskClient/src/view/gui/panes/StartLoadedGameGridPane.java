@@ -1,14 +1,11 @@
 package view.gui.panes;
 
 import exceptions.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import model.Game;
 import model.Player;
@@ -16,10 +13,8 @@ import view.gui.alerts.ErrorAlert;
 import view.gui.helper.GUIControl;
 import view.gui.helper.RiskUIElement;
 import view.gui.helper.Updatable;
-import view.gui.roots.GameBorderPane;
 import view.gui.sockets.GameControllerFacade;
 import view.gui.sockets.GameLobbyManager;
-import view.gui.viewhelper.PlayerColorItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,15 +38,18 @@ public class StartLoadedGameGridPane extends GridPane implements RiskUIElement, 
         addAsUpdateElement(getId(), this);
         this.add(playerList, 0, 0);
         this.gameId = gameId;
-        doStuff();
+        init();
     }
 
     @Override
-    public void doStuff() {
+    public void init() {
+        //FIXME: Server needs time to process
+        // this solution is very hacky, needs to be fixed, because the server
+        // can be slower than the client wait time.
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            new ErrorAlert(e);
         }
 
 
@@ -89,11 +87,10 @@ public class StartLoadedGameGridPane extends GridPane implements RiskUIElement, 
         @Override
         public void handle(ActionEvent event) {
             if (playerList.getChildren().size() == game.getPlayers().size()) {
-//                correctPlayerNames();
                 try {
                     GameLobbyManager.getInstance().startLoadedGame(gameId);
                 } catch (ClassNotFoundException | InvalidFormattedDataException | GameNotFoundException | IOException e) {
-                    e.printStackTrace();
+                    new ErrorAlert(e);
                 }
             } else {
                 new Alert(Alert.AlertType.INFORMATION, "Incorrect amount of players").showAndWait();

@@ -61,7 +61,7 @@ public class WorldController {
             Player player = game.getPlayers().get(p);
             player.getCountries().put(country.getName(), country);
             country.setOwner(player);
-            country.setUnits(5); //TODO: put 10 for testing purposes
+            country.setUnits(5);
             if (++p > game.getPlayers().size() - 1) {
                 p = 0;
             }
