@@ -266,17 +266,10 @@ public class LogicController {
         }
 
         //check for winner
-        for (Player p : game.getPlayers()) {
-            if (checkWinCondition(game, p)){
-                // MARK: I have not refactored this to ServerIOThread yet, since I dont know the best
-                //  way to access its methods from outside - make it a singleton?
-                for (Socket s : SocketGameManager.getInstance().getGameInitById(game.getId()).getSockets()) {
-                    ObjectOutputStream sOos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(s);
-                    sOos.reset();
-                    sOos.flush();
-                    sOos.writeUTF(END_GAME + "," + p.getName());
-                    sOos.flush();
-
+        for (Player player : game.getPlayers()) {
+            if (checkWinCondition(game, player)){
+                for (Socket socket : SocketGameManager.getInstance().getGameInitById(game.getId()).getSockets()) {
+                    SocketGameManager.getInstance().getSocketServerIOThreadMap().get(socket).endGame(player.getName());
                 }
                 return;
             }
@@ -293,18 +286,15 @@ public class LogicController {
                 }
             }
             if (playerToBeRemoved != null){
-                // MARK: I have not refactored this to ServerIOThread yet, since I dont know the best
-                //  way to access its methods from outside - make it a singleton?
                 game.getPlayers().remove(playerToBeRemoved);
                 for (Socket socket : SocketGameManager.getInstance().getGameIdSocketMap().get(game.getId())){
                     String name = SocketGameManager.getInstance().getSocketPlayerNameMap().get(socket);
                     if (name.equals(playerToBeRemoved.getName())){
-                        ObjectOutputStream oos = SocketGameManager.getInstance().getSocketObjectOutputStreamMap().get(socket);
-                        oos.reset();
-                        oos.flush();
-                        oos.writeUTF(REMOVE_PLAYER);
+                        SocketGameManager.getInstance().getSocketServerIOThreadMap().get(socket).removePlayer();
+
                     }
                 }
+
             }
         }
 

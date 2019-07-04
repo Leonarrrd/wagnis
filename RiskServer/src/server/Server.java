@@ -33,7 +33,10 @@ public class Server {
                 e.printStackTrace();
             }
 
-            new ServerIOThread(socket).start();
+            ServerIOThread serverIOThread = new ServerIOThread(socket);
+            SocketGameManager.getInstance().getSocketServerIOThreadMap().put(socket, serverIOThread);
+            serverIOThread.start();
+
         }
     }
 }

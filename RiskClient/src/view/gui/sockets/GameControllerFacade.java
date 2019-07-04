@@ -81,17 +81,7 @@ public class GameControllerFacade implements IGameController {
      */
     @Override
     public Game getGameById(UUID id) throws GameNotFoundException, IOException, ClassNotFoundException {
-
-        /*oos.writeUTF(GET_GAME + "," + id.toString());
-        oos.flush();
-
-        synchronized (ois) {
-            return (Game) ois.readObject();
-
-        }*/
-        synchronized (game) {
-            return game;
-        }
+        return game;
     }
 
     /**

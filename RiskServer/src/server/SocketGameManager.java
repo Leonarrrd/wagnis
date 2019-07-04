@@ -16,10 +16,11 @@ public class SocketGameManager {
     private static SocketGameManager instance;
     private List<GameInit> gameInitList = new ArrayList();
     private Map<UUID, List<Socket>> gameIdSocketMap = new HashMap<>();
-    private Map<Socket, ObjectOutputStream> socketObjectOutputStreamMap = new HashMap<>();
-    private Map<Socket, ObjectInputStream> socketObjectInputStreamMap = new HashMap<>();
-    private Map<Socket, String> socketPlayerNameMap = new HashMap<>();
 
+    //TODO: Multiple mapping with sockets -> Create an object with OOS,String,ServerIOThread
+    private Map<Socket, ObjectOutputStream> socketObjectOutputStreamMap = new HashMap<>();
+    private Map<Socket, String> socketPlayerNameMap = new HashMap<>();
+    private Map<Socket, ServerIOThread> socketServerIOThreadMap = new HashMap<>();
 
     private SocketGameManager() {
     }
@@ -134,11 +135,12 @@ public class SocketGameManager {
         return socketObjectOutputStreamMap;
     }
 
-    public Map<Socket, ObjectInputStream> getSocketObjectInputStreamMap() {
-        return socketObjectInputStreamMap;
-    }
 
     public Map<Socket, String> getSocketPlayerNameMap() {
         return socketPlayerNameMap;
+    }
+
+    public Map<Socket, ServerIOThread> getSocketServerIOThreadMap() {
+        return socketServerIOThreadMap;
     }
 }

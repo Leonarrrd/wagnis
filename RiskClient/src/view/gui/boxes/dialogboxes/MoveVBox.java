@@ -79,6 +79,8 @@ public class MoveVBox extends VBox implements RiskUIElement, Updatable {
             new Alert(Alert.AlertType.INFORMATION, "You don't own this country.").showAndWait();
         } else {
             if (!firstCountrySelected) {
+                moveToText.setText("<Country to move to>");
+                moveButton.setDisable(true);
                 if(guic.getSelectedCountry().getUnits() == 1) {
                     new Alert(Alert.AlertType.INFORMATION, "Only one unit on this country.").showAndWait();
                 } else {

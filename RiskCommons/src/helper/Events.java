@@ -23,4 +23,3 @@ public class Events {
     public static final String END_GAME = "END_GAME";
     public static final String REMOVE_PLAYER = "REMOVE_PLAYER";
 }
-

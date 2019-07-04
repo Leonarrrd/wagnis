@@ -19,6 +19,8 @@ import static helper.Events.*;
 /**
  * ServerIOThread is a thread active for every socket that reads input
  * and sends responses to certain sockets depending on the input
+ *
+ *
  */
 public class ServerIOThread extends Thread {
     private Socket socket;
@@ -26,6 +28,7 @@ public class ServerIOThread extends Thread {
 
     public ServerIOThread(Socket socket) {
         this.socket = socket;
+
     }
 
     private InputStream is;
@@ -33,6 +36,10 @@ public class ServerIOThread extends Thread {
     private OutputStream os;
     private ObjectOutputStream oos;
 
+    /**
+     * Waits for string input from the clients and passes it onto other methods that will
+     * parse the string and perform the operations needed
+     */
     public void run() {
         System.out.println("Socket connected!");
         try {
@@ -43,7 +50,6 @@ public class ServerIOThread extends Thread {
             oos = new ObjectOutputStream(os);
 
             SocketGameManager.getInstance().getSocketObjectOutputStreamMap().put(socket, oos);
-            SocketGameManager.getInstance().getSocketObjectInputStreamMap().put(socket, ois);
 
             String clientInput;
 
@@ -139,6 +145,10 @@ public class ServerIOThread extends Thread {
                 }
             }
         } catch (InvalidPlayerNameException | MaximumNumberOfPlayersReachedException e) {
+            // Exceptions that can occur in the lobby have to be handled differently
+            // than ingame exceptions
+            // socket will not be reset if exception occurs in the lobby
+            // if an exception occurs ingame and an ERROR event can't be sent to the client, his socket will be closed
             try {
                 oos.writeUTF(ERROR);
                 oos.flush();
@@ -148,7 +158,11 @@ public class ServerIOThread extends Thread {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-        } catch (NoSuchCardException | CountriesNotConnectedException | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException | CountriesNotAdjacentException | CardAlreadyOwnedException | NotEnoughUnitsException | InvalidFormattedDataException | CountriesAlreadyAssignedException | CountryNotOwnedException e) {
+        } catch (NoSuchCardException |  CountriesNotConnectedException
+                | GameNotFoundException | NoSuchPlayerException | NoSuchCountryException
+                |  CountriesNotAdjacentException | CardAlreadyOwnedException | NotEnoughUnitsException
+                | CountriesAlreadyAssignedException | CountryNotOwnedException | DuplicateGameIdException
+                | InvalidFormattedDataException e) {
             e.printStackTrace();
             try {
                 oos.writeUTF(ERROR);
@@ -170,11 +184,8 @@ public class ServerIOThread extends Thread {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-        } catch (DuplicateGameIdException e) {
-            e.printStackTrace();
         }
     }
-
 
     private void createGame(UUID gameId, String hostPlayerName) throws InvalidPlayerNameException {
         GameController.getInstance().createGameRoom(gameId, hostPlayerName, socket);
@@ -402,6 +413,18 @@ public class ServerIOThread extends Thread {
         }
     }
 
+    public void removePlayer() throws IOException {
+        oos.reset();
+        oos.flush();
+        oos.writeUTF(REMOVE_PLAYER);
+    }
+
+    public void endGame(String playerString) throws IOException {
+        oos.reset();
+        oos.flush();
+        oos.writeUTF(END_GAME + "," + playerString);
+        oos.flush();
+    }
 
     /**
      * Helper-Method that updates the Movement-Graph for each player
@@ -415,6 +438,7 @@ public class ServerIOThread extends Thread {
             GameController.getInstance().updatePlayerGraphMap(game.getId(), p);
         }
     }
+
 
 
 }
